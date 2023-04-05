@@ -1,11 +1,11 @@
 # Project Plans
 
-Take a picture of a drink menu at a restaurant, the web app shall give you the APK (Alcohol per Krona) for each drink.
+To be decided.
 
 ## Functions
 
-1. Use old Systembolaget data for alcohol percentages.
-2. Use Googles tools to extract text from images.
+1. To be decided.
+2. To be decided.
 3. Use Django to authenticate log-in to access account features.
 4. Use Django database to store user contributed information which will be searchable for other users.
 
