@@ -1,4 +1,5 @@
 import './App.css';
+import { signInWithGoogle } from './Firebase';
 
 function App() {
   return (
@@ -7,14 +8,7 @@ function App() {
         <p>
           Oisko boiski.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn BOIS IF
-        </a>
+        <button onClick={signInWithGoogle}>Sign in with Google</button>
       </header>
     </div>
   );

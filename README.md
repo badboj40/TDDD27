@@ -30,3 +30,17 @@ We chose Django as backend framework because of its easy-to-use nature and remov
 ### Heroku
 
 We would like to try and use a deployment service and Heroku, according to our research, would work really well with Django. This is if we have the time.
+
+## How to run
+
+To build React version (executed inside client folder)
+
+```zsh
+npm run build
+```
+
+To run the Django server (executed at top level)
+
+```zsh
+python3 manage.py runserver
+```
