@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMsNwx5KzZKx5tdeh0FcT8yY_ckeZMliE",
@@ -20,11 +20,36 @@ const provider = new GoogleAuthProvider();
 export const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
         .then((result) => {
+            console.log(result);
             const name = result.user.displayName;
             const email = result.user.email;
-            //const profilePic = result.user.photoURL;
+
+            localStorage.setItem("name", name);
+            localStorage.setItem("email", email);
         })
         .catch((error) => {
             console.log(error);
         })
 };
+
+export const signOutFromGoogle = () => {
+    signOut(auth)
+        .then((result) => {
+            console.log("Successfully signed out.", result)
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+};
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    console.log("You just signed in", uid);
+    // ...
+  } else {
+    console.log("Else!");
+  }
+});
