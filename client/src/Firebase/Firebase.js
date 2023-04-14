@@ -1,5 +1,12 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth"
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+} from "firebase/auth";
+
+import axios from 'axios';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMsNwx5KzZKx5tdeh0FcT8yY_ckeZMliE",
@@ -23,6 +30,7 @@ export const signInWithGoogle = () => {
             console.log(result);
             const name = result.user.displayName;
             const email = result.user.email;
+            handleLogin(result.user)
 
             localStorage.setItem("name", name);
             localStorage.setItem("email", email);
@@ -42,14 +50,18 @@ export const signOutFromGoogle = () => {
         })
 };
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    const uid = user.uid;
-    console.log("You just signed in", uid);
-    // ...
-  } else {
-    console.log("Else!");
+
+const handleLogin = async (user) => {
+  console.log("before logging in.");
+  try {
+    const response = await axios.post('http://' + window.location.host + '/login/', {
+      idToken: user.idToken,
+      accessToken: user.accessToken
+    });
+
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
   }
-});
+};
+

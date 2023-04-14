@@ -1,22 +1,26 @@
-import './App.css';
-import { signInWithGoogle, signOutFromGoogle } from './Firebase';
+import React, { useState } from 'react'
 
-function App() {
+import { LoginPage } from './Components/Login'
+import { HomePage } from './Components/Home'
+
+import { auth } from './Firebase/Firebase'
+
+import './App.css';
+
+export default function App() {
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      setIsSignedIn(true);
+    } else {
+      setIsSignedIn(false);
+    }
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>
-          GGWatch
-        </h1>
-        <button className="login-with-google-btn" onClick={signInWithGoogle}>
-          Sign in with Google
-        </button>
-        <button onClick={signOutFromGoogle}>
-          Sign out
-        </button>
-      </header>
+    <div className='App'>
+      { isSignedIn === true ? <HomePage /> : <LoginPage /> }
     </div>
   );
 }
-
-export default App;

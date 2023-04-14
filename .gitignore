@@ -26,3 +26,6 @@ __pycache__
 
 #env
 env/
+
+#private keys
+./server/tddd27-gg-firebase-adminsdk-k0gde-cf111528e0.json
