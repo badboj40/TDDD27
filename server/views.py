@@ -6,10 +6,8 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import auth
 
-cred = credentials.Certificate('./server/tddd27-gg-firebase-adminsdk-k0gde-cf111528e0.json')
+cred = credentials.Certificate('server/tddd27-gg-firebase-adminsdk-k0gde-8699c126f0.json')
 firebase_admin.initialize_app(cred)
-
-
 
 def index(request):
     return render(request, 'index.html')

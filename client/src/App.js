@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 
+
 import { LoginPage } from './Components/Login'
 import { HomePage } from './Components/Home'
 
 import { auth } from './Firebase/Firebase'
 
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
