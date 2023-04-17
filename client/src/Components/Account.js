@@ -2,16 +2,15 @@ import { Button } from 'react-bootstrap';
 
 import { signOutFromGoogle } from "../Firebase/Firebase";
 
-import './Home.css';
+import './SignOutButton.css';
 
 export function AccountPage() {
+    console.log("Load 'Account' page");
   return (
     <div className="Account">
-      <header>
         <Button className="logout-btn" variant="light" onClick={signOutFromGoogle}>
-          Sign out
+            Sign out
         </Button>{' '}
-      </header>
     </div>
   )
 }

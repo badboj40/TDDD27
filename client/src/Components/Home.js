@@ -1,55 +1,23 @@
-import { Button } from 'react-bootstrap';
-import { Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom'
 
-import './Home.css';
 import { AccountPage } from './Account'
+import { MoviesPage } from './Movies'
 
-import { signOutFromGoogle } from "../Firebase/Firebase";
-
+import './SignOutButton.css';
 
 export function HomePage() {
+  console.log("Load 'Home' page");
+
   return (
     <div className="Home">   
       <header className="Home-header">
-        <Navbar bg="dark" variant="dark" expand="lg">
-          <Container className='d-flex'>
-            <Navbar.Brand href="/" className='d-flex'>
-              <img
-                src='/popcorn.png'
-                width="45"
-                height="45"
-                className="gg-logo"
-                alt="GGWatch Logo"
-              />
-              <h1 className=''>GGWatch</h1>
-            </Navbar.Brand>
-            <Nav>
-                <Nav.Link href="movies">Movies</Nav.Link>
-            </Nav>
-            <Container className='d-flex justify-content-end'> 
-              <Form className="d-flex justify-content-strecth">
-                  <Form.Control
-                    type="search"
-                    placeholder="Enter movie"
-                    className="me-2"
-                    aria-label="Search"
-                  />
-                  <Button variant="outline-light" size="sm">Search</Button>
-                </Form>
-                <Nav>
-                  <NavDropdown title="Account" id="basic-nav-dropdown">
-                    <NavDropdown.Item href="account">Settings</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item href="signout">
-                    <Button className="logout-btn" variant="light" onClick={signOutFromGoogle}>
-                      Sign out
-                    </Button>{' '}
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </Nav> 
-            </Container>
-          </Container>
-        </Navbar>
+        <Router>
+          <Routes>
+            <Route exact path="/"/>
+            <Route path="/account" element={<AccountPage/>} />
+            <Route path="/movies" element={<MoviesPage/>} />
+          </Routes>
+        </Router>
       </header>     
     </div>
   )
