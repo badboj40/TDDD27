@@ -26,7 +26,7 @@ export function PageHeader() {
                         <h1 className=''>GGWatch</h1>
                         </Navbar.Brand>
                         <Nav>
-                            <Nav.Link href="movies">Movies</Nav.Link>
+                            <Nav.Link href="/movies">Movies</Nav.Link>
                         </Nav>
                         <Container className='d-flex justify-content-end'> 
                         <Form className="d-flex justify-content-strecth">
@@ -40,9 +40,9 @@ export function PageHeader() {
                             </Form>
                             <Nav>
                             <NavDropdown title="Account" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="account">Settings</NavDropdown.Item>
+                                <NavDropdown.Item href="/account">Settings</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="signout">
+                                <NavDropdown.Item href="/signout">
                                 <Button className="logout-btn" variant="light" onClick={signOutFromGoogle}>
                                 Sign out
                                 </Button>{' '}
