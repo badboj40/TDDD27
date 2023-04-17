@@ -11,8 +11,8 @@ export function PageHeader() {
     const pageLogo = "/static/images/popcorn.png"
 
     return (
-        <div className="Home">   
-            <header className="Home-header">
+        <div className="PageHeader">   
+            <header className="PageHeader-header">
                 <Navbar bg="dark" variant="dark" expand="lg">
                     <Container className='d-flex'>
                         <Navbar.Brand href="/" className='d-flex'>

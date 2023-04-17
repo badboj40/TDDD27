@@ -1,12 +1,10 @@
-import { PageHeader } from './PageHeader';
 
 
 export function MoviesPage() {
+    console.log("Load 'Movies' page");
   return (
     <div className="Movies">
-      <header>
-        <PageHeader/>
-      </header>
+        <></>
     </div>
   )
 }

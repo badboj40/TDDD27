@@ -1,19 +1,16 @@
 import { Button } from 'react-bootstrap';
-import { PageHeader } from './PageHeader';
 
 import { signOutFromGoogle } from "../Firebase/Firebase";
 
 import './SignOutButton.css';
 
 export function AccountPage() {
+    console.log("Load 'Account' page");
   return (
     <div className="Account">
-      <header>
-      <PageHeader/>
         <Button className="logout-btn" variant="light" onClick={signOutFromGoogle}>
-          Sign out
+            Sign out
         </Button>{' '}
-      </header>
     </div>
   )
 }
