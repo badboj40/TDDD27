@@ -2,7 +2,6 @@ import { Button } from 'react-bootstrap';
 import { Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 import './Home.css';
-import { AccountPage } from './Account'
 
 import { signOutFromGoogle } from "../Firebase/Firebase";
 

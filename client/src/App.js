@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import { LoginPage } from './Components/Login'
 import { HomePage } from './Components/Home'
 import { AccountPage } from './Components/Account'
+import { MoviesPage } from './Components/Movies'
 
 import { auth } from './Firebase/Firebase'
 
@@ -29,6 +30,7 @@ export default function App() {
           <Routes>
             <Route exact path="/"/>
             <Route path="/account" component={AccountPage} />
+            <Route path="/movies" component={MoviesPage} />
           </Routes>
         </Router>
       { isSignedIn === true ? <HomePage /> : <LoginPage /> }
