@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 
 import { LoginPage } from './Components/Login'
 import { HomePage } from './Components/Home'
+import { PageHeader } from './Components/PageHeader'
+
 
 import { auth } from './Firebase/Firebase'
 
@@ -23,6 +25,7 @@ export default function App() {
 
   return (
     <div className='App'>
+      { isSignedIn === true ? <PageHeader />: <></>}
       { isSignedIn === true ? <HomePage /> : <LoginPage /> }
     </div>
   );
