@@ -22,5 +22,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+__pycache__
+client/package-lock.json
+
 #env
 env/
+
+#private keys
+./server/tddd27-gg-firebase-adminsdk-k0gde-cf111528e0.json
