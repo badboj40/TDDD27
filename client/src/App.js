@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
+import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom'
 
-
-import { LoginPage } from './Components/Login'
+import { AccountPage } from './Components/Account'
 import { HomePage } from './Components/Home'
 import { PageHeader } from './Components/PageHeader'
+import { WatchListPage } from './Components/WatchList'
 
 
 import { auth } from './Firebase/Firebase'
@@ -24,9 +25,15 @@ export default function App() {
   })
 
   return (
-    <div className='App'>
-      { isSignedIn === true ? <PageHeader />: <></>}
-      { isSignedIn === true ? <HomePage /> : <LoginPage /> }
-    </div>
+    <Router>
+      <div className='App'>
+        <PageHeader isSignedIn={isSignedIn}/> 
+          <Routes>
+            <Route exact path="/" element={<HomePage/>}/>
+            <Route path="/account" element={<AccountPage/>} />
+            <Route path="/watchlist" element={<WatchListPage/>} />
+          </Routes>  
+      </div>
+    </Router>
   );
 }
