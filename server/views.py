@@ -39,3 +39,6 @@ def search(request):
 
 def movies(request):
     pass
+
+def get_csrf_token(request):
+    return get_token(request)
