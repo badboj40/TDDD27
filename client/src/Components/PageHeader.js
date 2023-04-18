@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 
 import { Button } from 'react-bootstrap';
 import { Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstrap';
@@ -19,18 +20,24 @@ export function PageHeader(props) {
 
     const pageLogo = "/static/images/popcorn.png"
     const accountLogo = "/static/images/account.png"
-    console.log(isSignedIn);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         setSearchQuery(searchQuery);
-        console.log(searchQuery);
+        try {
+            const response = await axios.post('http://' + window.location.host + '/movies/search/', {
+              'q': searchQuery,
+            });
+        
+            console.log(response.data);
+          } catch (error) {
+            console.error(error);
+          }
     };
 
     const handleChange = (event) => {
         setSearchQuery(event.target.value);
-        console.log(searchQuery);
     };
 
     return (

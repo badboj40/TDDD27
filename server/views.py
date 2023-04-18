@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.contrib.auth import authenticate
+from django.middleware.csrf import get_token
 
 import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import auth
+from firebase_admin import credentials, auth
 
 cred = credentials.Certificate('server/tddd27-gg-firebase-adminsdk-k0gde-8699c126f0.json')
 firebase_admin.initialize_app(cred)
@@ -32,3 +32,10 @@ def login(request):
 
 #   except auth.InvalidIdTokenError as e:
 #     return HttpResponse(status=400, content='Invalid ID token')
+
+def search(request):
+    search_query = request.POST.get('q', None)
+    print(search_query)
+
+def movies(request):
+    pass
