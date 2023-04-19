@@ -23,16 +23,17 @@ export function PageHeader(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        setSearchQuery(searchQuery);
-        try {
-            const response = await axios.post('http://' + window.location.host + '/movies/search/', {
-              'q': searchQuery,
-            });
+        setSearchQuery(searchQuery)
         
-            console.log(response.data);
-          } catch (error) {
+        await axios.post('http://' + window.location.host + '/movies/search/', {
+              'q': searchQuery,
+        })
+        .then((result) => {
+                console.log(result);
+            })
+        .catch((error) => {
             console.error(error);
-          }
+        })
     };
 
     const handleChange = (event) => {

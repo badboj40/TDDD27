@@ -61,9 +61,11 @@ def login(request):
 
 @api_view(["POST"])
 def search(request):
-    search_query = request.POST.get('q', None)
+    search_query = request.data['q']
     print(search_query)
+    return Response(search_query)
 
+@api_view(["POST"])
 def movies(request):
     pass
 
