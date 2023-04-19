@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { Button } from 'react-bootstrap';
 import { Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom'; 
 
 import './Login.css'
 import './SignOutButton.css';
@@ -16,6 +16,7 @@ export function PageHeader(props) {
     const isSignedIn = props.isSignedIn;
 
     const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
 
     const pageLogo = "/static/images/popcorn.png"
     const accountLogo = "/static/images/account.png"
@@ -23,13 +24,17 @@ export function PageHeader(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        let path = '/movies/search';
+
         setSearchQuery(searchQuery)
-        
-        await axios.post('http://' + window.location.host + '/movies/search/', {
+
+        await axios.post('http://' + window.location.host + path, {
               'q': searchQuery,
         })
         .then((result) => {
-                console.log(result);
+                console.log(result)
+                const url = path + `?q=${result.data}`
+                navigate(url)
             })
         .catch((error) => {
             console.error(error);
