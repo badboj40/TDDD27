@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import {
     getAuth,
     GoogleAuthProvider,
-    signInWithRedirect,
+    signInWithPopup,
     signOut,
 } from "firebase/auth";
 
@@ -25,43 +25,54 @@ export const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = () => {
-    signInWithRedirect(auth, provider)
-        .then((result) => {
-            console.log(result);
-            const name = result.user.displayName;
-            const email = result.user.email;
-            handleLogin(result.user)
+  signInWithPopup(auth, provider)
+      .then((result) => {
+          console.log("Google sign in result:", result);
+          const name = result.user.displayName;
+          const email = result.user.email;
+          console.log("user result", result.user)
+          let data = handleLogin(result)
+          console.log(data)
 
-            localStorage.setItem("name", name);
-            localStorage.setItem("email", email);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+          localStorage.setItem("name", name);
+          localStorage.setItem("email", email);
+      })
+      .catch((error) => {
+          console.log(error);
+      })
 };
 
 export const signOutFromGoogle = () => {
-    signOut(auth)
-        .then((result) => {
-            console.log("Successfully signed out.", result)
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+  signOut(auth)
+      .then((result) => {
+          console.log("Successfully signed out.", result)
+      })
+      .catch((error) => {
+          console.log(error);
+      })
 };
 
 
-const handleLogin = async (user) => {
+const handleLogin = async (result) => {
   console.log("before logging in.");
-  try {
-    const response = await axios.post('http://' + window.location.host + '/login/', {
-      idToken: user.idToken,
-      accessToken: user.accessToken
-    });
+  console.log(result._tokenResponse.idToken)
+  let data = {
+    'idToken': result._tokenResponse.idToken,
+    'accessToken': result.user.accessToken,
+    'uid': result.user.uid,
+    'email':result.user.email
+  };
 
-    console.log(response.data);
-  } catch (error) {
-    console.error(error);
-  }
+  await axios.post('http://' + window.location.host + '/login', data, { 
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    return response.data
+  })
+  .catch(error => {
+    return error
+  })
 };
 

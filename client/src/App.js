@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 
 import { AccountPage } from './Components/Account'
 import { HomePage } from './Components/Home'
@@ -31,7 +31,7 @@ export default function App() {
           <Routes>
             <Route exact path="/" element={<HomePage/>}/>
             <Route path="/account" element={<AccountPage/>} />
-            <Route path="/watchlist" element={<WatchListPage/>} />
+            <Route path="/watchlist" element={<WatchListPage isSignedIn={isSignedIn}/>} />
           </Routes>  
       </div>
     </Router>

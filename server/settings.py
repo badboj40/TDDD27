@@ -128,7 +128,9 @@ MEDIA_URL = "/images/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'build/images')
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000'
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
