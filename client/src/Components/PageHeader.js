@@ -23,17 +23,16 @@ export function PageHeader(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        let path = '/movies/search';
-
         setSearchQuery(searchQuery)
 
-        await axios.post('http://' + window.location.host + path, {
+        let path = '/movies/search/';
+        const url = path + searchQuery
+
+        await axios.post('http://' + window.location.host + path + searchQuery, {
               'q': searchQuery,
         })
         .then((result) => {
                 console.log(result)
-                const url = path + `?q=${result.data}`
                 navigate(url)
             })
         .catch((error) => {

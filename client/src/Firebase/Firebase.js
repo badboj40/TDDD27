@@ -26,20 +26,20 @@ const provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
-      .then((result) => {
-          console.log("Google sign in result:", result);
-          const name = result.user.displayName;
-          const email = result.user.email;
-          console.log("user result", result.user)
-          let data = handleLogin(result)
-          console.log(data)
+    .then((result) => {
+        console.log("Google sign in result:", result);
+        const name = result.user.displayName;
+        const email = result.user.email;
+        //console.log("user result", result.user)
+        let data = handleLogin(result)
+        //console.log(data)
 
-          localStorage.setItem("name", name);
-          localStorage.setItem("email", email);
-      })
-      .catch((error) => {
-          console.log(error);
-      })
+        localStorage.setItem("name", name);
+        localStorage.setItem("email", email);
+    })
+    .catch((error) => {
+        console.log(error);
+    })
 };
 
 export const signOutFromGoogle = () => {
@@ -55,7 +55,6 @@ export const signOutFromGoogle = () => {
 
 const handleLogin = async (result) => {
   console.log("before logging in.");
-  console.log(result._tokenResponse.idToken)
   let data = {
     'idToken': result._tokenResponse.idToken,
     'accessToken': result.user.accessToken,
@@ -63,16 +62,12 @@ const handleLogin = async (result) => {
     'email':result.user.email
   };
 
-  await axios.post('http://' + window.location.host + '/login', data, { 
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => {
-    return response.data
-  })
-  .catch(error => {
-    return error
-  })
+  await axios.post('http://' + window.location.host + '/login', data)
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      return error
+    })
 };
 

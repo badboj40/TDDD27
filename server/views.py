@@ -13,7 +13,7 @@ from firebase_admin import db
 
 cred = credentials.Certificate('server/tddd27-gg-firebase-adminsdk-k0gde-8699c126f0.json')
 #authe = auth
-firebase_admin.initialize_app(cred, {
+app = firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://tddd27-gg-default-rtdb.europe-west1.firebasedatabase.app/'
 })
 
@@ -36,12 +36,14 @@ def index(request):
 @api_view(["POST"])
 def login(request):
     id_token = request.data['idToken']
+    decoded_token = auth.verify_id_token(id_token, check_revoked=True)
     access_token = request.data['accessToken']
     uid = request.data['uid']
     email = request.data['email']
 
     # Verify the ID token and get the user's information (Doesn't seem to work with Firebase_admin because of time)
-    #decoded_token = auth.verify_id_token(id_token, check_revoked=True)
+    
+    print(decoded_token)
     #uid = decoded_token['uid']
     #email = decoded_token['email']
 
@@ -60,9 +62,11 @@ def login(request):
     return Response({'result':id_token}, status=200)
 
 @api_view(["POST"])
-def search(request):
+def search(request, search_term):
+    print(search_term)
     search_query = request.data['q']
-    print(search_query)
+    ref = db.reference('Data')
+    ref.update({'searchQuery': search_query})
     return Response(search_query)
 
 @api_view(["POST"])
