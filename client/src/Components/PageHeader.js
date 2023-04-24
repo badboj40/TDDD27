@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import axios from 'axios';
+import { setSearchTerm } from '../store';
 
 import { Button } from 'react-bootstrap';
 import { Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom'; 
+import { useDispatch } from 'react-redux';
 
 import './Login.css'
 import './SignOutButton.css';
@@ -17,6 +19,7 @@ export function PageHeader(props) {
 
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const pageLogo = "/static/images/popcorn.png"
     const accountLogo = "/static/images/account.png"
@@ -28,12 +31,12 @@ export function PageHeader(props) {
         let path = '/movies/search/';
         const url = path + searchQuery
 
-        await axios.post('http://' + window.location.host + path + searchQuery, {
-              'q': searchQuery,
-        })
+        await axios.get('http://' + window.location.host + path + searchQuery)
         .then((result) => {
-                console.log(result)
-                navigate(url)
+                console.log(result);
+                console.log(setSearchTerm)
+                navigate(url);
+                dispatch(setSearchTerm(result.data));
             })
         .catch((error) => {
             console.error(error);

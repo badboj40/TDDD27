@@ -11,6 +11,8 @@ from firebase_admin import credentials
 from firebase_admin import auth
 from firebase_admin import db
 
+import requests
+
 cred = credentials.Certificate('server/tddd27-gg-firebase-adminsdk-k0gde-8699c126f0.json')
 #authe = auth
 app = firebase_admin.initialize_app(cred, {
@@ -25,6 +27,12 @@ firebaseConfig = {
   'messagingSenderId': "622087775650",
   'appId': "1:622087775650:web:cf7b13d091e47a9511fefb",
 };
+
+headers = {
+        "content-type": "application/octet-stream",
+        "X-RapidAPI-Key": "b41f441a44msh205258985fa3fd0p162968jsna501ac32a342",
+        "X-RapidAPI-Host": "moviesminidatabase.p.rapidapi.com"
+    }
 
 def index(request):
     website_name = db.reference('Data').child('Name').get()
@@ -61,13 +69,19 @@ def login(request):
 
     return Response({'result':id_token}, status=200)
 
-@api_view(["POST"])
+@api_view(["GET"])
 def search(request, search_term):
-    print(search_term)
-    search_query = request.data['q']
+    result = []
+    #search_query = request.data['q']
     ref = db.reference('Data')
-    ref.update({'searchQuery': search_query})
-    return Response(search_query)
+    ref.update({'searchQuery': search_term})
+
+    search_url = "https://moviesminidatabase.p.rapidapi.com/movie/imdb_id/byTitle/" + search_term + "/"
+    
+    for movie in requests.get(url=search_url, headers=headers).json()["results"]:
+        id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + movie["imdb_id"] + "/"
+        result.append(requests.get(url=id_search_url, headers=headers).json())
+    return Response(result)
 
 @api_view(["POST"])
 def movies(request):

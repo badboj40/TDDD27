@@ -5,7 +5,7 @@ import { AccountPage } from './Components/Account'
 import { HomePage } from './Components/Home'
 import { PageHeader } from './Components/PageHeader'
 import { WatchListPage } from './Components/WatchList'
-
+import { SearchResultPage } from './Components/SearchResult'
 
 import { auth } from './Firebase/Firebase'
 
@@ -28,11 +28,14 @@ export default function App() {
     <Router>
       <div className='App'>
         <PageHeader isSignedIn={isSignedIn}/> 
+        <div className='App-body'>
           <Routes>
             <Route exact path="/" element={<HomePage/>}/>
             <Route path="/account" element={<AccountPage/>} />
-            <Route path="/watchlist" element={<WatchListPage isSignedIn={isSignedIn}/>} />
+            <Route path="/watchlist" element={<WatchListPage isSignedIn={isSignedIn} />} />
+            <Route path="/movies/search/:searchTerm" element={<SearchResultPage />} />
           </Routes>  
+        </div>
       </div>
     </Router>
   );
