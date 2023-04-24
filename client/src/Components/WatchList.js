@@ -5,7 +5,7 @@ export function WatchListPage(props) {
 
     const isSignedIn = props.isSignedIn;
 
-    console.log("Load 'WatchList' page");
+    console.log("Load 'WatchList' page, on new branch");
 
   return (
     <div className="WatchList">
