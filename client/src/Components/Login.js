@@ -6,7 +6,7 @@ return (
     <div className="Login">
       <header className="App-header">
         <h1>
-          GGWatch - Login page
+          You must be logged in to access this feature
         </h1>
         <button className="login-with-google-btn" onClick={signInWithGoogle}>
           Sign in with Google
