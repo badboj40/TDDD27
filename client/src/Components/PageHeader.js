@@ -33,7 +33,7 @@ export function PageHeader(props) {
 
         await axios.get('http://' + window.location.host + path + searchQuery)
         .then((result) => {
-                //console.log(result);
+                console.log(result);
                 //console.log(setSearchTerm)
                 navigate(url);
                 dispatch(setSearchTerm(result.data));
@@ -67,7 +67,10 @@ export function PageHeader(props) {
                             <Nav.Link as={Link} to="/watchlist">Watchlist</Nav.Link>
                         </Nav>
                         <Container className='d-flex justify-content-end'> 
-                        <Form className="d-flex" onSubmit={handleSubmit}>
+                        <Form className="d-flex" onSubmit={(e) => {
+                                            e.currentTarget.value = ""
+                                            handleSubmit(e)
+                                        }}>
                             <Form.Control
                                 type="search"
                                 placeholder="Enter movie"

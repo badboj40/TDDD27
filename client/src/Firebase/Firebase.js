@@ -56,6 +56,7 @@ export const signOutFromGoogle = () => {
 const handleLogin = async (result) => {
   console.log("before logging in.");
   let data = {
+    'displayName': result.user.displayName,
     'idToken': result._tokenResponse.idToken,
     'accessToken': result.user.accessToken,
     'uid': result.user.uid,

@@ -33,7 +33,7 @@ export default function App() {
             <Route exact path="/" element={<HomePage/>}/>
             <Route path="/account" element={<AccountPage/>} />
             <Route path="/watchlist" element={<WatchListPage isSignedIn={isSignedIn} />} />
-            <Route path="/movies/search/:searchTerm" element={<SearchResultPage />} />
+            <Route path="/movies/search/:searchTerm" element={<SearchResultPage isSignedIn={isSignedIn} />} />
           </Routes>  
         </div>
       </div>
