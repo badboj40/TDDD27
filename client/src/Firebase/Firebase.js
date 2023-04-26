@@ -41,7 +41,8 @@ export const signInWithGoogle = async () => {
 export const signOutFromGoogle = () => {
   signOut(auth)
       .then((result) => {
-          console.log("Successfully signed out.", result)
+        sessionStorage.removeItem('watchlist')
+        console.log("Successfully signed out.", result)
       })
       .catch((error) => {
           console.log("signout error", error);

@@ -4,9 +4,9 @@ const searchInitialState = {
   searchTerm: "",
 };
 
-const watchlistInitialState = {
-  watchlist: [],
-};
+// const watchlistInitialState = {
+//   watchlist: [],
+// };
 
 // Define slice
 const searchSlice = createSlice({
@@ -19,30 +19,30 @@ const searchSlice = createSlice({
   },
 });
 
-const watchlistSlice = createSlice({
-  name: "watchlist",
-  initialState: watchlistInitialState,
-  reducers: {
-    addWatchlistItem: (state, action) => {
-      state.watchlist.push(action.payload);
-    },
-    removeWatchlistItem: (state, action) => {
-      const indexToRemove = state.watchlist.indexOf(action.payload); // find the index of the element
-      if (indexToRemove !== -1) { // check if the element is in the array
-        state.watchlist.splice(indexToRemove, 1); // remove one element at the specified index
-      }
-    },
-  },
-});
+// const watchlistSlice = createSlice({
+//   name: "watchlist",
+//   initialState: watchlistInitialState,
+//   reducers: {
+//     addWatchlistItem: (state, action) => {
+//       state.watchlist.push(action.payload);
+//     },
+//     removeWatchlistItem: (state, action) => {
+//       const indexToRemove = state.watchlist.indexOf(action.payload); // find the index of the element
+//       if (indexToRemove !== -1) { // check if the element is in the array
+//         state.watchlist.splice(indexToRemove, 1); // remove one element at the specified index
+//       }
+//     },
+//   },
+// });
 
 // Export actions
 export const { setSearchTerm } = searchSlice.actions;
-export const { addWatchlistItem, removeWatchlistItem } = watchlistSlice.actions;
+// export const { addWatchlistItem, removeWatchlistItem } = watchlistSlice.actions;
 
 
 const rootReducer = {
   search: searchSlice.reducer,
-  watchlist: watchlistSlice.reducer,
+  // watchlist: watchlistSlice.reducer,
 };
 
 

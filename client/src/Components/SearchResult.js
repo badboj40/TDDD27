@@ -57,7 +57,7 @@ export function SearchResultPage(props) {
     const addToWatchlist = async (movie) => {
         console.log("add", movie)
 
-        auth.onAuthStateChanged((user) => {
+        let user = auth.currentUser
             if (user) {
                 user.getIdToken(true)
                     .then(async (idToken) => {
@@ -79,14 +79,12 @@ export function SearchResultPage(props) {
                         console.error("Error retrieving ID token:", error);
                     });
             }
-        });
-
     };
 
     const removeFromWatchlist = async (movieId) => {
         console.log("remove", movieId)
 
-        auth.onAuthStateChanged((user) => {
+        let user = auth.currentUser
             if (user) {
                 user.getIdToken(true)
                     .then(async (idToken) => {
@@ -109,7 +107,6 @@ export function SearchResultPage(props) {
                         console.error("Error retrieving ID token:", error);
                     });
             }
-        });
     };
 
     return (
