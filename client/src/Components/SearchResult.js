@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useState } from 'react';
 import { Card, Container, OverlayTrigger, ToggleButton, Tooltip } from 'react-bootstrap'
 import { addWatchlistItem, removeWatchlistItem } from '../store';
+import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
 
 
@@ -10,13 +11,26 @@ export function SearchResultPage(props) {
     const isSignedIn = props.isSignedIn;
     const { searchTerm } = useParams();
     const searchResult = useSelector(state => state.search.searchTerm);
-    const [checked, setChecked] = useState(Array(searchResult.length).fill(false));
     const dispatch = useDispatch();
+
+    const [watchlistState, setWatchlistState] = useState(new Set(JSON.parse(sessionStorage.getItem('watchlist'))));
 
     const notFoundLogo = "/static/images/unknown-file-icon.png"
 
-    const renderTooltip = (index) => {
-        if (index) {
+    const addMovieToState = movie_id => {
+        setWatchlistState(previousState => new Set([...previousState, movie_id]));
+    }
+
+    const removeMovieFromState = movie_id => {
+        setWatchlistState(previousState => {
+            const newState = new Set(previousState);
+            newState.delete(movie_id);
+            return newState;
+        })
+    }
+
+    const renderTooltip = (movie_id) => {
+        if (watchlistState.has(movie_id)) { // change this condition
             return (
                 <Tooltip id="button-tooltip">
                     Remove from my watchlist
@@ -31,30 +45,71 @@ export function SearchResultPage(props) {
         }
     };
 
-    const addToWatchlist = async (movieId) => {
-        console.log("add", movieId)
-        
-        await axios.post('http://' + window.location.host + '/updateWatchlist')
-        .then((result) => {
-                console.log(result);
-                dispatch(addWatchlistItem(movieId));
-            })
-        .catch((error) => {
-            console.error(error);
-        })
+    const renderToggleButton = (movie_id) => {
+        if (watchlistState.has(movie_id)) { // change this condition
+            return 'x'
+        } else {
+            return '+'
+        }
+    };
+
+
+    const addToWatchlist = async (movie) => {
+        console.log("add", movie)
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                user.getIdToken(true)
+                    .then(async (idToken) => {
+                        // Use the ID token to authenticate the user with your backend server
+
+                        // Make an Axios request with the ID token as the Bearer token
+                        await axios.post('http://' + window.location.host + '/addWatchlistItem', {
+                            'idToken': idToken,
+                            'movie': movie,
+                        })
+                            .then((result) => {
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+                    })
+                    .catch((error) => {
+                        // Handle any errors that occur while retrieving the ID token
+                        console.error("Error retrieving ID token:", error);
+                    });
+            }
+        });
+
     };
 
     const removeFromWatchlist = async (movieId) => {
         console.log("remove", movieId)
 
-        await axios.delete('http://' + window.location.host + '/updateWatchlist')
-        .then((result) => {
-                console.log(result);
-                dispatch(removeWatchlistItem(movieId))
-            })
-        .catch((error) => {
-            console.error(error);
-        })
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                user.getIdToken(true)
+                    .then(async (idToken) => {
+                        // Use the ID token to authenticate the user with your backend server
+
+                        // Make an Axios request with the ID token as the Bearer token
+                        await axios.delete('http://' + window.location.host + '/removeWatchlistItem/' + movieId, {
+                            headers: {
+                                Authorization: idToken,
+                            },
+                        })
+                            .then((result) => {
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+                    })
+                    .catch((error) => {
+                        // Handle any errors that occur while retrieving the ID token
+                        console.error("Error retrieving ID token:", error);
+                    });
+            }
+        });
     };
 
     return (
@@ -77,22 +132,29 @@ export function SearchResultPage(props) {
                                             <OverlayTrigger
                                                 placement="right"
                                                 delay={{ show: 250, hide: 400 }}
-                                                overlay={renderTooltip(checked[index])}
+                                                overlay={renderTooltip(item.results.imdb_id)}
                                             >
                                                 <ToggleButton
                                                     id={index}
                                                     type="checkbox"
                                                     variant="success"
-                                                    checked={checked[index]}
                                                     value={index}
-                                                    onChange={(e) => {
-                                                        const newChecked = [...checked];
-                                                        newChecked[index] = e.currentTarget.checked;
-                                                        setChecked(newChecked);
-                                                        checked[index] ? removeFromWatchlist(item.results.imdb_id) : addToWatchlist(item.results.imdb_id);
+                                                    checked={watchlistState.has(item.results.movie_id)}
+                                                    onClick={async (e) => {
+                                                        if (watchlistState.has(item.results.imdb_id)) {
+                                                            removeFromWatchlist(item.results.imdb_id)
+                                                            watchlistState.delete(item.results.imdb_id);
+                                                            removeMovieFromState(item.results.imdb_id)
+                                                        } else {
+                                                            addToWatchlist(item.results)
+                                                            watchlistState.add(item.results.imdb_id);
+                                                            addMovieToState(item.results.imdb_id)
+                                                        }
+                                                        console.log(watchlistState)
+                                                        sessionStorage.setItem("watchlist", JSON.stringify(Array.from(watchlistState)))
                                                     }}
                                                 >
-                                                    {checked[index] ? 'x' : '+'}
+                                                    {renderToggleButton(item.results.imdb_id)}
                                                 </ToggleButton>
                                             </OverlayTrigger>
                                             :

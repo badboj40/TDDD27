@@ -46,28 +46,23 @@ def index(request):
 
 @api_view(["POST"])
 def login(request):
+    # Verify the ID token and get the user's information
     id_token = request.data['idToken']
     decoded_token = auth.verify_id_token(id_token, check_revoked=True)
-    uid = request.data['uid']
-    email = request.data['email']
-    display_name = request.data['displayName']
 
-    # Verify the ID token and get the user's information (Doesn't seem to work with Firebase_admin because of time)
-
-    print("decoded", decoded_token)
-    # uid = decoded_token['uid']
-    # email = decoded_token['email']
+    # print("decoded", decoded_token)
+    uid = decoded_token['uid']
+    email = decoded_token['email']
+    displayName = decoded_token['name']
 
     # Provide uid and add email and displayname to it
-    ref = db.reference(uid)
+    ref = db.reference('Users').child(uid)
     ref.update({'email': email})
-    ref.update({'displayName': display_name})
+    ref.update({'displayName': displayName})
 
-    # Authenticate the user in Django and create a session
-    user = authenticate(request, uid=uid, email=email)
-    # login(request, user)
-
-    return Response({'result': uid}, status=200)
+    watchlist = [key for key in ref.child('watchlist').get()] if ref.child('watchlist').get() else []
+    print("watchlist:\n", watchlist)
+    return Response({'uid': uid, 'watchlist': watchlist}, status=200)
 
 
 @api_view(["GET"])
@@ -92,13 +87,64 @@ def movies(request):
     pass
 
 
-@api_view(["POST", "DELETE"])
-def update_watchlist(request):
-    #ref = db.reference(uid)
-    if request.method == "POST":
-        return Response({'result': "POST"}, status=200)
-    elif request.method == "DELETE":
-        return Response({'result': "DELETE"}, status=200)
+@api_view(["POST"])
+def add_watchlist_item(request):
+    id_token = request.data['idToken']
+    if not id_token:
+        return Response({'error': "No authentication token."}, status=404)
+
+    decoded_token = auth.verify_id_token(id_token, check_revoked=True)
+
+    if not request.data.get('movie'):
+        return Response({'error': "Movie was not found."}, status=404)
+
+    ref = db.reference('Users').child(decoded_token['uid']).child('watchlist')
+    print(request.data['movie'])
+    ref.update({request.data['movie']['imdb_id']: request.data['movie']})
+
+
+    return Response({'result': "POST"}, status=200)
+
+
+@api_view(["DELETE"])
+def remove_watchlist_item(request, movie_id):
+
+    # id_token = request.headers.get("Authentication")
+    id_token = request.META.get('HTTP_AUTHORIZATION')
+    # print(id_token)
+
+    if not id_token:
+        return Response({'error': "No authentication token."}, status=401)
+
+    if not movie_id:
+        return Response({'error': "You don't have this movie in your watchlist."}, status=404)
+
+    decoded_token = auth.verify_id_token(id_token, check_revoked=True)
+
+    ref = db.reference('Users').child(decoded_token['uid']).child('watchlist')
+    ref.child(movie_id).delete()
+
+    return Response({'result': "DELETE"}, status=200)
+
+
+# @api_view(["GET"])
+# def is_in_watchlist(request, movie_id):
+#     # TODO: Break out authentication part to separate function (do not place the function in this file)
+#     id_token = request.META.get('HTTP_AUTHORIZATION')
+#     #print(id_token)
+
+#     if not id_token:
+#         return Response({'error': "No authentication token."}, status=401)
+
+#     if not movie_id:
+#         return Response({'error': "You don't have this movie in your watchlist."}, status=404)
+
+#     decoded_token = auth.verify_id_token(id_token, check_revoked=True)
+
+#     if not db.reference('Users').child(decoded_token['uid']).child('watchlist').get(movie_id):
+#         return Response({'result': False}, status=200)
+
+#     return Response({'result': True}, status=200)
 
 
 def get_csrf_token(request):

@@ -9,7 +9,9 @@ urlpatterns = [
     path('login', views.login, name="login"),
     path('movies/search/<str:search_term>', views.search, name='search'),
     #path('watchlist', views.watchlist, name='watchlist'),
-    path('updateWatchlist', views.update_watchlist, name="update_watchlist"),
+    path('addWatchlistItem', views.add_watchlist_item, name="add_watchlist_item"),
+    path('removeWatchlistItem/<str:movie_id>', views.remove_watchlist_item, name="remove_watchlist_item"),
+    # path('isInWatchlist/<str:movie_id>', views.is_in_watchlist, name="is_in_watchlist"),
     # path('signout', views.index, name="index"),
 ]
 

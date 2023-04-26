@@ -33,8 +33,6 @@ export function PageHeader(props) {
 
         await axios.get('http://' + window.location.host + path + searchQuery)
         .then((result) => {
-                console.log(result);
-                //console.log(setSearchTerm)
                 navigate(url);
                 dispatch(setSearchTerm(result.data));
             })
