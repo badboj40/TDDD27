@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { useNavigate } from "react-router-dom";
 import {
     getAuth,
     GoogleAuthProvider,
@@ -23,8 +24,6 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
-
-
 
 export const signInWithGoogle = async () => {
   signInWithPopup(auth, provider)

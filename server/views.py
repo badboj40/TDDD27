@@ -60,14 +60,14 @@ def login(request):
     ref.update({'email': email})
     ref.update({'displayName': displayName})
 
-    watchlist = [key for key in ref.child('watchlist').get()] if ref.child('watchlist').get() else []
+    watchlist = wl if (wl:=ref.child('watchlist').get()) else []
     print("watchlist:\n", watchlist)
     return Response({'uid': uid, 'watchlist': watchlist}, status=200)
 
 
 @api_view(["GET"])
 def search(request, search_term):
-    result = []
+    result = {}
     # search_query = request.data['q']
     ref = db.reference('Data')
     ref.update({'searchQuery': search_term})
@@ -78,7 +78,8 @@ def search(request, search_term):
     for movie in requests.get(url=search_url, headers=headers).json()["results"]:
         id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + \
             movie["imdb_id"] + "/"
-        result.append(requests.get(url=id_search_url, headers=headers).json())
+
+        result[movie["imdb_id"]] = requests.get(url=id_search_url, headers=headers).json()["results"]
     return Response(result)
 
 

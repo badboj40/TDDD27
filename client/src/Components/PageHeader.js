@@ -94,6 +94,7 @@ export function PageHeader(props) {
                                     <Button className="logout-btn" variant="light" onClick={(e) => {
                                         e.preventDefault();
                                         signOutFromGoogle();
+                                        navigate('/')
                                     }}>Sign out
                                     </Button>{' '}
                                 </NavDropdown.Item>
