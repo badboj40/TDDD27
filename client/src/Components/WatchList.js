@@ -1,5 +1,4 @@
-import { useSelector } from 'react-redux'
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Container, OverlayTrigger, ToggleButton, Tooltip } from 'react-bootstrap'
 import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
@@ -7,7 +6,6 @@ import axios from 'axios';
 
 export function WatchListPage(props) {
     const isSignedIn = props.isSignedIn;
-    const searchResult = useSelector(state => state.search.searchTerm);
 
     const [watchlistState, setWatchlistState] = useState(JSON.parse(sessionStorage.getItem('watchlist')));
 
@@ -15,7 +13,7 @@ export function WatchListPage(props) {
 
     const addMovieToState = key_value => {
         setWatchlistState(previousState => {
-            const newObject = {...previousState};
+            const newObject = { ...previousState };
             newObject[key_value[0]] = key_value[1]
             return newObject;
         })
@@ -23,11 +21,16 @@ export function WatchListPage(props) {
 
     const removeMovieFromState = movie_id => {
         setWatchlistState(previousState => {
-            const newObject = {...previousState};
+            const newObject = { ...previousState };
             delete newObject[movie_id]
             return newObject;
         })
     }
+
+    useEffect(() => {
+        console.log("watchlistState", watchlistState);
+        sessionStorage.setItem("watchlist", JSON.stringify(watchlistState));
+    }, [watchlistState]);
 
     const renderTooltip = (movie_id) => {
         if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
@@ -108,24 +111,27 @@ export function WatchListPage(props) {
                 });
         }
     };
-    
+
 
     return (
-        <div className="SearchResult">
-            <Container className=''>
+        <div className="WatchList">
+            <Container className='d-flex'>
                 {watchlistState ? (
                     Object.entries(watchlistState).map((key_value) => (
-                        <Card className="" key={key_value[0]} style={{ width: '40rem' }}>
+                        // fix 3 movies per row
+                        <Card className="" key={key_value[0]} style={{ width: '10rem' }}>
                             <div className=''>
                                 <div className='col-sm-7'>
                                     <Card.Body>
-                                        <Card.Title>{key_value[1].title}</Card.Title>
+                                        <Card.Title className='text-center' 
+                                            style={{fontSize: '20px'}}>{key_value[1].title}</Card.Title>
                                         {isSignedIn === true ?
                                             <OverlayTrigger
                                                 placement="right"
                                                 delay={{ show: 250, hide: 400 }}
                                                 overlay={renderTooltip(key_value[1].imdb_id)}
                                             >
+                                                {/* TODO: might be enough with a normal button for remove here */}
                                                 <ToggleButton
                                                     id={key_value[0]}
                                                     type="checkbox"
@@ -140,8 +146,6 @@ export function WatchListPage(props) {
                                                             addToWatchlist(key_value[1])
                                                             addMovieToState(key_value)
                                                         }
-                                                        console.log(watchlistState)
-                                                        sessionStorage.setItem("watchlist", JSON.stringify(watchlistState))
                                                     }}
                                                 >
                                                     {renderToggleButton(key_value[0])}
@@ -154,7 +158,7 @@ export function WatchListPage(props) {
                                     </Card.Body>
                                 </div>
                                 <div className='col-sm-5'>
-                                    <Card.Img variant="top"
+                                    <Card.Img variant="top" style={{width: '10rem'}}
                                         src={key_value[1].banner} onError={(e) => { e.target.src = notFoundLogo }} />
                                 </div>
                             </div>

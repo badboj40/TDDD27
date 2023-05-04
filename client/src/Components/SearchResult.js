@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Container, OverlayTrigger, ToggleButton, Tooltip } from 'react-bootstrap'
 import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
@@ -13,21 +13,29 @@ export function SearchResultPage(props) {
 
     const notFoundLogo = "/static/images/unknown-file-icon.png"
 
-    const addMovieToState = key_value => {
-        setWatchlistState(previousState => {
-            const newObject = {...previousState};
-            newObject[key_value[0]] = key_value[1]
-            return newObject;
-        })
-    }
+    const addMovieToState = (key_value) => {
+        console.log("add state")
 
-    const removeMovieFromState = movie_id => {
+        setWatchlistState(previousState => {
+            const newObject = { ...previousState, [key_value[0]]: key_value[1] };
+            return newObject;
+          });
+        };
+
+    const removeMovieFromState = (movie_id) => {
+        console.log("remove state")
+
         setWatchlistState(previousState => {
             const newObject = {...previousState};
             delete newObject[movie_id]
             return newObject;
-        })
-    }
+        });
+    };
+
+    useEffect(() => {
+        console.log("watchlistState", watchlistState);
+        sessionStorage.setItem("watchlist", JSON.stringify(watchlistState));
+      }, [watchlistState]);
 
     const renderTooltip = (movie_id) => {
         if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
@@ -55,15 +63,14 @@ export function SearchResultPage(props) {
 
 
     const addToWatchlist = async (movie) => {
-        console.log("add", movie)
+        console.log("add:", movie)
 
         let user = auth.currentUser
         if (user) {
             user.getIdToken(true)
                 .then(async (idToken) => {
-                    // Use the ID token to authenticate the user with your backend server
+                    // ID token to authenticate the user on the backend
 
-                    // Make an Axios request with the ID token as the Bearer token
                     await axios.post('http://' + window.location.host + '/addWatchlistItem', {
                         'idToken': idToken,
                         'movie': movie,
@@ -82,15 +89,14 @@ export function SearchResultPage(props) {
     };
 
     const removeFromWatchlist = async (movieId) => {
-        console.log("remove", movieId)
+        console.log("remove:", movieId)
 
         let user = auth.currentUser
         if (user) {
             user.getIdToken(true)
                 .then(async (idToken) => {
-                    // Use the ID token to authenticate the user with your backend server
+                    // ID token to authenticate the user on the backend
 
-                    // Make an Axios request with the ID token as the Bearer token
                     await axios.delete('http://' + window.location.host + '/removeWatchlistItem/' + movieId, {
                         headers: {
                             Authorization: idToken,
@@ -138,7 +144,7 @@ export function SearchResultPage(props) {
                                                     variant="success"
                                                     value={key_value[0]}
                                                     checked={watchlistState.hasOwnProperty(key_value[0])}
-                                                    onClick={async (e) => {
+                                                    onClick={ () => {
                                                         if (watchlistState.hasOwnProperty(key_value[0])) {
                                                             removeFromWatchlist(key_value[0])
                                                             removeMovieFromState(key_value[0])
@@ -146,8 +152,6 @@ export function SearchResultPage(props) {
                                                             addToWatchlist(key_value[1])
                                                             addMovieToState(key_value)
                                                         }
-                                                        console.log(watchlistState)
-                                                        sessionStorage.setItem("watchlist", JSON.stringify(watchlistState))
                                                     }}
                                                 >
                                                     {renderToggleButton(key_value[0])}
