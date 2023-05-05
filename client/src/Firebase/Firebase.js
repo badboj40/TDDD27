@@ -29,8 +29,7 @@ export const signInWithGoogle = async () => {
   signInWithPopup(auth, provider)
     .then(async (result) => {
         console.log("Google sign in result:", result);
-
-        let data = handleLogin(result)
+        handleLogin(result)
     })
     .catch((error) => {
         console.log("signin error",error);
@@ -41,6 +40,7 @@ export const signOutFromGoogle = () => {
   signOut(auth)
       .then((result) => {
         sessionStorage.removeItem('watchlist')
+        sessionStorage.removeItem('seenlist')
         console.log("Successfully signed out.", result)
       })
       .catch((error) => {
@@ -56,6 +56,7 @@ const handleLogin = async (result) => {
     .then(response => {
       console.log("login response", response.data)
       sessionStorage.setItem('watchlist', JSON.stringify(response.data.watchlist))
+      sessionStorage.setItem('seenlist', JSON.stringify(response.data.seenlist))
       return response.data
     })
     .catch(error => {

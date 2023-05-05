@@ -5,6 +5,7 @@ import { AccountPage } from './Components/Account'
 import { HomePage } from './Components/Home'
 import { PageHeader } from './Components/PageHeader'
 import { WatchListPage } from './Components/WatchList'
+import { SeenListPage } from './Components/SeenList'
 import { SearchResultPage } from './Components/SearchResult'
 import { LoginPage } from './Components/Login'
 
@@ -34,6 +35,7 @@ export default function App() {
             <Route exact path="/" element={<HomePage/>}/>
             <Route path="/account" element={<AccountPage/>} />
             <Route path="/watchlist" element={isSignedIn ? <WatchListPage/> : <LoginPage/> } />
+            <Route path="/seen" element={isSignedIn ? <SeenListPage/> : <LoginPage/> } />
             <Route path="/movies/search/:searchTerm" element={<SearchResultPage isSignedIn={isSignedIn} />} />
           </Routes>  
         </div>

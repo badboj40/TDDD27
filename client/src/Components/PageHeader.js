@@ -63,6 +63,7 @@ export function PageHeader(props) {
                         <Nav>
                             <Nav.Link as={Link} to="/">Movies</Nav.Link>
                             <Nav.Link as={Link} to="/watchlist">Watchlist</Nav.Link>
+                            <Nav.Link as={Link} to="/seen">Seen</Nav.Link>
                         </Nav>
                         <Container className='d-flex justify-content-end'> 
                         <Form className="d-flex" onSubmit={(e) => {

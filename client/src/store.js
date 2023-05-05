@@ -4,9 +4,14 @@ const searchInitialState = {
   searchTerm: "",
 };
 
-// const watchlistInitialState = {
-//   watchlist: [],
-// };
+const watchlistInitialState = {
+  watchlist: {},
+};
+
+const seenlistInitialState = {
+  watchlist: {},
+};
+
 
 // Define slice
 const searchSlice = createSlice({

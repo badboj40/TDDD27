@@ -8,9 +8,10 @@ urlpatterns = [
     path('account', views.index, name='index'),
     path('login', views.login, name="login"),
     path('movies/search/<str:search_term>', views.search, name='search'),
-    #path('watchlist', views.watchlist, name='watchlist'),
     path('addWatchlistItem', views.add_watchlist_item, name="add_watchlist_item"),
     path('removeWatchlistItem/<str:movie_id>', views.remove_watchlist_item, name="remove_watchlist_item"),
+    path('addSeenlistItem', views.add_seenlist_item, name="add_seenlist_item"),
+    path('removeSeenlistItem/<str:movie_id>', views.remove_seenlist_item, name="remove_seenlist_item"),
     # path('isInWatchlist/<str:movie_id>', views.is_in_watchlist, name="is_in_watchlist"),
     # path('signout', views.index, name="index"),
 ]

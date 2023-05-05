@@ -4,21 +4,14 @@ import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
 
 
-export function WatchListPage() {
-    const [watchlistState, setWatchlistState] = useState(JSON.parse(sessionStorage.getItem('watchlist')));
+export function SeenListPage() {
     const [seenlistState, setSeenlistState] = useState(JSON.parse(sessionStorage.getItem('seenlist')));
+    const [watchlistState, setWatchlistState] = useState(JSON.parse(sessionStorage.getItem('watchlist')));
 
     const notFoundLogo = "/static/images/unknown-file-icon.png"
     const checkMarkLogo = "/static/images/check_mark.png"
 
     const cardWidth = '20rem'
-
-    const addMovieToSeenlistState = (key_value) => {
-        setSeenlistState(previousState => {
-            const newObject = { ...previousState, [key_value[0]]: key_value[1] };
-            return newObject;
-        });
-    };
 
     const addMovieToWatchlistState = (key_value) => {
         setWatchlistState(previousState => {
@@ -34,6 +27,13 @@ export function WatchListPage() {
             return newObject;
         })
     }
+
+    const addMovieToSeenlistState = (key_value) => {
+        setSeenlistState(previousState => {
+            const newObject = { ...previousState, [key_value[0]]: key_value[1] };
+            return newObject;
+        });
+    };
 
     const removeMovieFromSeenlistState = movie_id => {
         setSeenlistState(previousState => {
@@ -52,6 +52,7 @@ export function WatchListPage() {
         console.log("SeenlistState", seenlistState);
         sessionStorage.setItem("seenlist", JSON.stringify(seenlistState));
     }, [seenlistState]);
+
 
     const addToWatchlist = async (movie) => {
         console.log("add:", movie)
@@ -203,11 +204,11 @@ export function WatchListPage() {
 
 
     return (
-        <div className="WatchList">
+        <div className="Seenlist">
             <Container className='grid'>
                 <Row md={8} className="gy-5">
-                    {watchlistState ? (
-                        Object.entries(watchlistState).map((key_value) => (
+                    {seenlistState ? (
+                        Object.entries(seenlistState).map((key_value) => (
                             <Col md={4} key={key_value[0]}>
                                 <Card style={{ width: cardWidth }}>
                                     <Container style={{ postition: 'relative', padding: 0 }}>
