@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Card, Container, OverlayTrigger, Row, ToggleButton, Tooltip } from 'react-bootstrap'
 import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
-import { addToWatchlist, 
-    addMovieToWatchlistState, 
-    removeFromWatchlist, 
-    removeMovieFromWatchlistState, 
-    renderWatchlistTooltip, 
-    renderToggleButton } from '../Helpers/WatchListHelpers'
+// import { addToWatchlist, 
+//     addMovieToWatchlistState, 
+//     removeFromWatchlist, 
+//     removeMovieFromWatchlistState, 
+//     renderWatchlistTooltip, 
+//     renderToggleButton } from '../Helpers/WatchListHelpers'
 
 
 
@@ -20,117 +20,126 @@ export function SearchResultPage(props) {
 
     const notFoundLogo = "/static/images/unknown-file-icon.png"
 
+    const addMovieToWatchlistState = (key_value) => {
+        console.log("add state")
+
+        setWatchlistState(previousState => {
+            const newObject = { ...previousState, [key_value[0]]: key_value[1] };
+            return newObject;
+        });
+    };
+
+    const removeMovieFromWatchlistState = (movie_id) => {
+        console.log("remove state")
+
+        setWatchlistState(previousState => {
+            const newObject = { ...previousState };
+            delete newObject[movie_id]
+            return newObject;
+        });
+    };
+
     useEffect(() => {
         console.log("watchlistState", watchlistState);
         sessionStorage.setItem("watchlist", JSON.stringify(watchlistState));
-      }, [watchlistState]);
+    }, [watchlistState]);
 
-    // const addMovieToState = (key_value) => {
-    //     console.log("add state")
+    useEffect(() => {
+        console.log("watchlistState", watchlistState);
+        sessionStorage.setItem("watchlist", JSON.stringify(watchlistState));
+    }, [watchlistState]);
 
-    //     setWatchlistState(previousState => {
-    //         const newObject = { ...previousState, [key_value[0]]: key_value[1] };
-    //         return newObject;
-    //       });
-    //     };
+    const addToWatchlist = async (key_value) => {
+        console.log("add:", key_value)
 
-    // const removeMovieFromState = (movie_id) => {
-    //     console.log("remove state")
+        let user = auth.currentUser
+        if (user) {
+            user.getIdToken(true)
+                .then(async (idToken) => {
+                    // ID token to authenticate the user on the backend
 
-    //     setWatchlistState(previousState => {
-    //         const newObject = {...previousState};
-    //         delete newObject[movie_id]
-    //         return newObject;
-    //     });
-    // };
+                    await axios.post('http://' + window.location.host + '/addWatchlistItem', {
+                        'idToken': idToken,
+                        'movie': key_value[1],
+                    })
+                        .then((result) => {
+                            setWatchlistState(previousState => {
+                                const newObject = { ...previousState, [key_value[0]]: key_value[1] };
+                                return newObject;
+                            });
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+                })
+                .catch((error) => {
+                    // Handle any errors that occur while retrieving the ID token
+                    console.error("Error retrieving ID token:", error);
+                });
+        }
+    };
 
-    // useEffect(() => {
-    //     console.log("watchlistState", watchlistState);
-    //     sessionStorage.setItem("watchlist", JSON.stringify(watchlistState));
-    //   }, [watchlistState]);
+    const removeFromWatchlist = async (movieId) => {
+        console.log("remove", movieId)
 
-    // const renderWatchlistTooltip = (movie_id) => {
-    //     if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
-    //         return (
-    //             <Tooltip id="button-tooltip">
-    //                 Remove from my watchlist
-    //             </Tooltip>
-    //         );
-    //     } else {
-    //         return (
-    //             <Tooltip id="button-tooltip">
-    //                 Add to my watchlist
-    //             </Tooltip>
-    //         );
-    //     }
-    // };
+        let user = auth.currentUser
+        if (user) {
+            user.getIdToken(true)
+                .then(async (idToken) => {
+                    // Use the ID token to authenticate the user with your backend server
 
-    // const renderToggleButton = (movie_id) => {
-    //     if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
-    //         return 'x'
-    //     } else {
-    //         return '+'
-    //     }
-    // };
+                    // Make an Axios request with the ID token as the Bearer token
+                    await axios.delete('http://' + window.location.host + '/removeWatchlistItem/' + movieId, {
+                        headers: {
+                            Authorization: idToken,
+                        },
+                    })
+                        .then((result) => {
+                            setWatchlistState(previousState => {
+                                const newObject = { ...previousState };
+                                delete newObject[movieId]
+                                return newObject;
+                            })
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+                })
+                .catch((error) => {
+                    // Handle any errors that occur while retrieving the ID token
+                    console.error("Error retrieving ID token:", error);
+                });
+        }
+    };
 
+    const renderWatchlistTooltip = (movie_id) => {
+        if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
+            return (
+                <Tooltip id="button-tooltip">
+                    Remove from my watchlist
+                </Tooltip>
+            );
+        } else {
+            return (
+                <Tooltip id="button-tooltip">
+                    Add to my watchlist
+                </Tooltip>
+            );
+        }
+    };
 
-    // const addToWatchlist = async (movie) => {
-    //     console.log("add:", movie)
+    const renderToggleButton = (movie_id) => {
+        if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
+            return 'x'
+        } else {
+            return '+'
+        }
+    };
 
-    //     let user = auth.currentUser
-    //     if (user) {
-    //         user.getIdToken(true)
-    //             .then(async (idToken) => {
-    //                 // ID token to authenticate the user on the backend
-
-    //                 await axios.post('http://' + window.location.host + '/addWatchlistItem', {
-    //                     'idToken': idToken,
-    //                     'movie': movie,
-    //                 })
-    //                     .then((result) => {
-    //                     })
-    //                     .catch((error) => {
-    //                         console.error(error);
-    //                     });
-    //             })
-    //             .catch((error) => {
-    //                 // Handle any errors that occur while retrieving the ID token
-    //                 console.error("Error retrieving ID token:", error);
-    //             });
-    //     }
-    // };
-
-    // const removeFromWatchlist = async (movieId) => {
-    //     console.log("remove:", movieId)
-
-    //     let user = auth.currentUser
-    //     if (user) {
-    //         user.getIdToken(true)
-    //             .then(async (idToken) => {
-    //                 // ID token to authenticate the user on the backend
-
-    //                 await axios.delete('http://' + window.location.host + '/removeWatchlistItem/' + movieId, {
-    //                     headers: {
-    //                         Authorization: idToken,
-    //                     },
-    //                 })
-    //                     .then((result) => {
-    //                     })
-    //                     .catch((error) => {
-    //                         console.error(error);
-    //                     });
-    //             })
-    //             .catch((error) => {
-    //                 // Handle any errors that occur while retrieving the ID token
-    //                 console.error("Error retrieving ID token:", error);
-    //             });
-    //     }
-    // };
-    
 
     return (
         <div className="SearchResult">
-            <Container className=''>
+            <Container>
                 {searchResult ? (
                     Object.entries(searchResult).map((key_value) => (
                         <Card className="" key={key_value[0]} style={{ width: '62rem' }}>
@@ -156,13 +165,13 @@ export function SearchResultPage(props) {
                                                     variant="success"
                                                     value={key_value[0]}
                                                     checked={watchlistState.hasOwnProperty(key_value[0])}
-                                                    style={{borderWidth: '2px', borderColor: 'black', fontWeight: 'bold'}}
-                                                    onClick={ () => {
+                                                    style={{ borderWidth: '2px', borderColor: 'black', fontWeight: 'bold' }}
+                                                    onClick={() => {
                                                         if (watchlistState.hasOwnProperty(key_value[0])) {
                                                             removeFromWatchlist(key_value[0])
                                                             removeMovieFromWatchlistState(key_value[0])
                                                         } else {
-                                                            addToWatchlist(key_value[1])
+                                                            addToWatchlist(key_value)
                                                             addMovieToWatchlistState(key_value)
                                                         }
                                                     }}

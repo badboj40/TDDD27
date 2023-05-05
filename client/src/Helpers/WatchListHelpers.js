@@ -4,19 +4,19 @@ import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
 import { WatchListPage } from '../Components/WatchList'
 
-export const addMovieToWatchlistState = (key_value) => {
+export const addMovieToWatchlistState = async (key_value) => {
     console.log("add state")
 
-    WatchListPage.setWatchlistState(previousState => {
+    await WatchListPage.setWatchlistState(previousState => {
         const newObject = { ...previousState, [key_value[0]]: key_value[1] };
         return newObject;
       });
     };
 
-export const removeMovieFromWatchlistState = (movie_id) => {
+export const removeMovieFromWatchlistState = async (movie_id) => {
     console.log("remove state")
 
-    WatchListPage.setWatchlistState(previousState => {
+    await WatchListPage.setWatchlistState(previousState => {
         const newObject = {...previousState};
         delete newObject[movie_id]
         return newObject;

@@ -13,36 +13,6 @@ export function SeenListPage() {
 
     const cardWidth = '20rem'
 
-    const addMovieToWatchlistState = (key_value) => {
-        setWatchlistState(previousState => {
-            const newObject = { ...previousState, [key_value[0]]: key_value[1] };
-            return newObject;
-        });
-    };
-
-    const removeMovieFromWatchlistState = movie_id => {
-        setWatchlistState(previousState => {
-            const newObject = { ...previousState };
-            delete newObject[movie_id]
-            return newObject;
-        })
-    }
-
-    const addMovieToSeenlistState = (key_value) => {
-        setSeenlistState(previousState => {
-            const newObject = { ...previousState, [key_value[0]]: key_value[1] };
-            return newObject;
-        });
-    };
-
-    const removeMovieFromSeenlistState = movie_id => {
-        setSeenlistState(previousState => {
-            const newObject = { ...previousState };
-            delete newObject[movie_id]
-            return newObject;
-        })
-    }
-
     useEffect(() => {
         console.log("watchlistState", watchlistState);
         sessionStorage.setItem("watchlist", JSON.stringify(watchlistState));
@@ -54,8 +24,8 @@ export function SeenListPage() {
     }, [seenlistState]);
 
 
-    const addToWatchlist = async (movie) => {
-        console.log("add:", movie)
+    const addToWatchlist = async (key_value) => {
+        console.log("add:", key_value)
 
         let user = auth.currentUser
         if (user) {
@@ -65,9 +35,13 @@ export function SeenListPage() {
 
                     await axios.post('http://' + window.location.host + '/addWatchlistItem', {
                         'idToken': idToken,
-                        'movie': movie,
+                        'movie': key_value[1],
                     })
                         .then((result) => {
+                            setWatchlistState(previousState => {
+                                const newObject = { ...previousState, [key_value[0]]: key_value[1] };
+                                return newObject;
+                            });
                         })
                         .catch((error) => {
                             console.error(error);
@@ -80,8 +54,8 @@ export function SeenListPage() {
         }
     };
 
-    const addToSeenlist = async (movie) => {
-        console.log("add:", movie)
+    const addToSeenlist = async (key_value) => {
+        console.log("add:", key_value[1])
 
         let user = auth.currentUser
         if (user) {
@@ -91,9 +65,13 @@ export function SeenListPage() {
 
                     await axios.post('http://' + window.location.host + '/addSeenlistItem', {
                         'idToken': idToken,
-                        'movie': movie,
+                        'movie': key_value[1],
                     })
                         .then((result) => {
+                            setSeenlistState(previousState => {
+                                const newObject = { ...previousState, [key_value[0]]: key_value[1] };
+                                return newObject;
+                            });
                         })
                         .catch((error) => {
                             console.error(error);
@@ -122,6 +100,11 @@ export function SeenListPage() {
                         },
                     })
                         .then((result) => {
+                            setWatchlistState(previousState => {
+                                const newObject = { ...previousState };
+                                delete newObject[movieId]
+                                return newObject;
+                            })
                         })
                         .catch((error) => {
                             console.error(error);
@@ -150,6 +133,11 @@ export function SeenListPage() {
                         },
                     })
                         .then((result) => {
+                            setSeenlistState(previousState => {
+                                const newObject = { ...previousState };
+                                delete newObject[movieId]
+                                return newObject;
+                            })
                         })
                         .catch((error) => {
                             console.error(error);
@@ -227,10 +215,8 @@ export function SeenListPage() {
                                                 onClick={async () => {
                                                     if (watchlistState.hasOwnProperty(key_value[0])) {
                                                         removeFromWatchlist(key_value[0])
-                                                        removeMovieFromWatchlistState(key_value[0])
                                                     } else {
-                                                        addToWatchlist(key_value[1])
-                                                        addMovieToWatchlistState(key_value)
+                                                        addToWatchlist(key_value)
                                                     }
                                                 }}
                                                 style={{ position: 'absolute', borderWidth: '2px', borderColor: 'black', opacity: '0.9', fontWeight: 'bold' }}
@@ -253,10 +239,8 @@ export function SeenListPage() {
                                                 onClick={async () => {
                                                     if (seenlistState.hasOwnProperty(key_value[0])) {
                                                         removeFromSeenlist(key_value[0])
-                                                        removeMovieFromSeenlistState(key_value[0])
                                                     } else {
-                                                        addToSeenlist(key_value[1])
-                                                        addMovieToSeenlistState(key_value)
+                                                        addToSeenlist(key_value)
                                                     }
                                                 }}
                                                 style={{ position: 'absolute', right: '0', borderWidth: '2px', borderColor: 'black', opacity: '0.9', fontWeight: 'bold' }}
