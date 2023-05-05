@@ -136,6 +136,14 @@ export function SearchResultPage(props) {
         }
     };
 
+    const renderVariant = (movie_id) => {
+        if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
+            return 'danger'
+        } else {
+            return 'success'
+        }
+    };
+
 
     return (
         <div className="SearchResult">
@@ -162,7 +170,7 @@ export function SearchResultPage(props) {
                                                 <ToggleButton
                                                     id={key_value[0]}
                                                     type="checkbox"
-                                                    variant="success"
+                                                    variant={renderVariant(key_value[0])}
                                                     value={key_value[0]}
                                                     checked={watchlistState.hasOwnProperty(key_value[0])}
                                                     style={{ borderWidth: '2px', borderColor: 'black', fontWeight: 'bold' }}

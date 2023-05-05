@@ -190,6 +190,14 @@ export function SeenListPage() {
         }
     };
 
+    const renderVariant = (movie_id) => {
+        if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
+            return 'danger'
+        } else {
+            return 'success'
+        }
+    };
+
 
     return (
         <div className="Seenlist">
@@ -209,7 +217,7 @@ export function SeenListPage() {
                                             <ToggleButton
                                                 id={key_value[0]}
                                                 type="checkbox"
-                                                variant="success"
+                                                variant={renderVariant(key_value[0])}
                                                 value={key_value[0]}
                                                 checked={watchlistState.hasOwnProperty(key_value[0])}
                                                 onClick={async () => {
