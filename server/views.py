@@ -102,7 +102,6 @@ def add_watchlist_item(request):
         return Response({'error': "Movie was not found."}, status=404)
 
     ref = db.reference('Users').child(decoded_token['uid']).child('watchlist')
-    print(request.data['movie'])
     ref.update({request.data['movie']['imdb_id']: request.data['movie']})
 
 
@@ -114,7 +113,6 @@ def remove_watchlist_item(request, movie_id):
 
     # id_token = request.headers.get("Authentication")
     id_token = request.META.get('HTTP_AUTHORIZATION')
-    # print(id_token)
 
     if not id_token:
         return Response({'error': "No authentication token."}, status=401)
@@ -141,7 +139,6 @@ def add_seenlist_item(request):
         return Response({'error': "Movie was not found."}, status=404)
 
     ref = db.reference('Users').child(decoded_token['uid']).child('seenlist')
-    print(request.data['movie'])
     ref.update({request.data['movie']['imdb_id']: request.data['movie']})
 
 

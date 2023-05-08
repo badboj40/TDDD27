@@ -182,20 +182,21 @@ export function SeenListPage() {
         }
     };
 
-    const renderToggleButton = (movie_id) => {
-        if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
-            return 'x'
-        } else {
-            return '+'
+    const renderToggleButtonElement = (movie_id, state_dict, disable_content, enable_content) => {
+        if(state_dict === 'watchlist'){
+            if (watchlistState.hasOwnProperty(movie_id)) {
+                return disable_content
+            } else {
+                return enable_content
+            }
+        }else if(state_dict === 'seenlist'){
+            if (seenlistState.hasOwnProperty(movie_id)) {
+                return disable_content
+            } else {
+                return enable_content
+            }
         }
-    };
-
-    const renderVariant = (movie_id) => {
-        if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
-            return 'danger'
-        } else {
-            return 'success'
-        }
+        return null
     };
 
 
@@ -217,7 +218,7 @@ export function SeenListPage() {
                                             <ToggleButton
                                                 id={key_value[0]}
                                                 type="checkbox"
-                                                variant={renderVariant(key_value[0])}
+                                                variant={renderToggleButtonElement(key_value[0], 'watchlist', 'success', 'light')}
                                                 value={key_value[0]}
                                                 checked={watchlistState.hasOwnProperty(key_value[0])}
                                                 onClick={async () => {
@@ -229,7 +230,7 @@ export function SeenListPage() {
                                                 }}
                                                 style={{ position: 'absolute', borderWidth: '2px', borderColor: 'black', opacity: '0.9', fontWeight: 'bold' }}
                                             >
-                                                {renderToggleButton(key_value[0])}
+                                                {renderToggleButtonElement(key_value[0], 'watchlist', 'x', '+')}
                                             </ToggleButton>
                                         </OverlayTrigger>
                                         <OverlayTrigger
@@ -259,6 +260,7 @@ export function SeenListPage() {
                                                     height="15"
                                                     className=""
                                                     alt="checkmark"
+                                                    style={renderToggleButtonElement(key_value[0], 'seenlist', {filter: 'grayscale(0%)'}, {filter: 'grayscale(100%)'})}
                                                 />
                                             </ToggleButton>
                                         </OverlayTrigger>
