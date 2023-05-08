@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 import { AccountPage } from './Components/Account'
 import { HomePage } from './Components/Home'
 import { PageHeader } from './Components/PageHeader'
 import { WatchListPage } from './Components/WatchList'
+import { SeenListPage } from './Components/SeenList'
 import { SearchResultPage } from './Components/SearchResult'
+import { LoginPage } from './Components/Login'
 
 import { auth } from './Firebase/Firebase'
 
@@ -32,8 +34,9 @@ export default function App() {
           <Routes>
             <Route exact path="/" element={<HomePage/>}/>
             <Route path="/account" element={<AccountPage/>} />
-            <Route path="/watchlist" element={<WatchListPage isSignedIn={isSignedIn} />} />
-            <Route path="/movies/search/:searchTerm" element={<SearchResultPage />} />
+            <Route path="/watchlist" element={isSignedIn ? <WatchListPage/> : <LoginPage/> } />
+            <Route path="/seen" element={isSignedIn ? <SeenListPage/> : <LoginPage/> } />
+            <Route path="/movies/search/:searchTerm" element={<SearchResultPage isSignedIn={isSignedIn} />} />
           </Routes>  
         </div>
       </div>

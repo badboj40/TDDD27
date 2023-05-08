@@ -1,13 +1,13 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
 
-const initialState = {
+const searchInitialState = {
   searchTerm: "",
 };
 
 // Define slice
 const searchSlice = createSlice({
   name: "search",
-  initialState,
+  initialState: searchInitialState,
   reducers: {
     setSearchTerm: (state, action) => {
       state.searchTerm = action.payload;
@@ -15,12 +15,19 @@ const searchSlice = createSlice({
   },
 });
 
+
 // Export actions
 export const { setSearchTerm } = searchSlice.actions;
 
+
+const rootReducer = {
+  search: searchSlice.reducer,
+};
+
+
 // Create store
 const store = configureStore({
-  reducer: searchSlice.reducer,
+  reducer: rootReducer,
 });
 
 export default store;

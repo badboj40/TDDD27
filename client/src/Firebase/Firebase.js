@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { useNavigate } from "react-router-dom";
 import {
     getAuth,
     GoogleAuthProvider,
@@ -24,46 +25,38 @@ export const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
 
-export const signInWithGoogle = () => {
+export const signInWithGoogle = async () => {
   signInWithPopup(auth, provider)
-    .then((result) => {
+    .then(async (result) => {
         console.log("Google sign in result:", result);
-        const name = result.user.displayName;
-        const email = result.user.email;
-        //console.log("user result", result.user)
-        let data = handleLogin(result)
-        //console.log(data)
-
-        localStorage.setItem("name", name);
-        localStorage.setItem("email", email);
+        handleLogin(result)
     })
     .catch((error) => {
-        console.log(error);
+        console.log("signin error",error);
     })
 };
 
 export const signOutFromGoogle = () => {
   signOut(auth)
       .then((result) => {
-          console.log("Successfully signed out.", result)
+        sessionStorage.removeItem('watchlist')
+        sessionStorage.removeItem('seenlist')
+        console.log("Successfully signed out.", result)
       })
       .catch((error) => {
-          console.log(error);
+          console.log("signout error", error);
       })
 };
 
 
 const handleLogin = async (result) => {
   console.log("before logging in.");
-  let data = {
-    'idToken': result._tokenResponse.idToken,
-    'accessToken': result.user.accessToken,
-    'uid': result.user.uid,
-    'email':result.user.email
-  };
 
-  await axios.post('http://' + window.location.host + '/login', data)
+  await axios.post('http://' + window.location.host + '/login', {'idToken': result._tokenResponse.idToken})
     .then(response => {
+      console.log("login response", response.data)
+      sessionStorage.setItem('watchlist', JSON.stringify(response.data.watchlist))
+      sessionStorage.setItem('seenlist', JSON.stringify(response.data.seenlist))
       return response.data
     })
     .catch(error => {

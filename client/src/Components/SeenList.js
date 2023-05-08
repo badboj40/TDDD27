@@ -4,9 +4,9 @@ import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
 
 
-export function WatchListPage() {
-    const [watchlistState, setWatchlistState] = useState(JSON.parse(sessionStorage.getItem('watchlist')));
+export function SeenListPage() {
     const [seenlistState, setSeenlistState] = useState(JSON.parse(sessionStorage.getItem('seenlist')));
+    const [watchlistState, setWatchlistState] = useState(JSON.parse(sessionStorage.getItem('watchlist')));
 
     const notFoundLogo = "/static/images/unknown-file-icon.png"
     const checkMarkLogo = "/static/images/check_mark.png"
@@ -20,6 +20,7 @@ export function WatchListPage() {
     useEffect(() => {
         sessionStorage.setItem("seenlist", JSON.stringify(seenlistState));
     }, [seenlistState]);
+
 
     const addToWatchlist = async (key_value) => {
         let user = auth.currentUser
@@ -190,11 +191,11 @@ export function WatchListPage() {
 
 
     return (
-        <div className="WatchList">
+        <div className="Seenlist">
             <Container className='grid'>
                 <Row md={8} className="gy-5">
-                    {watchlistState ? (
-                        Object.entries(watchlistState).map((key_value) => (
+                    {seenlistState ? (
+                        Object.entries(seenlistState).map((key_value) => (
                             <Col md={4} key={key_value[0]}>
                                 <Card style={{ width: cardWidth }}>
                                     <Container style={{ postition: 'relative', padding: 0 }}>
@@ -238,12 +239,10 @@ export function WatchListPage() {
                                                     if (seenlistState.hasOwnProperty(key_value[0])) {
                                                         removeFromSeenlist(key_value[0])
                                                     } else {
-                                                        removeFromWatchlist(key_value[0])
                                                         addToSeenlist(key_value)
                                                     }
                                                 }}
-                                                style={{ position: 'absolute', right: '0', borderWidth: '2px', 
-                                                borderColor: 'black', opacity: '0.9', fontWeight: 'bold' }}
+                                                style={{ position: 'absolute', right: '0', borderWidth: '2px', borderColor: 'black', opacity: '0.9', fontWeight: 'bold' }}
                                             >
                                                 <img
                                                     src={checkMarkLogo}
