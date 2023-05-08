@@ -1,11 +1,7 @@
 import { useSelector } from 'react-redux'
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
-import { Card, Container, Nav, OverlayTrigger, Row, ToggleButton, Tooltip } from 'react-bootstrap'
-import { auth } from '../Firebase/Firebase'
+import { useNavigate } from 'react-router-dom'
+import { Card, Container, Nav, Row } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
-import { addItemToWatchlist, removeItemFromWatchlist, setMovie } from '../store';
-import axios from 'axios';
 import { HandleMoviePage } from '../Helpers/HandleMoviePage';
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
@@ -25,7 +21,7 @@ export function SearchResultPage(props) {
             <Container>
                 {searchResult ? (
                     Object.entries(searchResult).map((movie_kv) => (
-                        <Card className="" key={movie_kv[0]} style={{ width: '62rem' }}>
+                        <Card className="border-0" key={movie_kv[0]} style={{ width: '62rem', }}>
                             <Row>
                                 <div className='col-sm-5'>
                                     <Nav>

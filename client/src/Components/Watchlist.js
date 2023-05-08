@@ -17,13 +17,13 @@ export function WatchListPage() {
     const dispatch = useDispatch()
 
     return (
-        <div className="WatchList">
+        <div className="WatchList" style={{backgroundColor: '#FFFFFF'}}>
             <Container className='grid'>
                 <Row md={8} className="gy-5">
                     {watchlistState ? (
                         Object.entries(watchlistState).map((movie_kv) => (
                             <Col md={4} key={movie_kv[0]}>
-                                <Card style={{ width: cardWidth }}>
+                                <Card className='border-0' style={{ width: cardWidth}}>
                                     <Container style={{ postition: 'relative', padding: 0 }}>
                                         <WatchListToggleButton movie_kv={movie_kv} dispatch={dispatch} style={{
                                             position: 'absolute', borderWidth: '2px',

@@ -1,10 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { useNavigate } from "react-router-dom";
+import { initWatchlist, initSeenlist, initProfilePic, clearWatchlist, clearSeenlist, clearProfilePic } from "../store";
 import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
 } from "firebase/auth";
 
 import axios from 'axios';
@@ -25,42 +25,52 @@ export const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
 
-export const signInWithGoogle = async () => {
+export const signInWithGoogle = async (dispatch) => {
   signInWithPopup(auth, provider)
     .then(async (result) => {
-        console.log("Google sign in result:", result);
-        handleLogin(result)
+      console.log("Google sign in result:", result);
+      handleLogin(result, dispatch)
     })
     .catch((error) => {
-        console.log("signin error",error);
+      console.log("signin error", error);
     })
 };
 
-export const signOutFromGoogle = () => {
+export const signOutFromGoogle = (dispatch) => {
   signOut(auth)
-      .then((result) => {
-        sessionStorage.removeItem('watchlist')
-        sessionStorage.removeItem('seenlist')
-        console.log("Successfully signed out.", result)
-      })
-      .catch((error) => {
-          console.log("signout error", error);
-      })
+    .then((result) => {
+      handleLogout(result, dispatch)
+    })
+    .catch((error) => {
+      console.log("signout error", error);
+    })
 };
 
 
-const handleLogin = async (result) => {
+const handleLogin = async (result, dispatch) => {
   console.log("before logging in.");
 
-  await axios.post('http://' + window.location.host + '/login', {'idToken': result._tokenResponse.idToken})
+  await axios.post('http://' + window.location.host + '/login', { 'idToken': result._tokenResponse.idToken })
     .then(response => {
       console.log("login response", response.data)
       sessionStorage.setItem('watchlist', JSON.stringify(response.data.watchlist))
       sessionStorage.setItem('seenlist', JSON.stringify(response.data.seenlist))
+      dispatch(initWatchlist())
+      dispatch(initSeenlist())
+      dispatch(initProfilePic(response.data['picture']))
       return response.data
     })
     .catch(error => {
       return error
     })
 };
+
+const handleLogout = async (result, dispatch) => {
+  sessionStorage.removeItem('watchlist')
+  sessionStorage.removeItem('seenlist')
+  dispatch(clearWatchlist())
+  dispatch(clearSeenlist())
+  dispatch(clearProfilePic())
+  console.log("Successfully signed out.", result)
+}
 

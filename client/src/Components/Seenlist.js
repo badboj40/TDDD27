@@ -17,36 +17,36 @@ export function SeenListPage() {
     const dispatch = useDispatch()
 
     return (
-        <div className="Seenlist">
+        <div className="Seenlist" style={{backgroundColor: '#061706'}}>
             <Container className='grid'>
                 <Row md={8} className="gy-5">
                     {seenlistState ? (
-                        Object.entries(seenlistState).map((key_value) => (
-                            <Col md={4} key={key_value[0]}>
-                                <Card style={{ width: cardWidth }}>
+                        Object.entries(seenlistState).map((movie_kv) => (
+                            <Col md={4} key={movie_kv[0]}>
+                                <Card className='border-0' style={{ width: cardWidth }}>
                                     <Container style={{ postition: 'relative', padding: 0 }}>
-                                        <WatchListToggleButton movie_kv={key_value} dispatch={dispatch} style={{
+                                        <WatchListToggleButton movie_kv={movie_kv} dispatch={dispatch} style={{
                                             position: 'absolute', borderWidth: '2px',
                                             borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
                                         }} />
-                                        <SeenListToggleButton movie_kv={key_value} dispatch={dispatch} style={{
+                                        <SeenListToggleButton movie_kv={movie_kv} dispatch={dispatch} style={{
                                             position: 'absolute', right: '0', borderWidth: '2px',
                                             borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
                                         }} />
                                         <Nav>
-                                            <Nav.Link onClick={() => HandleMoviePage(key_value, navigate, dispatch)} style={{ padding: 0 }}>
+                                            <Nav.Link onClick={() => HandleMoviePage(movie_kv, navigate, dispatch)} style={{ padding: 0 }}>
                                                 <Card.Img variant="top"
-                                                    src={key_value[1].banner}
+                                                    src={movie_kv[1].banner}
                                                     onError={(e) => { e.target.src = notFoundLogo }} />
 
                                             </Nav.Link>
                                         </Nav>
                                     </Container>
                                     <div className=''>
-                                        <Card.Body>
+                                        <Card.Body style={{backgroundColor: '#061706', color: '#FFFFFF', textAlign: 'center'}}>
                                             <Card.Title className=''
                                                 style={{ fontSize: '20px' }}>
-                                                {key_value[1].title}
+                                                {movie_kv[1].title}
                                             </Card.Title>
                                         </Card.Body>
                                     </div>
@@ -54,7 +54,7 @@ export function SeenListPage() {
                             </Col>
                         ))
                     ) : (
-                        <h2>No movies in your watchlist.</h2>
+                        <h2>No movies in your seenlist.</h2>
                     )}
                 </Row>
             </Container>

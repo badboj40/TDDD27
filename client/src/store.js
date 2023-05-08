@@ -1,5 +1,6 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
 
+// Initialise states
 const searchInitialState = {
   searchTerm: "",
 };
@@ -16,8 +17,11 @@ const seenlistInitialState = {
   seenlist: JSON.parse(sessionStorage.getItem('seenlist')),
 };
 
+const profilePictureState = {
+  profilePicture: ""
+};
 
-// Define slice
+// Create slices
 const searchSlice = createSlice({
   name: "search",
   initialState: searchInitialState,
@@ -42,6 +46,9 @@ const watchlistSlice = createSlice({
   name: 'watchlist',
   initialState: watchlistInitialState,
   reducers: {
+    initWatchlist: (state) => {
+      state.watchlist = JSON.parse(sessionStorage.getItem('watchlist'))
+    },
     addItemToWatchlist: (state, action) => {
       const newWatchlist = { ...state.watchlist, [action.payload[0]]: action.payload[1] }
       sessionStorage.setItem('watchlist', JSON.stringify(newWatchlist))
@@ -54,14 +61,19 @@ const watchlistSlice = createSlice({
       sessionStorage.setItem('watchlist', JSON.stringify(newWatchlist))
       state.watchlist = newWatchlist
     },
-    
-  }
-})
+    clearWatchlist: (state) => {
+      state.watchlist = {}
+    },
+  },
+});
 
 const seenlistSlice = createSlice({
   name: 'seenlist',
   initialState: seenlistInitialState,
   reducers: {
+    initSeenlist: (state) => {
+      state.seenlist = JSON.parse(sessionStorage.getItem('seenlist'))
+    },
     addItemToSeenlist: (state, action) => {
       const newSeenlist = { ...state.seenlist, [action.payload[0]]: action.payload[1] }
       sessionStorage.setItem('seenlist', JSON.stringify(newSeenlist))
@@ -72,26 +84,40 @@ const seenlistSlice = createSlice({
       delete newSeenlist[action.payload]
       sessionStorage.setItem('seenlist', JSON.stringify(newSeenlist))
       state.seenlist = newSeenlist
-    }
-    
+    },
+    clearSeenlist: (state) => {
+      state.seenlist = {}
+    },
+  },
+});
+
+const profilePictureSlice = createSlice({
+  name: 'profilePicture',
+  initialState: profilePictureState,
+  reducers: {
+    initProfilePic: (state, action) => {
+      state.profilePicture = action.payload
+    },
+    clearProfilePic: (state) => {
+      state.profilePicture = ""
+    },
   }
 })
-
-
 
 // Export actions
 export const { setSearchTerm } = searchSlice.actions;
 export const { setMovie } = movieSlice.actions;
-export const { addItemToWatchlist, removeItemFromWatchlist } = watchlistSlice.actions;
-export const { addItemToSeenlist, removeItemFromSeenlist } = seenlistSlice.actions;
-
+export const { initWatchlist, addItemToWatchlist, removeItemFromWatchlist, clearWatchlist } = watchlistSlice.actions;
+export const { initSeenlist, addItemToSeenlist, removeItemFromSeenlist, clearSeenlist } = seenlistSlice.actions;
+export const { initProfilePic, clearProfilePic } = profilePictureSlice.actions;
 
 
 const rootReducer = {
   search: searchSlice.reducer,
   movie: movieSlice.reducer,
   watchlist: watchlistSlice.reducer,
-  seenlist: seenlistSlice.reducer
+  seenlist: seenlistSlice.reducer,
+  profilePic: profilePictureSlice.reducer
 };
 
 

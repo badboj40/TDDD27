@@ -5,7 +5,7 @@ import { setSearchTerm } from '../store';
 import { Button } from 'react-bootstrap';
 import { Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom'; 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './Login.css'
 import './SignOutButton.css';
@@ -22,7 +22,10 @@ export function PageHeader(props) {
     const dispatch = useDispatch();
 
     const pageLogo = "/static/images/popcorn.png"
-    const accountLogo = "/static/images/account.png"
+    const altAccountLogo = "/static/images/account.png"
+    
+    //Tror inte den hinner hämta bilden typ
+    const accountLogo = useSelector(state => state.profilePicture)
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -86,7 +89,7 @@ export function PageHeader(props) {
                                 width="45"
                                 height="45"
                                 className="gg-logo"
-                                alt="GGWatch Logo"
+                                alt={"Account Logo"}
                             />} 
                             id="basic-nav-dropdown">
                                 <NavDropdown.Item as={Link} to="/account">Settings</NavDropdown.Item>
@@ -94,14 +97,14 @@ export function PageHeader(props) {
                                 <NavDropdown.Item href="/signout">
                                     <Button className="logout-btn" variant="light" onClick={(e) => {
                                         e.preventDefault();
-                                        signOutFromGoogle();
+                                        signOutFromGoogle(dispatch);
                                         navigate('/')
                                     }}>Sign out
                                     </Button>{' '}
                                 </NavDropdown.Item>
                             </NavDropdown>
                             : 
-                            <button className="login-with-google-btn" onClick={signInWithGoogle}>
+                            <button className="login-with-google-btn" onClick={() => signInWithGoogle(dispatch)}>
                                 Sign in with Google
                             </button>
                         }      

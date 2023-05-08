@@ -1,6 +1,5 @@
 import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
 import { removeItemFromSeenlist } from '../store';
 import { removeItemFromWatchlist } from '../store';
 

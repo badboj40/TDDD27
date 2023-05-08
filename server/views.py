@@ -52,6 +52,7 @@ def login(request):
 
     # print("decoded", decoded_token)
     uid = decoded_token['uid']
+    picture = decoded_token['picture']
     email = decoded_token['email']
     displayName = decoded_token['name']
 
@@ -64,7 +65,7 @@ def login(request):
     seenlist = sl if (sl:=ref.child('seenlist').get()) else {}
     print("watchlist:\n", watchlist)
     print("seenlist:\n", seenlist)
-    return Response({'uid': uid, 'watchlist': watchlist, 'seenlist': seenlist}, status=200)
+    return Response({'uid': uid, 'picture': picture, 'watchlist': watchlist, 'seenlist': seenlist}, status=200)
 
 
 @api_view(["GET"])

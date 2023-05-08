@@ -12,9 +12,9 @@ export function MoviePage(props) {
     const notFoundLogo = "/static/images/unknown-file-icon.png"
 
     return (
-        <div className="MoviePage">
+        <div className="MoviePage" style={{backgroundColor: '#061706'}}> 
             <Container className='grid'>
-                <Card style={{ width: '62rem' }}>
+                <Card className='border-0' style={{ width: '62rem' }}>
                     <Row>
                         <div className='col-sm-5'>
                             <Card.Img variant="top"
@@ -22,7 +22,7 @@ export function MoviePage(props) {
                                 onError={(e) => { e.target.src = notFoundLogo }} />
                         </div>
                         <div className='col-sm-7'>
-                            <Card.Body>
+                            <Card.Body style={{backgroundColor: '#061706', color: '#FFFFFF', textAlign: 'center'}}>
                                 <Card.Title>{movie_kv[1].title}</Card.Title>
                                 <Card.Text>{movie_kv[1].plot}</Card.Text>
                                 <Card.Text>{movie_kv[1].movie_length}min</Card.Text>
