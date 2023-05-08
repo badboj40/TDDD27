@@ -1,16 +1,11 @@
 import { useSelector } from 'react-redux'
 import React, { useState, useEffect } from 'react';
-import { Card, Container, OverlayTrigger, Row, ToggleButton, Tooltip } from 'react-bootstrap'
+import { Link, useNavigate } from 'react-router-dom'
+import { Card, Container, Nav, OverlayTrigger, Row, ToggleButton, Tooltip } from 'react-bootstrap'
 import { auth } from '../Firebase/Firebase'
+import { useDispatch } from 'react-redux';
+import { setMovie } from '../store';
 import axios from 'axios';
-// import { addToWatchlist, 
-//     addMovieToWatchlistState, 
-//     removeFromWatchlist, 
-//     removeMovieFromWatchlistState, 
-//     renderWatchlistTooltip, 
-//     renderToggleButton } from '../Helpers/WatchListHelpers'
-
-
 
 export function SearchResultPage(props) {
     const isSignedIn = props.isSignedIn;
@@ -20,24 +15,9 @@ export function SearchResultPage(props) {
 
     const notFoundLogo = "/static/images/unknown-file-icon.png"
 
-    const addMovieToWatchlistState = (key_value) => {
-        console.log("add state")
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
-        setWatchlistState(previousState => {
-            const newObject = { ...previousState, [key_value[0]]: key_value[1] };
-            return newObject;
-        });
-    };
-
-    const removeMovieFromWatchlistState = (movie_id) => {
-        console.log("remove state")
-
-        setWatchlistState(previousState => {
-            const newObject = { ...previousState };
-            delete newObject[movie_id]
-            return newObject;
-        });
-    };
 
     useEffect(() => {
         console.log("watchlistState", watchlistState);
@@ -134,7 +114,13 @@ export function SearchResultPage(props) {
         } else {
             return enable_content
         }
-        return null
+    };
+
+    const handleMoviePage = (movie) => {
+        let path = '/movie/';
+        const url = path + movie[0]
+        navigate(url)
+        dispatch(setMovie(movie))
     };
 
 
@@ -146,8 +132,13 @@ export function SearchResultPage(props) {
                         <Card className="" key={key_value[0]} style={{ width: '62rem' }}>
                             <Row>
                                 <div className='col-sm-5'>
-                                    <Card.Img variant="top"
-                                        src={key_value[1].banner} onError={(e) => { e.target.src = notFoundLogo }} />
+                                    <Nav>
+                                        <Nav.Link onClick={() => handleMoviePage(key_value)} style={{ padding: 0 }}>
+                                            <Card.Img variant="top"
+                                                src={key_value[1].banner}
+                                                onError={(e) => { e.target.src = notFoundLogo }} />
+                                        </Nav.Link>
+                                    </Nav>
                                 </div>
                                 <div className='col-sm-7'>
                                     <Card.Body>
@@ -170,10 +161,8 @@ export function SearchResultPage(props) {
                                                     onClick={() => {
                                                         if (watchlistState.hasOwnProperty(key_value[0])) {
                                                             removeFromWatchlist(key_value[0])
-                                                            removeMovieFromWatchlistState(key_value[0])
                                                         } else {
                                                             addToWatchlist(key_value)
-                                                            addMovieToWatchlistState(key_value)
                                                         }
                                                     }}
                                                 >

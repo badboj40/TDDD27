@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Col, Container, OverlayTrigger, Row, ToggleButton, Tooltip } from 'react-bootstrap'
+import { Link, useNavigate } from 'react-router-dom'
+import { Card, Col, Container, Nav, OverlayTrigger, Row, ToggleButton, Tooltip } from 'react-bootstrap'
 import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setMovie } from '../store';
 
 
 export function WatchListPage() {
@@ -12,6 +15,9 @@ export function WatchListPage() {
     const checkMarkLogo = "/static/images/check_mark.png"
 
     const cardWidth = '20rem'
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         sessionStorage.setItem("watchlist", JSON.stringify(watchlistState));
@@ -172,13 +178,13 @@ export function WatchListPage() {
     };
 
     const renderToggleButtonElement = (movie_id, state_dict, disable_content, enable_content) => {
-        if(state_dict === 'watchlist'){
+        if (state_dict === 'watchlist') {
             if (watchlistState.hasOwnProperty(movie_id)) {
                 return disable_content
             } else {
                 return enable_content
             }
-        }else if(state_dict === 'seenlist'){
+        } else if (state_dict === 'seenlist') {
             if (seenlistState.hasOwnProperty(movie_id)) {
                 return disable_content
             } else {
@@ -186,6 +192,13 @@ export function WatchListPage() {
             }
         }
         return null
+    };
+
+    const handleMoviePage = (movie) => {
+        let path = '/movie/';
+        const url = path + movie[0]
+        navigate(url)
+        dispatch(setMovie(movie))
     };
 
 
@@ -242,8 +255,10 @@ export function WatchListPage() {
                                                         addToSeenlist(key_value)
                                                     }
                                                 }}
-                                                style={{ position: 'absolute', right: '0', borderWidth: '2px', 
-                                                borderColor: 'black', opacity: '0.9', fontWeight: 'bold' }}
+                                                style={{
+                                                    position: 'absolute', right: '0', borderWidth: '2px',
+                                                    borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
+                                                }}
                                             >
                                                 <img
                                                     src={checkMarkLogo}
@@ -251,12 +266,17 @@ export function WatchListPage() {
                                                     height="15"
                                                     className=""
                                                     alt="checkmark"
-                                                    style={renderToggleButtonElement(key_value[0], 'seenlist', {filter: 'grayscale(0%)'}, {filter: 'grayscale(100%)'})}
+                                                    style={renderToggleButtonElement(key_value[0], 'seenlist', { filter: 'grayscale(0%)' }, { filter: 'grayscale(100%)' })}
                                                 />
                                             </ToggleButton>
                                         </OverlayTrigger>
-                                        <Card.Img variant="top"
-                                            src={key_value[1].banner} onError={(e) => { e.target.src = notFoundLogo }} />
+                                        <Nav>
+                                            <Nav.Link onClick={() => handleMoviePage(key_value)} style={{padding: 0}}>
+                                                <Card.Img variant="top"
+                                                    src={key_value[1].banner}
+                                                    onError={(e) => { e.target.src = notFoundLogo }} />
+                                            </Nav.Link>
+                                        </Nav>
                                     </Container>
                                     <div className=''>
                                         <Card.Body>

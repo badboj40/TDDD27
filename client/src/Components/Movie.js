@@ -1,32 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
-import { Card, Col, Container, Nav, OverlayTrigger, Row, ToggleButton, Tooltip } from 'react-bootstrap'
+import { useSelector } from 'react-redux';
+import { Card, Container, OverlayTrigger, Row, ToggleButton, Tooltip } from 'react-bootstrap'
 import { auth } from '../Firebase/Firebase'
-import { useDispatch } from 'react-redux';
-import { setMovie } from '../store';
 import axios from 'axios';
 
+export function MoviePage(props) {
+    const isSignedIn = props.isSignedIn;
+    const movieContent = useSelector(state => state.movie.movie);
 
-export function SeenListPage() {
-    const [seenlistState, setSeenlistState] = useState(JSON.parse(sessionStorage.getItem('seenlist')));
+
     const [watchlistState, setWatchlistState] = useState(JSON.parse(sessionStorage.getItem('watchlist')));
+    const [seenlistState, setSeenlistState] = useState(JSON.parse(sessionStorage.getItem('seenlist')));
 
     const notFoundLogo = "/static/images/unknown-file-icon.png"
     const checkMarkLogo = "/static/images/check_mark.png"
 
     const cardWidth = '20rem'
 
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
-
     useEffect(() => {
         sessionStorage.setItem("watchlist", JSON.stringify(watchlistState));
     }, [watchlistState]);
 
     useEffect(() => {
-        sessionStorage.setItem("seenlist", JSON.stringify(seenlistState));
-    }, [seenlistState]);
-
+        sessionStorage.setItem("watchlist", JSON.stringify(watchlistState));
+    }, [watchlistState]);
 
     const addToWatchlist = async (key_value) => {
         let user = auth.currentUser
@@ -41,34 +38,6 @@ export function SeenListPage() {
                     })
                         .then((result) => {
                             setWatchlistState(previousState => {
-                                const newObject = { ...previousState, [key_value[0]]: key_value[1] };
-                                return newObject;
-                            });
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                        });
-                })
-                .catch((error) => {
-                    // Handle any errors that occur while retrieving the ID token
-                    console.error("Error retrieving ID token:", error);
-                });
-        }
-    };
-
-    const addToSeenlist = async (key_value) => {
-        let user = auth.currentUser
-        if (user) {
-            user.getIdToken(true)
-                .then(async (idToken) => {
-                    // ID token to authenticate the user on the backend
-
-                    await axios.post('http://' + window.location.host + '/addSeenlistItem', {
-                        'idToken': idToken,
-                        'movie': key_value[1],
-                    })
-                        .then((result) => {
-                            setSeenlistState(previousState => {
                                 const newObject = { ...previousState, [key_value[0]]: key_value[1] };
                                 return newObject;
                             });
@@ -103,6 +72,34 @@ export function SeenListPage() {
                                 delete newObject[movieId]
                                 return newObject;
                             })
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+                })
+                .catch((error) => {
+                    // Handle any errors that occur while retrieving the ID token
+                    console.error("Error retrieving ID token:", error);
+                });
+        }
+    };
+
+    const addToSeenlist = async (key_value) => {
+        let user = auth.currentUser
+        if (user) {
+            user.getIdToken(true)
+                .then(async (idToken) => {
+                    // ID token to authenticate the user on the backend
+
+                    await axios.post('http://' + window.location.host + '/addSeenlistItem', {
+                        'idToken': idToken,
+                        'movie': key_value[1],
+                    })
+                        .then((result) => {
+                            setSeenlistState(previousState => {
+                                const newObject = { ...previousState, [key_value[0]]: key_value[1] };
+                                return newObject;
+                            });
                         })
                         .catch((error) => {
                             console.error(error);
@@ -195,104 +192,91 @@ export function SeenListPage() {
         return null
     };
 
-    const handleMoviePage = (movie) => {
-        let path = '/movie/';
-        const url = path + movie[0]
-        navigate(url)
-        dispatch(setMovie(movie))
-    };
-
 
     return (
-        <div className="Seenlist">
+        <div className="MoviePage">
             <Container className='grid'>
-                <Row md={8} className="gy-5">
-                    {seenlistState ? (
-                        Object.entries(seenlistState).map((key_value) => (
-                            <Col md={4} key={key_value[0]}>
-                                <Card style={{ width: cardWidth }}>
+                <Card style={{ width: '62rem' }}>
+                    <Row>
+                        <div className='col-sm-5'>
+                            <Card.Img variant="top"
+                                src={movieContent[1].banner}
+                                onError={(e) => { e.target.src = notFoundLogo }} />
+                        </div>
+                        <div className='col-sm-7'>
+                            <Card.Body>
+                                <Card.Title>{movieContent[1].title}</Card.Title>
+                                <Card.Text>{movieContent[1].plot}</Card.Text>
+                                <Card.Text>{movieContent[1].movie_length}min</Card.Text>
+                                {isSignedIn === true ?
                                     <Container style={{ postition: 'relative', padding: 0 }}>
                                         <OverlayTrigger
                                             placement="bottom"
                                             delay={{ show: 250, hide: 400 }}
-                                            overlay={renderWatchlistTooltip(key_value[1].imdb_id)}
+                                            overlay={renderWatchlistTooltip(movieContent[1].imdb_id)}
                                         >
                                             {/* watchlist-knappen */}
                                             <ToggleButton
-                                                id={key_value[0]}
+                                                id={movieContent[0]}
                                                 type="checkbox"
-                                                variant={renderToggleButtonElement(key_value[0], 'watchlist', 'success', 'light')}
-                                                value={key_value[0]}
-                                                checked={watchlistState.hasOwnProperty(key_value[0])}
+                                                variant={renderToggleButtonElement(movieContent[0], 'watchlist', 'success', 'light')}
+                                                value={movieContent[0]}
+                                                checked={watchlistState.hasOwnProperty(movieContent[0])}
                                                 onClick={async () => {
-                                                    if (watchlistState.hasOwnProperty(key_value[0])) {
-                                                        removeFromWatchlist(key_value[0])
+                                                    if (watchlistState.hasOwnProperty(movieContent[0])) {
+                                                        removeFromWatchlist(movieContent[0])
                                                     } else {
-                                                        addToWatchlist(key_value)
+                                                        addToWatchlist(movieContent)
                                                     }
                                                 }}
                                                 style={{ position: 'absolute', borderWidth: '2px', borderColor: 'black', opacity: '0.9', fontWeight: 'bold' }}
                                             >
-                                                {renderToggleButtonElement(key_value[0], 'watchlist', 'x', '+')}
+                                                {renderToggleButtonElement(movieContent[0], 'watchlist', 'x', '+')}
                                             </ToggleButton>
                                         </OverlayTrigger>
                                         <OverlayTrigger
                                             placement="bottom"
                                             delay={{ show: 250, hide: 400 }}
-                                            overlay={renderSeenlistTooltip(key_value[1].imdb_id)}
+                                            overlay={renderSeenlistTooltip(movieContent[1].imdb_id)}
                                         >
                                             {/* Seenlist-knappen */}
                                             <ToggleButton
-                                                id={key_value[0]}
+                                                id={movieContent[0]}
                                                 type="checkbox"
                                                 variant="dark"
-                                                value={key_value[0]}
-                                                checked={seenlistState.hasOwnProperty(key_value[0])}
+                                                value={movieContent[0]}
+                                                checked={seenlistState.hasOwnProperty(movieContent[0])}
                                                 onClick={async () => {
-                                                    if (seenlistState.hasOwnProperty(key_value[0])) {
-                                                        removeFromSeenlist(key_value[0])
+                                                    if (seenlistState.hasOwnProperty(movieContent[0])) {
+                                                        removeFromSeenlist(movieContent[0])
                                                     } else {
-                                                        addToSeenlist(key_value)
+                                                        removeFromWatchlist(movieContent[0])
+                                                        addToSeenlist(movieContent)
                                                     }
                                                 }}
-                                                style={{ position: 'absolute', right: '0', borderWidth: '2px', borderColor: 'black', opacity: '0.9', fontWeight: 'bold' }}
+                                                style={{
+                                                    position: 'absolute', right: '0', borderWidth: '2px',
+                                                    borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
+                                                }}
                                             >
                                                 <img
                                                     src={checkMarkLogo}
                                                     width="15"
                                                     height="15"
-                                                    className=""
                                                     alt="checkmark"
-                                                    style={renderToggleButtonElement(key_value[0],
-                                                        'seenlist', 
-                                                        { filter: 'grayscale(0%)' }, 
-                                                        { filter: 'grayscale(100%)' })}
+                                                    //Något fel med styling här
+                                                    style={renderToggleButtonElement(movieContent[0], 'seenlist', { filter: 'grayscale(0%)' }, { filter: 'grayscale(100%)' })}
                                                 />
                                             </ToggleButton>
                                         </OverlayTrigger>
-                                        <Nav>
-                                            <Nav.Link onClick={() => handleMoviePage(key_value)} style={{ padding: 0 }}>
-                                                <Card.Img variant="top"
-                                                    src={key_value[1].banner}
-                                                    onError={(e) => { e.target.src = notFoundLogo }} />
-                                            </Nav.Link>
-                                        </Nav>
                                     </Container>
-                                    <div className=''>
-                                        <Card.Body>
-                                            <Card.Title className=''
-                                                style={{ fontSize: '20px' }}>
-                                                {key_value[1].title}
-                                            </Card.Title>
-                                        </Card.Body>
-                                    </div>
-                                </Card>
-                            </Col>
-                        ))
-                    ) : (
-                        <h2>No movies in your watchlist.</h2>
-                    )}
-                </Row>
+                                    :
+                                    <h1>Something went wrong loading "add to watchlist/seenlist"</h1>
+                                }
+                            </Card.Body>
+                        </div>
+                    </Row>
+                </Card>
             </Container>
         </div >
     )
