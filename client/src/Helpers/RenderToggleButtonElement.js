@@ -1,6 +1,4 @@
-import { Card, Col, Container, Nav, OverlayTrigger, Row, ToggleButton, Tooltip } from 'react-bootstrap'
 import { useSelector } from 'react-redux';
-
 
 
 export function RenderToggleButtonElement(movie_id, state_dict, disable_content, enable_content) {
