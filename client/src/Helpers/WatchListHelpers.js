@@ -1,27 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import {Tooltip } from 'react-bootstrap'
 import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
 import { WatchListPage } from '../Components/WatchList'
-
-export const addMovieToWatchlistState = async (key_value) => {
-    console.log("add state")
-
-    await WatchListPage.setWatchlistState(previousState => {
-        const newObject = { ...previousState, [key_value[0]]: key_value[1] };
-        return newObject;
-      });
-    };
-
-export const removeMovieFromWatchlistState = async (movie_id) => {
-    console.log("remove state")
-
-    await WatchListPage.setWatchlistState(previousState => {
-        const newObject = {...previousState};
-        delete newObject[movie_id]
-        return newObject;
-    });
-};
 
 export const renderWatchlistTooltip = async (movie_id) => {
     if (await WatchListPage.watchlistState.hasOwnProperty(movie_id)) { // change this condition
@@ -47,9 +27,7 @@ export const renderToggleButton = async (movie_id) => {
     }
 };
 
-export const addToWatchlist = async (movie) => {
-    console.log("add:", movie)
-
+export const addToWatchlist = async (key_value) => {
     let user = auth.currentUser
     if (user) {
         user.getIdToken(true)
@@ -58,9 +36,13 @@ export const addToWatchlist = async (movie) => {
 
                 await axios.post('http://' + window.location.host + '/addWatchlistItem', {
                     'idToken': idToken,
-                    'movie': movie,
+                    'movie': key_value[1],
                 })
                     .then((result) => {
+                        WatchListPage.setWatchlistState(previousState => {
+                            const newObject = { ...previousState, [key_value[0]]: key_value[1] };
+                            return newObject;
+                        });
                     })
                     .catch((error) => {
                         console.error(error);
@@ -74,20 +56,24 @@ export const addToWatchlist = async (movie) => {
 };
 
 export const removeFromWatchlist = async (movieId) => {
-    console.log("remove:", movieId)
-
     let user = auth.currentUser
     if (user) {
         user.getIdToken(true)
             .then(async (idToken) => {
-                // ID token to authenticate the user on the backend
+                // Use the ID token to authenticate the user with your backend server
 
+                // Make an Axios request with the ID token as the Bearer token
                 await axios.delete('http://' + window.location.host + '/removeWatchlistItem/' + movieId, {
                     headers: {
                         Authorization: idToken,
                     },
                 })
                     .then((result) => {
+                        WatchListPage.setWatchlistState(previousState => {
+                            const newObject = { ...previousState };
+                            delete newObject[movieId]
+                            return newObject;
+                        })
                     })
                     .catch((error) => {
                         console.error(error);

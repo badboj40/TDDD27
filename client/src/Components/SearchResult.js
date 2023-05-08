@@ -128,20 +128,13 @@ export function SearchResultPage(props) {
         }
     };
 
-    const renderToggleButton = (movie_id) => {
-        if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
-            return 'x'
+    const renderToggleButtonElement = (movie_id, disable_content, enable_content) => {
+        if (watchlistState.hasOwnProperty(movie_id)) {
+            return disable_content
         } else {
-            return '+'
+            return enable_content
         }
-    };
-
-    const renderVariant = (movie_id) => {
-        if (watchlistState.hasOwnProperty(movie_id)) { // change this condition
-            return 'danger'
-        } else {
-            return 'success'
-        }
+        return null
     };
 
 
@@ -170,7 +163,7 @@ export function SearchResultPage(props) {
                                                 <ToggleButton
                                                     id={key_value[0]}
                                                     type="checkbox"
-                                                    variant={renderVariant(key_value[0])}
+                                                    variant={renderToggleButtonElement(key_value[0], 'success', 'light')}
                                                     value={key_value[0]}
                                                     checked={watchlistState.hasOwnProperty(key_value[0])}
                                                     style={{ borderWidth: '2px', borderColor: 'black', fontWeight: 'bold' }}
@@ -184,7 +177,7 @@ export function SearchResultPage(props) {
                                                         }
                                                     }}
                                                 >
-                                                    {renderToggleButton(key_value[0])}
+                                                    {renderToggleButtonElement(key_value[0], 'x', '+')}
                                                 </ToggleButton>
                                             </OverlayTrigger>
                                             :

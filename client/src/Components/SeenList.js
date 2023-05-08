@@ -14,19 +14,15 @@ export function SeenListPage() {
     const cardWidth = '20rem'
 
     useEffect(() => {
-        console.log("watchlistState", watchlistState);
         sessionStorage.setItem("watchlist", JSON.stringify(watchlistState));
     }, [watchlistState]);
 
     useEffect(() => {
-        console.log("SeenlistState", seenlistState);
         sessionStorage.setItem("seenlist", JSON.stringify(seenlistState));
     }, [seenlistState]);
 
 
     const addToWatchlist = async (key_value) => {
-        console.log("add:", key_value)
-
         let user = auth.currentUser
         if (user) {
             user.getIdToken(true)
@@ -55,8 +51,6 @@ export function SeenListPage() {
     };
 
     const addToSeenlist = async (key_value) => {
-        console.log("add:", key_value[1])
-
         let user = auth.currentUser
         if (user) {
             user.getIdToken(true)
@@ -85,8 +79,6 @@ export function SeenListPage() {
     };
 
     const removeFromWatchlist = async (movieId) => {
-        console.log("remove", movieId)
-
         let user = auth.currentUser
         if (user) {
             user.getIdToken(true)
@@ -118,8 +110,6 @@ export function SeenListPage() {
     };
 
     const removeFromSeenlist = async (movieId) => {
-        console.log("remove", movieId)
-
         let user = auth.currentUser
         if (user) {
             user.getIdToken(true)
