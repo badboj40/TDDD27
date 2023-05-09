@@ -21,6 +21,10 @@ const profilePictureState = {
   profilePicture: ""
 };
 
+const streamServiceState = {
+  streamingService: {}
+};
+
 // Create slices
 const searchSlice = createSlice({
   name: "search",
@@ -101,8 +105,24 @@ const profilePictureSlice = createSlice({
     clearProfilePic: (state) => {
       state.profilePicture = ""
     },
-  }
-})
+  },
+});
+
+const streamingServiceSlice = createSlice({
+  name: 'streamingservice',
+  initialState: streamServiceState,
+  reducers: {
+    initStreamingService: (state) => {
+      //WIP
+    },
+    getStreamingService: (state, action) => {
+      //WIP
+    },
+    clearStreamingService: (state) => {
+      state.streamingService = {}
+    },
+  },
+});
 
 // Export actions
 export const { setSearchTerm } = searchSlice.actions;
@@ -110,6 +130,7 @@ export const { setMovie } = movieSlice.actions;
 export const { initWatchlist, addItemToWatchlist, removeItemFromWatchlist, clearWatchlist } = watchlistSlice.actions;
 export const { initSeenlist, addItemToSeenlist, removeItemFromSeenlist, clearSeenlist } = seenlistSlice.actions;
 export const { initProfilePic, clearProfilePic } = profilePictureSlice.actions;
+export const { initStreamingService, addStreamingSerice, removeStreamingService, clearStreamingService } = streamingServiceSlice.actions;
 
 
 const rootReducer = {
@@ -117,7 +138,8 @@ const rootReducer = {
   movie: movieSlice.reducer,
   watchlist: watchlistSlice.reducer,
   seenlist: seenlistSlice.reducer,
-  profilePic: profilePictureSlice.reducer
+  profilePic: profilePictureSlice.reducer,
+  streamingService: streamingServiceSlice.reducer,
 };
 
 

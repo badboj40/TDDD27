@@ -17,7 +17,7 @@ export function SeenListPage() {
     const dispatch = useDispatch()
 
     return (
-        <div className="Seenlist" style={{backgroundColor: '#061706'}}>
+        <div className="Seenlist" style={{}}>
             <Container className='grid'>
                 <Row md={8} className="gy-5">
                     {seenlistState ? (
@@ -43,7 +43,7 @@ export function SeenListPage() {
                                         </Nav>
                                     </Container>
                                     <div className=''>
-                                        <Card.Body style={{backgroundColor: '#061706', color: '#FFFFFF', textAlign: 'center'}}>
+                                        <Card.Body style={{textAlign: 'center'}}>
                                             <Card.Title className=''
                                                 style={{ fontSize: '20px' }}>
                                                 {movie_kv[1].title}

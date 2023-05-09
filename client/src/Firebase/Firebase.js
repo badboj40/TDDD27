@@ -62,7 +62,9 @@ const handleLogin = async (result, dispatch) => {
       console.log("login response", response.data)
       sessionStorage.setItem('watchlist', JSON.stringify(response.data.watchlist))
       sessionStorage.setItem('seenlist', JSON.stringify(response.data.seenlist))
-      dispatch(initWatchlist(), initSeenlist(), initProfilePic(response.data['picture']))
+      dispatch(initWatchlist())
+      dispatch(initSeenlist())
+      dispatch(initProfilePic(response.data['picture']))
       return response.data
     })
     .catch(error => {
@@ -73,7 +75,9 @@ const handleLogin = async (result, dispatch) => {
 const handleLogout = async (result, dispatch) => {
   sessionStorage.removeItem('watchlist')
   sessionStorage.removeItem('seenlist')
-  dispatch(clearWatchlist(), clearSeenlist(), clearProfilePic())
+  dispatch(clearWatchlist())
+  dispatch(clearSeenlist())
+  dispatch(clearProfilePic())
   console.log("Successfully signed out.", result)
 }
 

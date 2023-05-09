@@ -15,7 +15,6 @@ import requests
 
 cred = credentials.Certificate(
     'server/tddd27-gg-firebase-adminsdk-k0gde-8699c126f0.json')
-# authe = auth
 app = firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://tddd27-gg-default-rtdb.europe-west1.firebasedatabase.app/'
 })
@@ -29,10 +28,15 @@ firebaseConfig = {
     'appId': "1:622087775650:web:cf7b13d091e47a9511fefb",
 }
 
-headers = {
+movie_db_headers = {
     "content-type": "application/octet-stream",
     "X-RapidAPI-Key": "b41f441a44msh205258985fa3fd0p162968jsna501ac32a342",
     "X-RapidAPI-Host": "moviesminidatabase.p.rapidapi.com"
+}
+
+streaming_headers = {
+    "X-RapidAPI-Key": "b41f441a44msh205258985fa3fd0p162968jsna501ac32a342",
+    "X-RapidAPI-Host": "streaming-availability.p.rapidapi.com"
 }
 
 
@@ -61,8 +65,8 @@ def login(request):
     ref.update({'email': email})
     ref.update({'displayName': displayName})
 
-    watchlist = wl if (wl:=ref.child('watchlist').get()) else {}
-    seenlist = sl if (sl:=ref.child('seenlist').get()) else {}
+    watchlist = wl if (wl := ref.child('watchlist').get()) else {}
+    seenlist = sl if (sl := ref.child('seenlist').get()) else {}
     print("watchlist:\n", watchlist)
     print("seenlist:\n", seenlist)
     return Response({'uid': uid, 'picture': picture, 'watchlist': watchlist, 'seenlist': seenlist}, status=200)
@@ -71,18 +75,18 @@ def login(request):
 @api_view(["GET"])
 def search(request, search_term):
     result = {}
-    # search_query = request.data['q']
     ref = db.reference('Data')
     ref.update({'searchQuery': search_term})
 
     search_url = "https://moviesminidatabase.p.rapidapi.com/movie/imdb_id/byTitle/" + \
         search_term + "/"
 
-    for movie in requests.get(url=search_url, headers=headers).json()["results"]:
+    for movie in requests.get(url=search_url, headers=movie_db_headers).json()["results"]:
         id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + \
             movie["imdb_id"] + "/"
 
-        result[movie["imdb_id"]] = requests.get(url=id_search_url, headers=headers).json()["results"]
+        result[movie["imdb_id"]] = requests.get(
+            url=id_search_url, headers=movie_db_headers).json()["results"]
     return Response(result)
 
 
@@ -105,14 +109,12 @@ def add_watchlist_item(request):
     ref = db.reference('Users').child(decoded_token['uid']).child('watchlist')
     ref.update({request.data['movie']['imdb_id']: request.data['movie']})
 
-
     return Response({'result': "POST"}, status=200)
 
 
 @api_view(["DELETE"])
 def remove_watchlist_item(request, movie_id):
 
-    # id_token = request.headers.get("Authentication")
     id_token = request.META.get('HTTP_AUTHORIZATION')
 
     if not id_token:
@@ -128,6 +130,7 @@ def remove_watchlist_item(request, movie_id):
 
     return Response({'result': "DELETE"}, status=200)
 
+
 @api_view(["POST"])
 def add_seenlist_item(request):
     id_token = request.data['idToken']
@@ -142,16 +145,13 @@ def add_seenlist_item(request):
     ref = db.reference('Users').child(decoded_token['uid']).child('seenlist')
     ref.update({request.data['movie']['imdb_id']: request.data['movie']})
 
-
     return Response({'result': "POST"}, status=200)
 
 
 @api_view(["DELETE"])
 def remove_seenlist_item(request, movie_id):
 
-    # id_token = request.headers.get("Authentication")
     id_token = request.META.get('HTTP_AUTHORIZATION')
-    # print(id_token)
 
     if not id_token:
         return Response({'error': "No authentication token."}, status=401)
@@ -167,24 +167,11 @@ def remove_seenlist_item(request, movie_id):
     return Response({'result': "DELETE"}, status=200)
 
 
-# @api_view(["GET"])
-# def is_in_watchlist(request, movie_id):
-#     # TODO: Break out authentication part to separate function (do not place the function in this file)
-#     id_token = request.META.get('HTTP_AUTHORIZATION')
-#     #print(id_token)
-
-#     if not id_token:
-#         return Response({'error': "No authentication token."}, status=401)
-
-#     if not movie_id:
-#         return Response({'error': "You don't have this movie in your watchlist."}, status=404)
-
-#     decoded_token = auth.verify_id_token(id_token, check_revoked=True)
-
-#     if not db.reference('Users').child(decoded_token['uid']).child('watchlist').get(movie_id):
-#         return Response({'result': False}, status=200)
-
-#     return Response({'result': True}, status=200)
+@api_view(["GET"])
+def get_streaming_service(request):
+    # TODO: Call to Streaming Availability API to get 
+    # services via result:index:streamingInfo:us:<services>
+    pass
 
 
 def get_csrf_token(request):

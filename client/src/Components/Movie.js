@@ -1,7 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Container, Row } from 'react-bootstrap'
+import { Card, Container, ProgressBar, Row } from 'react-bootstrap'
+
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
+import { StreamingAvailabilityGroup } from './StreamingAvailability';
 
 
 export function MoviePage(props) {
@@ -12,9 +14,21 @@ export function MoviePage(props) {
     const notFoundLogo = "/static/images/unknown-file-icon.png"
 
     return (
-        <div className="MoviePage" style={{backgroundColor: '#061706'}}> 
-            <Container className='grid'>
-                <Card className='border-0' style={{ width: '62rem' }}>
+        <div className="MoviePage" style={{ marginBottom: '1rem' }}>
+            <div className='MoviePage-Background' style={{
+                backgroundImage: `url(${movie_kv[1].banner})`,
+                backgroundSize: 'cover',
+                filter: 'blur(5px)',
+                position: 'absolute',
+                zIndex: '-1',
+                width: '100%',
+                height: '100%',
+                transform: 'translateY(-100px) scale(1.1)'
+            }}>
+                <p></p>
+            </div>
+            <Container className='grid' style={{ position: 'relative' }}>
+                <Card style={{ width: '62rem', backgroundColor: '#1d1f1d', color: '#FFFFFF' }}>
                     <Row>
                         <div className='col-sm-5'>
                             <Card.Img variant="top"
@@ -22,10 +36,12 @@ export function MoviePage(props) {
                                 onError={(e) => { e.target.src = notFoundLogo }} />
                         </div>
                         <div className='col-sm-7'>
-                            <Card.Body style={{backgroundColor: '#061706', color: '#FFFFFF', textAlign: 'center'}}>
-                                <Card.Title>{movie_kv[1].title}</Card.Title>
+                            <Card.Body style={{ textAlign: 'center' }}>
+                                <Card.Title style={{ fontSize: '30px' }}>
+                                    {movie_kv[1].title}
+                                </Card.Title>
                                 <Card.Text>{movie_kv[1].plot}</Card.Text>
-                                <Card.Text>{movie_kv[1].movie_length}min</Card.Text>
+                                <Card.Text>{movie_kv[1].description}</Card.Text>
                                 {isSignedIn === true ?
                                     <Container style={{ postition: 'relative', padding: 0 }}>
                                         <WatchListToggleButton movie_kv={movie_kv} dispatch={dispatch} style={{
@@ -36,6 +52,13 @@ export function MoviePage(props) {
                                             borderWidth: '2px', borderColor: 'black',
                                             opacity: '0.9', fontWeight: 'bold'
                                         }} />
+                                        <div className='ratio ratio-16x9 border border-light border-4 rounded m-auto'>
+                                            <iframe src={movie_kv[1].trailer} title="Trailer" allowFullScreen></iframe>
+                                        </div>
+                                        <StreamingAvailabilityGroup movie_kv={movie_kv} style={{
+                                            borderWidth: '2px', borderColor: 'black',
+                                            opacity: '0.9', fontWeight: 'bold'
+                                        }} />
                                     </Container>
                                     :
                                     <h1>Something went wrong loading "add to watchlist/seenlist"</h1>
@@ -43,6 +66,27 @@ export function MoviePage(props) {
                             </Card.Body>
                         </div>
                     </Row>
+                    <Card.Body style={{ textAlign: 'center' }}>
+                        <Card.Text style={{ textAlign: 'left' }}><h3>Released:</h3> {movie_kv[1].release}</Card.Text>
+                        <Card.Text><h3>Length of movie</h3> {movie_kv[1].movie_length}min</Card.Text>
+                        <Card.Text>
+                            <h3>Rating</h3>
+                            <ProgressBar>
+                                <ProgressBar
+                                    now={movie_kv[1].rating * 10}
+                                    label={movie_kv[1].rating * 10 + "%"}
+                                    variant='success'
+                                    key={1}
+                                />
+                                <ProgressBar
+                                    now={100 - (movie_kv[1].rating * 10)}
+                                    label={100 - movie_kv[1].rating * 10 + "%"}
+                                    variant="danger"
+                                    key={2}
+                                />
+                            </ProgressBar>
+                        </Card.Text>
+                    </Card.Body>
                 </Card>
             </Container>
         </div >
