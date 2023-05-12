@@ -167,7 +167,8 @@ def remove_seenlist_item(request, movie_id):
 
 @api_view(["GET"])
 def get_streaming_service(request, movie_title, movie_id):
-    ref = db.reference('Data').child('streamingservices')
+    ref = db.reference('Data').child('streamingServices')
+    services = {}
 
     params = {"title": movie_title,
               "country": "se", "show_type": "movie"}
@@ -175,13 +176,18 @@ def get_streaming_service(request, movie_title, movie_id):
     url = "https://streaming-availability.p.rapidapi.com/v2/search/title"
 
     if ref.child(movie_id).get() is not None:
-        services = ss if (ss := ref.child('streamingservices').child(movie_id).get()) else {}
+        services = ss if (ss := ref.child('streamingServices').child(movie_id).get()) else {}
     else:
         for movie in requests.get(url=url, headers=streaming_headers, params=params).json()["result"]:
             if movie["title"] == movie_title:
-                services = movie["streamingInfo"]["se"]
-                movieId = movie["imdbId"]
-                ref.update({movieId: services})
+                try:
+                    services = movie["streamingInfo"]["se"]
+                except:
+                    # TODO: Send this answer to frontend?
+                    print("This movie does not have any streaming services available from this API")
+                finally:
+                    movieId = movie["imdbId"]
+                    ref.update({movieId: services})   
                 break
         
     return Response({'title': movie_title, 'services': services}, status=200)

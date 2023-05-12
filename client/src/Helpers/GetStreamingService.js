@@ -17,8 +17,8 @@ export const GetStreamingService = (movie_kv, dispatch) => {
                 // Make an Axios request with the ID token as the Bearer token
                 await axios.get('http://' + window.location.host + path + movie_kv[1].title + '/' + movie_kv[1].imdb_id)
                     .then((result) => {
-                        dispatch(setStreamingService(movie_kv))
-                        console.log("result from streaming axios", result)
+                        dispatch(setStreamingService(result.data.services))
+                        console.log("result from streaming axios", result.data)
                     })
                     .catch((error) => {
                         console.error(error);
