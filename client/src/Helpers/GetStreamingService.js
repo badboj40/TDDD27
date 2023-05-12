@@ -1,25 +1,24 @@
 import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
-import { removeItemFromWatchlist } from '../store';
+import { setStreamingService } from '../store';
 
 
 // WIP
-export const GetStreamingService= (movie_kv, dispatch) => {
+export const GetStreamingService = (movie_kv, dispatch) => {
     let user = auth.currentUser
-    
+
     if (user) {
         user.getIdToken(true)
             .then(async (idToken) => {
                 // Use the ID token to authenticate the user with your backend server
 
+                let path = '/getStreamingService/';
+                console.log(movie_kv[1].title)
                 // Make an Axios request with the ID token as the Bearer token
-                await axios.delete('http://' + window.location.host + '/getStreamingService/', {
-                    headers: {
-                        Authorization: idToken,
-                    },
-                })
+                await axios.get('http://' + window.location.host + path + movie_kv[1].title + '/' + movie_kv[1].imdb_id)
                     .then((result) => {
-                        dispatch(removeItemFromWatchlist(movieId))
+                        dispatch(setStreamingService(movie_kv))
+                        console.log("result from streaming axios", result)
                     })
                     .catch((error) => {
                         console.error(error);

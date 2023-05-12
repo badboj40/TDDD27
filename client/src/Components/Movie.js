@@ -25,7 +25,6 @@ export function MoviePage(props) {
                 height: '100%',
                 transform: 'translateY(-100px) scale(1.1)'
             }}>
-                <p></p>
             </div>
             <Container className='grid' style={{ position: 'relative' }}>
                 <Card style={{ width: '62rem', backgroundColor: '#1d1f1d', color: '#FFFFFF' }}>
@@ -61,16 +60,16 @@ export function MoviePage(props) {
                                         }} />
                                     </Container>
                                     :
-                                    <h1>Something went wrong loading "add to watchlist/seenlist"</h1>
+                                    <h1>Something went wrong loading movie"</h1>
                                 }
                             </Card.Body>
                         </div>
                     </Row>
                     <Card.Body style={{ textAlign: 'center' }}>
-                        <Card.Text style={{ textAlign: 'left' }}><h3>Released:</h3> {movie_kv[1].release}</Card.Text>
-                        <Card.Text><h3>Length of movie</h3> {movie_kv[1].movie_length}min</Card.Text>
-                        <Card.Text>
-                            <h3>Rating</h3>
+                        <Card.Text className='h3' style={{ textAlign: 'left' }}>Released: {movie_kv[1].release}</Card.Text>
+                        <Card.Text className='h3'>Length of movie {movie_kv[1].movie_length}min</Card.Text>
+                        <Card.Text className='h3'>
+                            Rating
                             <ProgressBar>
                                 <ProgressBar
                                     now={movie_kv[1].rating * 10}

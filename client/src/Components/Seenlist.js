@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
 import { HandleMoviePage } from '../Helpers/HandleMoviePage';
+import { GetStreamingService } from '../Helpers/GetStreamingService';
+import { setMovie } from '../store';
 
 
 export function SeenListPage() {
@@ -34,7 +36,11 @@ export function SeenListPage() {
                                             borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
                                         }} />
                                         <Nav>
-                                            <Nav.Link onClick={() => HandleMoviePage(movie_kv, navigate, dispatch)} style={{ padding: 0 }}>
+                                            <Nav.Link onClick={() => {
+                                                HandleMoviePage(movie_kv, navigate, dispatch)
+                                                setMovie(movie_kv[1])
+                                                GetStreamingService(movie_kv, dispatch)
+                                            }}>
                                                 <Card.Img variant="top"
                                                     src={movie_kv[1].banner}
                                                     onError={(e) => { e.target.src = notFoundLogo }} />
@@ -43,7 +49,7 @@ export function SeenListPage() {
                                         </Nav>
                                     </Container>
                                     <div className=''>
-                                        <Card.Body style={{textAlign: 'center'}}>
+                                        <Card.Body style={{ textAlign: 'center' }}>
                                             <Card.Title className=''
                                                 style={{ fontSize: '20px' }}>
                                                 {movie_kv[1].title}

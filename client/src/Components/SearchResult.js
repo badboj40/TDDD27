@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { HandleMoviePage } from '../Helpers/HandleMoviePage';
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
+import { GetStreamingService } from '../Helpers/GetStreamingService';
 
 export function SearchResultPage(props) {
     const isSignedIn = props.isSignedIn;
@@ -25,7 +26,10 @@ export function SearchResultPage(props) {
                             <Row>
                                 <div className='col-sm-5'>
                                     <Nav>
-                                        <Nav.Link onClick={() => HandleMoviePage(movie_kv, navigate, dispatch)} style={{ padding: 0 }}>
+                                        <Nav.Link onClick={() => {
+                                            HandleMoviePage(movie_kv, navigate, dispatch)
+                                            GetStreamingService(movie_kv, dispatch)
+                                        }}>
                                             <Card.Img variant="top"
                                                 src={movie_kv[1].banner}
                                                 onError={(e) => { e.target.src = notFoundLogo }} />

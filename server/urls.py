@@ -14,7 +14,8 @@ urlpatterns = [
     path('addSeenlistItem', views.add_seenlist_item, name="add_seenlist_item"),
     path('removeSeenlistItem/<str:movie_id>',
          views.remove_seenlist_item, name="remove_seenlist_item"),
-    path('getStreamingService', views.get_streaming_service, name="get_streaming_service"),
+    path('getStreamingService/<str:movie_title>/<str:movie_id>',
+         views.get_streaming_service, name="get_streaming_service"),
 
     # path('signout', views.index, name="index"),
 ]

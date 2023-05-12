@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 // WIP
 export function StreamingAvailabilityGroup(props) {
     const style = props.style
+    const movie_kv = props.movie_kv
+    const availableStreamingServices = useSelector(state => state.streamingService)
     const watchlistState = useSelector(state => state.watchlist)['watchlist']
 
 
@@ -18,7 +20,7 @@ export function StreamingAvailabilityGroup(props) {
                     {/* TODO: Change this to: "for every supported streaming site for the movie" loop */}
                     {watchlistState ? (
                         Object.entries(watchlistState).map((movie_kv) => (
-                            <Button className='mr-2 px-0' variant="secondary" size="lg" style={style}>
+                            <Button className={movie_kv[0]} variant="secondary" size="lg" style={style}>
                                 {movie_kv[1].title[0]}
                             </Button>
                         ))

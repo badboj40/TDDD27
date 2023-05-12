@@ -67,8 +67,6 @@ def login(request):
 
     watchlist = wl if (wl := ref.child('watchlist').get()) else {}
     seenlist = sl if (sl := ref.child('seenlist').get()) else {}
-    print("watchlist:\n", watchlist)
-    print("seenlist:\n", seenlist)
     return Response({'uid': uid, 'picture': picture, 'watchlist': watchlist, 'seenlist': seenlist}, status=200)
 
 
@@ -168,10 +166,25 @@ def remove_seenlist_item(request, movie_id):
 
 
 @api_view(["GET"])
-def get_streaming_service(request):
-    # TODO: Call to Streaming Availability API to get 
-    # services via result:index:streamingInfo:us:<services>
-    pass
+def get_streaming_service(request, movie_title, movie_id):
+    ref = db.reference('Data').child('streamingservices')
+
+    params = {"title": movie_title,
+              "country": "se", "show_type": "movie"}
+    
+    url = "https://streaming-availability.p.rapidapi.com/v2/search/title"
+
+    if ref.child(movie_id).get() is not None:
+        services = ss if (ss := ref.child('streamingservices').child(movie_id).get()) else {}
+    else:
+        for movie in requests.get(url=url, headers=streaming_headers, params=params).json()["result"]:
+            if movie["title"] == movie_title:
+                services = movie["streamingInfo"]["se"]
+                movieId = movie["imdbId"]
+                ref.update({movieId: services})
+                break
+        
+    return Response({'title': movie_title, 'services': services}, status=200)
 
 
 def get_csrf_token(request):
