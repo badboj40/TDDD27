@@ -58,7 +58,7 @@ export function MoviePage(props) {
                                         </div>
                                         <StreamingAvailabilityGroup movie_kv={movie_kv} navigate={navigate} style={{
                                             borderWidth: '2px', borderColor: 'black',
-                                            opacity: '0.9', fontWeight: 'bold', fontSize: '30px'
+                                            opacity: '0.9', fontWeight: 'bold', fontSize: '18px'
                                         }} />
                                     </Container>
                                     :

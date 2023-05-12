@@ -180,20 +180,20 @@ def get_streaming_service(request, movie_title, movie_id):
         print("already in database")
     else:
         for movie in requests.get(url=url, headers=streaming_headers, params=params).json()["result"]:
-            if movie["title"] == movie_title:
+            #if movie["title"] == movie_title:
+            try:
+                services = movie["streamingInfo"]["se"]
+                print("try se")
+            except:
                 try:
-                    services = movie["streamingInfo"]["se"]
-                    print("try se")
+                    services = movie["streamingInfo"]["us"]
+                    print("try us")
                 except:
-                    try:
-                        services = movie["streamingInfo"]["us"]
-                        print("try us")
-                    except:
-                        # TODO: Send this answer to frontend?
-                        print("This movie does not have any streaming services available from this API")
-                finally:
-                    movieId = movie["imdbId"]
-                    ref.update({movieId: services})   
+                    # TODO: Send this answer to frontend?
+                    print("This movie does not have any streaming services available from this API")
+            finally:
+                movieId = movie["imdbId"]
+                ref.update({movieId: services})   
                 break
         
     return Response({'title': movie_title, 'services': services}, status=200)
