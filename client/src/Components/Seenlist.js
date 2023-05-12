@@ -3,9 +3,8 @@ import { Card, Col, Container, Nav, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
-import { HandleMoviePage } from '../Helpers/HandleMoviePage';
-import { GetStreamingService } from '../Helpers/GetStreamingService';
-import { setMovie } from '../store';
+import { HandleMovieClick } from '../Helpers/HandleMovieClick';
+
 
 
 export function SeenListPage() {
@@ -36,11 +35,7 @@ export function SeenListPage() {
                                             borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
                                         }} />
                                         <Nav>
-                                            <Nav.Link onClick={() => {
-                                                HandleMoviePage(movie_kv, navigate, dispatch)
-                                                setMovie(movie_kv[1])
-                                                GetStreamingService(movie_kv, dispatch)
-                                            }}>
+                                            <Nav.Link onClick={async () => { HandleMovieClick(movie_kv, dispatch, navigate) }}>
                                                 <Card.Img variant="top"
                                                     src={movie_kv[1].banner}
                                                     onError={(e) => { e.target.src = notFoundLogo }} />

@@ -2,10 +2,9 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Card, Container, Nav, Row } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
-import { HandleMoviePage } from '../Helpers/HandleMoviePage';
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
-import { GetStreamingService } from '../Helpers/GetStreamingService';
+import { HandleMovieClick } from '../Helpers/HandleMovieClick';
 
 export function SearchResultPage(props) {
     const isSignedIn = props.isSignedIn;
@@ -26,10 +25,7 @@ export function SearchResultPage(props) {
                             <Row>
                                 <div className='col-sm-5'>
                                     <Nav>
-                                        <Nav.Link onClick={() => {
-                                            HandleMoviePage(movie_kv, navigate, dispatch)
-                                            GetStreamingService(movie_kv, dispatch)
-                                        }}>
+                                        <Nav.Link onClick={async () => { HandleMovieClick(movie_kv, dispatch, navigate) }}>
                                             <Card.Img variant="top"
                                                 src={movie_kv[1].banner}
                                                 onError={(e) => { e.target.src = notFoundLogo }} />

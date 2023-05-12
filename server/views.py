@@ -194,7 +194,6 @@ def get_streaming_service(request, movie_title, movie_id):
                 finally:
                     movieId = movie["imdbId"]
                     ref.update({movieId: services})   
-                    print("SERVICES", services)
                 break
         
     return Response({'title': movie_title, 'services': services}, status=200)

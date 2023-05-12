@@ -12,14 +12,12 @@ export function StreamingAvailabilityGroup(props) {
             <Container className='grid'>
                 <Row md={6} className="gx-5">
                     {availableStreamingServices && Object.entries(availableStreamingServices[movie_kv[0]]["services"])?.map((service_kv, index) => {
-                            console.log("LOLOL", service_kv, index)
                             return (
                                 <Button className={service_kv[0] + movie_kv[0]}
                                     variant="secondary"
                                     size="lg"
                                     style={style}
                                     onClick={() =>
-                                        //console.log(service_kv[1][0].link)
                                         window.open(service_kv[1][0].link, '_blank', 'rel=noopener noreferrer')
                                     }>
                                     {service_kv[0]}
