@@ -111,16 +111,9 @@ const streamingServiceSlice = createSlice({
   name: 'streamingservice',
   initialState: streamServiceState,
   reducers: {
-    initStreamingService: (state) => {
-      state.streamingService = streamServiceState
-    },
     setStreamingService: (state, action) => {
-      const newStreamingService = { ...state.streamingService, [action.payload[0]]: action.payload[1]}
-      //sessionStorage.setItem('seenlist', JSON.stringify(newSeenlist))
-      state.streamingService = newStreamingService
-    },
-    clearStreamingService: (state) => {
-      state.streamingService = {}
+      console.log("PAYLOAD", action.payload, "KEY", action.payload[0], "VALUE", action.payload[1])
+      state.streamingService = {[action.payload[0]]: action.payload[1]}
     },
   },
 });
@@ -131,7 +124,7 @@ export const { setMovie } = movieSlice.actions;
 export const { initWatchlist, addItemToWatchlist, removeItemFromWatchlist, clearWatchlist } = watchlistSlice.actions;
 export const { initSeenlist, addItemToSeenlist, removeItemFromSeenlist, clearSeenlist } = seenlistSlice.actions;
 export const { initProfilePic, clearProfilePic } = profilePictureSlice.actions;
-export const { initStreamingService, setStreamingService, getStreamingService, clearStreamingService } = streamingServiceSlice.actions;
+export const { setStreamingService } = streamingServiceSlice.actions;
 
 
 const rootReducer = {

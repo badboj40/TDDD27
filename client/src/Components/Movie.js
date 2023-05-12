@@ -4,12 +4,14 @@ import { Card, Container, ProgressBar, Row } from 'react-bootstrap'
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
 import { StreamingAvailabilityGroup } from './StreamingAvailability';
+import { useNavigate } from 'react-router-dom';
 
 
 export function MoviePage(props) {
     const isSignedIn = props.isSignedIn;
     const movie_kv = useSelector(state => state.movie.movie);
     const dispatch = useDispatch();
+    const navigate = useNavigate()
 
     const notFoundLogo = "/static/images/unknown-file-icon.png"
 
@@ -54,9 +56,9 @@ export function MoviePage(props) {
                                         <div className='ratio ratio-16x9 border border-light border-4 rounded m-auto'>
                                             <iframe src={movie_kv[1].trailer} title="Trailer" allowFullScreen></iframe>
                                         </div>
-                                        <StreamingAvailabilityGroup movie_kv={movie_kv} style={{
+                                        <StreamingAvailabilityGroup movie_kv={movie_kv} navigate={navigate} style={{
                                             borderWidth: '2px', borderColor: 'black',
-                                            opacity: '0.9', fontWeight: 'bold'
+                                            opacity: '0.9', fontWeight: 'bold', fontSize: '30px'
                                         }} />
                                     </Container>
                                     :

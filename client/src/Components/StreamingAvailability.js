@@ -1,35 +1,33 @@
-import { useNavigate } from 'react-router-dom'
 import { Button, Container, Row } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // WIP
 export function StreamingAvailabilityGroup(props) {
     const style = props.style
     const movie_kv = props.movie_kv
-    const availableStreamingServices = useSelector(state => state.streamingService)
-    const watchlistState = useSelector(state => state.watchlist)['watchlist']
-
-
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const availableStreamingServices = useSelector(state => state.streamingService)["streamingService"]
 
     return (
         <div className="StreamingAvailability">
-            <Container className='grid gap-2 p-0'>
-                <Row md={5} className="mx-auto">
-                    {/* TODO: Change this to: "for every supported streaming site for the movie" loop */}
-                    {watchlistState ? (
-                        Object.entries(watchlistState).map((movie_kv) => (
-                            <Button className={movie_kv[0]} variant="secondary" size="lg" style={style}>
-                                {movie_kv[1].title[0]}
-                            </Button>
-                        ))
-                    ) : (
-                        <h2>No movies in your watchlist.</h2>
-                    )}
+            <Container className='grid'>
+                <Row md={6} className="gx-5">
+                    {availableStreamingServices && Object.entries(availableStreamingServices[movie_kv[0]]["services"])?.map((service_kv, index) => {
+                            console.log("LOLOL", service_kv, index)
+                            return (
+                                <Button className={service_kv[0] + movie_kv[0]}
+                                    variant="secondary"
+                                    size="lg"
+                                    style={style}
+                                    onClick={() =>
+                                        //console.log(service_kv[1][0].link)
+                                        window.open(service_kv[1][0].link, '_blank', 'rel=noopener noreferrer')
+                                    }>
+                                    {service_kv[0]}
+                                </Button>
+                            )
+                        })}
                 </Row>
             </Container>
-        </div >
-
+        </div>
     )
 }
