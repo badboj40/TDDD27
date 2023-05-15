@@ -5,7 +5,8 @@ import {
   initProfilePic,
   clearWatchlist,
   clearSeenlist,
-  clearProfilePic
+  clearProfilePic,
+  clearHomeMovies,
 } from "../store";
 import {
   getAuth,
@@ -15,6 +16,7 @@ import {
 } from "firebase/auth";
 
 import axios from 'axios';
+import { GetPopularMovies } from "../Helpers/GetPopularMovies";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMsNwx5KzZKx5tdeh0FcT8yY_ckeZMliE",
@@ -55,16 +57,16 @@ export const signOutFromGoogle = (dispatch) => {
 
 
 const handleLogin = async (result, dispatch) => {
-  console.log("before logging in.");
+  console.log("Before logging in.");
 
   await axios.post('http://' + window.location.host + '/login', { 'idToken': result._tokenResponse.idToken })
     .then(response => {
-      console.log("login response", response.data)
+      console.log("Login response", response.data)
       sessionStorage.setItem('watchlist', JSON.stringify(response.data.watchlist))
       sessionStorage.setItem('seenlist', JSON.stringify(response.data.seenlist))
       dispatch(initWatchlist())
       dispatch(initSeenlist())
-      dispatch(initProfilePic(response.data['picture']))
+      GetPopularMovies(dispatch)
       return response.data
     })
     .catch(error => {
@@ -77,7 +79,7 @@ const handleLogout = async (result, dispatch) => {
   sessionStorage.removeItem('seenlist')
   dispatch(clearWatchlist())
   dispatch(clearSeenlist())
-  dispatch(clearProfilePic())
+  dispatch(clearHomeMovies())
   console.log("Successfully signed out.", result)
 }
 

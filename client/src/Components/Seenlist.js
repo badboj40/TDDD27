@@ -35,7 +35,8 @@ export function SeenListPage() {
                                             borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
                                         }} />
                                         <Nav>
-                                            <Nav.Link onClick={async () => { HandleMovieClick(movie_kv, dispatch, navigate) }}>
+                                            <Nav.Link onClick={async () => { HandleMovieClick(movie_kv, dispatch, navigate) }}
+                                                style={{ padding: 0 }}>                                                                                          
                                                 <Card.Img variant="top"
                                                     src={movie_kv[1].banner}
                                                     onError={(e) => { e.target.src = notFoundLogo }} />

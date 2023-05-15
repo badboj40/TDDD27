@@ -5,6 +5,10 @@ const searchInitialState = {
   searchTerm: "",
 };
 
+const homeInitialState = {
+  home: {},
+}
+
 const movieInitialState = {
   movie: {},
 }
@@ -15,10 +19,6 @@ const watchlistInitialState = {
 
 const seenlistInitialState = {
   seenlist: JSON.parse(sessionStorage.getItem('seenlist')),
-};
-
-const profilePictureState = {
-  profilePicture: ""
 };
 
 const streamServiceState = {
@@ -32,6 +32,20 @@ const searchSlice = createSlice({
   reducers: {
     setSearchTerm: (state, action) => {
       state.searchTerm = action.payload;
+    },
+  },
+});
+
+const homeSlice = createSlice({
+  name: "home",
+  initialState: homeInitialState,
+  reducers: {
+    setHomeMovies: (state, action) => {
+      state.home = action.payload;
+      //sessionStorage.setItem('popularMovies', JSON.stringify(action.payload))
+    },
+    clearHomeMovies: (state) => {
+      state.home = homeInitialState
     },
   },
 });
@@ -94,26 +108,12 @@ const seenlistSlice = createSlice({
   },
 });
 
-const profilePictureSlice = createSlice({
-  name: 'profilePicture',
-  initialState: profilePictureState,
-  reducers: {
-    initProfilePic: (state, action) => {
-      state.profilePicture = action.payload
-    },
-    clearProfilePic: (state) => {
-      state.profilePicture = ""
-    },
-  },
-});
-
 const streamingServiceSlice = createSlice({
   name: 'streamingservice',
   initialState: streamServiceState,
   reducers: {
     setStreamingService: (state, action) => {
-      console.log("PAYLOAD", action.payload, "KEY", action.payload[0], "VALUE", action.payload[1])
-      state.streamingService = {[action.payload[0]]: action.payload[1]}
+      state.streamingService = { [action.payload[0]]: action.payload[1] }
     },
   },
 });
@@ -121,18 +121,18 @@ const streamingServiceSlice = createSlice({
 // Export actions
 export const { setSearchTerm } = searchSlice.actions;
 export const { setMovie } = movieSlice.actions;
+export const { setHomeMovies, clearHomeMovies } = homeSlice.actions;
 export const { initWatchlist, addItemToWatchlist, removeItemFromWatchlist, clearWatchlist } = watchlistSlice.actions;
 export const { initSeenlist, addItemToSeenlist, removeItemFromSeenlist, clearSeenlist } = seenlistSlice.actions;
-export const { initProfilePic, clearProfilePic } = profilePictureSlice.actions;
 export const { setStreamingService } = streamingServiceSlice.actions;
 
 
 const rootReducer = {
   search: searchSlice.reducer,
   movie: movieSlice.reducer,
+  home: homeSlice.reducer,
   watchlist: watchlistSlice.reducer,
   seenlist: seenlistSlice.reducer,
-  profilePic: profilePictureSlice.reducer,
   streamingService: streamingServiceSlice.reducer,
 };
 

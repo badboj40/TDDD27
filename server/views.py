@@ -48,6 +48,24 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+@api_view(["GET"])
+def home(request):
+    result = {}
+    count = 0
+    url = "https://moviesminidatabase.p.rapidapi.com/movie/order/byPopularity/"
+
+    for movie in requests.get(url=url, headers=movie_db_headers).json()["results"]:
+        id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + \
+            movie["imdb_id"] + "/"
+
+        result[movie["imdb_id"]] = requests.get(
+            url=id_search_url, headers=movie_db_headers).json()["results"]
+        count += 1
+        if count == 8:
+            break
+    return Response(result)
+
+
 @api_view(["POST"])
 def login(request):
     # Verify the ID token and get the user's information
@@ -56,7 +74,6 @@ def login(request):
 
     # print("decoded", decoded_token)
     uid = decoded_token['uid']
-    picture = decoded_token['picture']
     email = decoded_token['email']
     displayName = decoded_token['name']
 
@@ -67,7 +84,7 @@ def login(request):
 
     watchlist = wl if (wl := ref.child('watchlist').get()) else {}
     seenlist = sl if (sl := ref.child('seenlist').get()) else {}
-    return Response({'uid': uid, 'picture': picture, 'watchlist': watchlist, 'seenlist': seenlist}, status=200)
+    return Response({'uid': uid, 'watchlist': watchlist, 'seenlist': seenlist}, status=200)
 
 
 @api_view(["GET"])
@@ -172,7 +189,7 @@ def get_streaming_service(request, movie_title, movie_id):
 
     params = {"title": movie_title,
               "country": "se", "show_type": "movie"}
-    
+
     url = "https://streaming-availability.p.rapidapi.com/v2/search/title"
 
     if ref.child(movie_id).get() is not None:
@@ -180,7 +197,8 @@ def get_streaming_service(request, movie_title, movie_id):
         print("already in database")
     else:
         for movie in requests.get(url=url, headers=streaming_headers, params=params).json()["result"]:
-            #if movie["title"] == movie_title:
+            # TODO: Sometimes this if-statement is wrong, like Harry Potter I
+            # if movie["title"] == movie_title:
             try:
                 services = movie["streamingInfo"]["se"]
                 print("try se")
@@ -190,12 +208,13 @@ def get_streaming_service(request, movie_title, movie_id):
                     print("try us")
                 except:
                     # TODO: Send this answer to frontend?
-                    print("This movie does not have any streaming services available from this API")
+                    print(
+                        "This movie does not have any streaming services available from this API")
             finally:
                 movieId = movie["imdbId"]
-                ref.update({movieId: services})   
+                ref.update({movieId: services})
                 break
-        
+
     return Response({'title': movie_title, 'services': services}, status=200)
 
 
