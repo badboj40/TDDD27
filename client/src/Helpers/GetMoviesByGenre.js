@@ -11,7 +11,6 @@ export const GetMoviesByGenre = (genre_kv, dispatch) => {
                 .then(async (idToken) => {
                     await axios.get('http://' + window.location.host + '/browse/' + genre_kv[1])
                         .then((result) => {
-                            console.log("THEN IN PROMISE", result.data)
                             dispatch(setGenre([result.data]))
                             resolve(result.data); // resolve the promise with the result data
                         })

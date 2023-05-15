@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Card, Col, Container, Nav, Row } from 'react-bootstrap'
+import { Card, Col, Container, Nav, Pagination, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { HandleMovieClick } from '../Helpers/HandleMovieClick';
 
@@ -18,8 +18,8 @@ export function BrowseGenrePage() {
         <div className="BrowseGenre" style={{ backgroundColor: '#FFFFFF' }}>
             <Container className='grid'>
                 <Row md={8} className="gy-5">
-                    {moviesByGenreState ? (
-                        Object.entries(moviesByGenreState).map((movie_kv) => (
+                    {moviesByGenreState[0] ? (
+                        Object.entries(moviesByGenreState[0]).map((movie_kv) => (
                             <Col md={4} key={movie_kv[0]}>
                                 <Card className='border-0' style={{ width: cardWidth }}>
                                     <Container style={{ postition: 'relative', padding: 0 }}>
@@ -49,6 +49,9 @@ export function BrowseGenrePage() {
                     )}
                 </Row>
             </Container>
+            <Pagination>
+                {/* ADD PAGINATION OR AT LEAST NEXT/PREV PAGE */}
+            </Pagination>
         </div >
     )
 }

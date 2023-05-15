@@ -73,7 +73,6 @@ const genreSlice = createSlice({
   initialState: genreInitialState,
   reducers: {
     setGenre: (state, action) => {
-      console.log("PAYLOAD", action.payload)
       state.genre = action.payload
     },
   },
