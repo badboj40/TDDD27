@@ -1,4 +1,3 @@
-import { setGenre } from "../store";
 import { GetMoviesByGenre } from "./GetMoviesByGenre";
 
 

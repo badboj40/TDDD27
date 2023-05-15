@@ -1,37 +1,31 @@
 import { useNavigate } from 'react-router-dom'
-import { Card, Col, Container, Nav, Pagination, Row } from 'react-bootstrap'
+import { Card, Col, Container, Pagination, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
-import { HandleMovieClick } from '../Helpers/HandleMovieClick';
+import { CardBannerNav } from './CardBannerNav';
 
 
 export function BrowseGenrePage() {
     const moviesByGenreState = useSelector(state => state.genre.genre);
-
-    const notFoundLogo = "/static/images/unknown-file-icon.png"
+    const movies = moviesByGenreState.result
+    //Links will be used for pagination
+    const links = moviesByGenreState.links
 
     const cardWidth = '20rem'
-
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+    console.log(moviesByGenreState)
 
     return (
         <div className="BrowseGenre" style={{ backgroundColor: '#FFFFFF' }}>
             <Container className='grid'>
-                <Row md={8} className="gy-5">
-                    {moviesByGenreState[0] ? (
-                        Object.entries(moviesByGenreState[0]).map((movie_kv) => (
+                <Row md={4} className="gy-1">
+                    {movies ? (
+                        Object.entries(movies).map((movie_kv) => (
                             <Col md={4} key={movie_kv[0]}>
                                 <Card className='border-0' style={{ width: cardWidth }}>
                                     <Container style={{ postition: 'relative', padding: 0 }}>
-                                        <Nav>
-                                            <Nav.Link onClick={async () => { HandleMovieClick(movie_kv, dispatch, navigate) }}
-                                                style={{ padding: 0 }}>
-                                                <Card.Img variant="top"
-                                                    src={movie_kv[1].banner}
-                                                    onError={(e) => { e.target.src = notFoundLogo }}
-                                                />
-                                            </Nav.Link>
-                                        </Nav>
+                                        <CardBannerNav movie_kv={movie_kv} dispatch={dispatch} navigate={navigate} />
                                     </Container>
                                     <div className=''>
                                         <Card.Body>

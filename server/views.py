@@ -69,7 +69,10 @@ def home(request):
 @api_view(["GET"])
 def browse(request, genre):
     result = {}
-    url = "https://moviesminidatabase.p.rapidapi.com/movie/byGen/" + genre
+    # TODO: ADD dynamic page, see URL for next in links
+    url = "https://moviesminidatabase.p.rapidapi.com/movie/byGen/" + genre# + page
+
+    links = requests.get(url=url, headers=movie_db_headers).json()["links"]
 
     for movie in requests.get(url=url, headers=movie_db_headers).json()["results"]:
         id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + \
@@ -78,7 +81,7 @@ def browse(request, genre):
         result[movie["imdb_id"]] = requests.get(
             url=id_search_url, headers=movie_db_headers).json()["results"]
 
-    return Response(result)
+    return Response({"result": result, "links": links})
 
 # Route which retrieves all genres that the MoviesMiniDatabase can be filtered with
 @api_view(["GET"])

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Button, Col, Container, Nav, Row } from 'react-bootstrap'
+import { Button, Col, Container, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { HandleGenreClick } from '../Helpers/HandleGenreClick';
 

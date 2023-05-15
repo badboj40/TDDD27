@@ -1,20 +1,16 @@
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Card, Container, Nav, Row } from 'react-bootstrap'
+import { Card, Container, Row } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
-import { HandleMovieClick } from '../Helpers/HandleMovieClick';
+import { CardBannerNav } from './CardBannerNav';
 
 export function SearchResultPage(props) {
     const isSignedIn = props.isSignedIn;
     const searchResult = useSelector(state => state.search.searchTerm);
-
-    const notFoundLogo = "/static/images/unknown-file-icon.png"
-
     const navigate = useNavigate()
     const dispatch = useDispatch()
-
 
     return (
         <div className="SearchResult">
@@ -24,13 +20,7 @@ export function SearchResultPage(props) {
                         <Card className="border-0" key={movie_kv[0]} style={{ width: '62rem', }}>
                             <Row>
                                 <div className='col-sm-5'>
-                                    <Nav>
-                                        <Nav.Link onClick={async () => { HandleMovieClick(movie_kv, dispatch, navigate) }}>
-                                            <Card.Img variant="top"
-                                                src={movie_kv[1].banner}
-                                                onError={(e) => { e.target.src = notFoundLogo }} />
-                                        </Nav.Link>
-                                    </Nav>
+                                    <CardBannerNav movie_kv={movie_kv} dispatch={dispatch} navigate={navigate} />
                                 </div>
                                 <div className='col-sm-7'>
                                     <Card.Body>

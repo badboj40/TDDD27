@@ -1,18 +1,14 @@
 import { useNavigate } from 'react-router-dom'
-import { Card, Col, Container, Nav, Row } from 'react-bootstrap'
+import { Card, Col, Container, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
-import { HandleMovieClick } from '../Helpers/HandleMovieClick';
+import { CardBannerNav } from './CardBannerNav';
 
 
 export function WatchListPage() {
     const watchlistState = useSelector(state => state.watchlist)['watchlist']
-
-    const notFoundLogo = "/static/images/unknown-file-icon.png"
-
     const cardWidth = '20rem'
-
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -33,15 +29,7 @@ export function WatchListPage() {
                                             position: 'absolute', right: '0', borderWidth: '2px',
                                             borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
                                         }} />
-                                        <Nav>
-                                            <Nav.Link onClick={async () => { HandleMovieClick(movie_kv, dispatch, navigate) }}
-                                                style={{ padding: 0 }}>
-                                                <Card.Img variant="top"
-                                                    src={movie_kv[1].banner}
-                                                    onError={(e) => { e.target.src = notFoundLogo }}
-                                                />
-                                            </Nav.Link>
-                                        </Nav>
+                                        <CardBannerNav movie_kv={movie_kv} dispatch={dispatch} navigate={navigate}/>
                                     </Container>
                                     <div className=''>
                                         <Card.Body>
