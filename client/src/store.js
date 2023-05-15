@@ -7,11 +7,19 @@ const searchInitialState = {
 
 const homeInitialState = {
   home: {},
-}
+};
 
 const movieInitialState = {
   movie: {},
-}
+};
+
+const genreInitialState = {
+  genre: {},
+};
+
+const movieGenresInitialState = {
+  movieGenres: {},
+};
 
 const watchlistInitialState = {
   watchlist: JSON.parse(sessionStorage.getItem('watchlist')),
@@ -59,6 +67,29 @@ const movieSlice = createSlice({
     },
   },
 });
+
+const genreSlice = createSlice({
+  name: "genre",
+  initialState: genreInitialState,
+  reducers: {
+    setGenre: (state, action) => {
+      console.log("PAYLOAD", action.payload)
+      state.genre = action.payload
+    },
+  },
+});
+
+const movieGenresSlice = createSlice({
+  name: "movieGenres",
+  initialState: movieGenresInitialState,
+  reducers: {
+    setMovieGenres: (state, action) => {
+      state.movieGenres = action.payload
+    },
+  },
+});
+
+
 
 const watchlistSlice = createSlice({
   name: 'watchlist',
@@ -113,6 +144,7 @@ const streamingServiceSlice = createSlice({
   initialState: streamServiceState,
   reducers: {
     setStreamingService: (state, action) => {
+      console.log("PAYLOAD STREAMING", action.payload)
       state.streamingService = { [action.payload[0]]: action.payload[1] }
     },
   },
@@ -121,16 +153,20 @@ const streamingServiceSlice = createSlice({
 // Export actions
 export const { setSearchTerm } = searchSlice.actions;
 export const { setMovie } = movieSlice.actions;
+export const { setGenre } = genreSlice.actions;
 export const { setHomeMovies, clearHomeMovies } = homeSlice.actions;
 export const { initWatchlist, addItemToWatchlist, removeItemFromWatchlist, clearWatchlist } = watchlistSlice.actions;
 export const { initSeenlist, addItemToSeenlist, removeItemFromSeenlist, clearSeenlist } = seenlistSlice.actions;
 export const { setStreamingService } = streamingServiceSlice.actions;
+export const { setMovieGenres } = movieGenresSlice.actions;
 
 
 const rootReducer = {
   search: searchSlice.reducer,
   movie: movieSlice.reducer,
+  genre: genreSlice.reducer,
   home: homeSlice.reducer,
+  movieGenres: movieGenresSlice.reducer,
   watchlist: watchlistSlice.reducer,
   seenlist: seenlistSlice.reducer,
   streamingService: streamingServiceSlice.reducer,

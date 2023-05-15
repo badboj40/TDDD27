@@ -6,6 +6,8 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('home', views.home, name='home'),
+    path('browse/<str:genre>', views.browse, name='browse'),
+    path('genres', views.genres, name="genres"),
     path('account', views.index, name='index'),
     path('login', views.login, name="login"),
     path('movies/search/<str:search_term>', views.search, name='search'),
@@ -17,6 +19,4 @@ urlpatterns = [
          views.remove_seenlist_item, name="remove_seenlist_item"),
     path('getStreamingService/<str:movie_title>/<str:movie_id>',
          views.get_streaming_service, name="get_streaming_service"),
-
-    # path('signout', views.index, name="index"),
 ]

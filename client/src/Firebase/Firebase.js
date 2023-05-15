@@ -2,10 +2,8 @@ import { initializeApp } from "firebase/app";
 import {
   initWatchlist,
   initSeenlist,
-  initProfilePic,
   clearWatchlist,
   clearSeenlist,
-  clearProfilePic,
   clearHomeMovies,
 } from "../store";
 import {
@@ -16,7 +14,7 @@ import {
 } from "firebase/auth";
 
 import axios from 'axios';
-import { GetPopularMovies } from "../Helpers/GetPopularMovies";
+import { GetHomeMovies } from "../Helpers/GetHomeMovies";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMsNwx5KzZKx5tdeh0FcT8yY_ckeZMliE",
@@ -66,7 +64,7 @@ const handleLogin = async (result, dispatch) => {
       sessionStorage.setItem('seenlist', JSON.stringify(response.data.seenlist))
       dispatch(initWatchlist())
       dispatch(initSeenlist())
-      GetPopularMovies(dispatch)
+      GetHomeMovies(dispatch)
       return response.data
     })
     .catch(error => {

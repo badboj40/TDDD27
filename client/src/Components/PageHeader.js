@@ -1,19 +1,25 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-import { setSearchTerm } from '../store';
 import { Button } from 'react-bootstrap';
 import { Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import './Login.css'
 import './SignOutButton.css';
 
 import { auth, signInWithGoogle } from "../Firebase/Firebase"
 import { signOutFromGoogle } from "../Firebase/Firebase";
-import { GetPopularMovies } from '../Helpers/GetPopularMovies';
+import { setSearchTerm } from '../store';
+import { setMovieGenres } from '../store';
+import { setHomeMovies } from '../store';
+import { GetHomeMovies } from '../Helpers/GetHomeMovies';
+
+
 
 export function PageHeader(props) {
+
+    let user = auth.currentUser;
 
     const isSignedIn = props.isSignedIn;
     const [searchQuery, setSearchQuery] = useState('');
@@ -21,9 +27,6 @@ export function PageHeader(props) {
     const dispatch = useDispatch();
     const pageLogo = "/static/images/popcorn.png"
     const altAccountLogo = "/static/images/account.png"
-
-    let user = auth.currentUser;
-
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -46,13 +49,27 @@ export function PageHeader(props) {
         setSearchQuery(event.target.value);
     };
 
+    const handleBrowse = async () => {
+        await axios.get('http://' + window.location.host + '/genres')
+            .then((result) => {
+                dispatch(setMovieGenres(result.data))
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+    const handleHomeMovies = async () => {
+        await GetHomeMovies(dispatch)
+    }
+
     return (
         <div className="PageHeader">
             <header className="PageHeader-header">
                 <Navbar bg="dark" variant="dark" expand="lg">
                     <Container className='d-flex'>
                         <Navbar.Brand as={Link} to="/" className='d-flex'
-                            onClick={() => GetPopularMovies(dispatch)}>
+                            onClick={handleHomeMovies}>
                             <img
                                 src={pageLogo}
                                 width="45"
@@ -63,7 +80,8 @@ export function PageHeader(props) {
                             <h1 className=''>GGWatch</h1>
                         </Navbar.Brand>
                         <Nav>
-                            <Nav.Link as={Link} to="/">Movies</Nav.Link>
+                            <Nav.Link as={Link} to="/browse"
+                                onClick={handleBrowse}>Browse</Nav.Link>
                             <Nav.Link as={Link} to="/watchlist">Watchlist</Nav.Link>
                             <Nav.Link as={Link} to="/seen">Seen</Nav.Link>
                         </Nav>

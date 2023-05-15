@@ -66,6 +66,31 @@ def home(request):
     return Response(result)
 
 
+@api_view(["GET"])
+def browse(request, genre):
+    result = {}
+    url = "https://moviesminidatabase.p.rapidapi.com/movie/byGen/" + genre
+
+    for movie in requests.get(url=url, headers=movie_db_headers).json()["results"]:
+        id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + \
+            movie["imdb_id"] + "/"
+
+        result[movie["imdb_id"]] = requests.get(
+            url=id_search_url, headers=movie_db_headers).json()["results"]
+
+    return Response(result)
+
+# Route which retrieves all genres that the MoviesMiniDatabase can be filtered with
+@api_view(["GET"])
+def genres(request):
+    result = []
+    url = "https://moviesminidatabase.p.rapidapi.com/genres/"
+
+    for genre in requests.get(url=url, headers=movie_db_headers).json()["results"]:
+        result.append(genre["genre"])
+    return Response(result)
+
+
 @api_view(["POST"])
 def login(request):
     # Verify the ID token and get the user's information
@@ -103,11 +128,6 @@ def search(request, search_term):
         result[movie["imdb_id"]] = requests.get(
             url=id_search_url, headers=movie_db_headers).json()["results"]
     return Response(result)
-
-
-@api_view(["POST"])
-def movies(request):
-    pass
 
 
 @api_view(["POST"])

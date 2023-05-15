@@ -3,7 +3,7 @@ import axios from 'axios';
 import { setHomeMovies } from '../store';
 
 
-export const GetPopularMovies = (dispatch) => {
+export const GetHomeMovies = (dispatch) => {
     return new Promise((resolve, reject) => {
         let user = auth.currentUser;
 
