@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Card, Col, Container, Nav, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
-import { HandleMovieClick } from '../Helpers/HandleMovieClick';
+import { CardBannerNav } from './CardBannerNav';
 
 
 export function HomePage() {
@@ -30,13 +30,7 @@ export function HomePage() {
                                 <Card className='border-0' style={{ width: cardWidth }}>
                                     <Container style={{ postition: 'relative', padding: 0 }}>
                                         <Nav>
-                                            <Nav.Link onClick={async () => { HandleMovieClick(movie_kv, dispatch, navigate) }}
-                                                style={{ padding: 0 }}>
-                                                <Card.Img variant="top"
-                                                    src={movie_kv[1].banner}
-                                                    onError={(e) => { e.target.src = notFoundLogo }}
-                                                />
-                                            </Nav.Link>
+                                        <CardBannerNav movie_kv={movie_kv} dispatch={dispatch} navigate={navigate} />
                                         </Nav>
                                     </Container>
                                     <div className=''>

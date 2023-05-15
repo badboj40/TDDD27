@@ -13,7 +13,7 @@ import { signOutFromGoogle } from "../Firebase/Firebase";
 import { setSearchTerm } from '../store';
 import { setMovieGenres } from '../store';
 import { setHomeMovies } from '../store';
-import { GetHomeMovies } from '../Helpers/GetHomeMovies';
+import { GetHomeMovies } from '../Helpers/GetData';
 
 
 

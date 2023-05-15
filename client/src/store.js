@@ -88,8 +88,6 @@ const movieGenresSlice = createSlice({
   },
 });
 
-
-
 const watchlistSlice = createSlice({
   name: 'watchlist',
   initialState: watchlistInitialState,
@@ -143,7 +141,6 @@ const streamingServiceSlice = createSlice({
   initialState: streamServiceState,
   reducers: {
     setStreamingService: (state, action) => {
-      console.log("PAYLOAD STREAMING", action.payload)
       state.streamingService = { [action.payload[0]]: action.payload[1] }
     },
   },

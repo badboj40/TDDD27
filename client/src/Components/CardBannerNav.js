@@ -1,5 +1,5 @@
 import { Card, Nav } from "react-bootstrap";
-import { HandleMovieClick } from "../Helpers/HandleMovieClick";
+import { HandleItemClick } from "../Helpers/HandleItemClick";
 
 
 export function CardBannerNav(props) {
@@ -9,7 +9,9 @@ export function CardBannerNav(props) {
     const navigate = props.navigate
     return (
         <Nav>
-            <Nav.Link onClick={async () => { HandleMovieClick(movie_kv, dispatch, navigate) }}
+            <Nav.Link onClick={async () => {
+                HandleItemClick(movie_kv, dispatch, navigate, 'movie');
+            }}
                 style={{ padding: 0 }}>
                 <Card.Img variant="top"
                     src={movie_kv[1].banner}

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
-import { HandleGenreClick } from '../Helpers/HandleGenreClick';
+import { HandleItemClick } from '../Helpers/HandleItemClick';
 
 
 export function BrowsePage() {
@@ -18,7 +18,7 @@ export function BrowsePage() {
                         Object.entries(genres).map((genre_kv) => (
                             <Col md={4} key={genre_kv}>
                                 <Button variant='outline-primary' size='lg'
-                                    onClick={() => HandleGenreClick(genre_kv, dispatch, navigate)}>
+                                    onClick={() => HandleItemClick(genre_kv, dispatch, navigate, 'genre')}>
                                     {genre_kv[1]}
                                 </Button>
                             </Col>

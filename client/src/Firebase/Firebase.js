@@ -14,7 +14,7 @@ import {
 } from "firebase/auth";
 
 import axios from 'axios';
-import { GetHomeMovies } from "../Helpers/GetHomeMovies";
+import { GetHomeMovies } from "../Helpers/GetData";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMsNwx5KzZKx5tdeh0FcT8yY_ckeZMliE",

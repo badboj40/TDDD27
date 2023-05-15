@@ -75,6 +75,7 @@ def browse(request, genre):
     links = requests.get(url=url, headers=movie_db_headers).json()["links"]
 
     for movie in requests.get(url=url, headers=movie_db_headers).json()["results"]:
+        print(movie)
         id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + \
             movie["imdb_id"] + "/"
 
