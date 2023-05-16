@@ -5,27 +5,19 @@ import { CardBannerNav } from './CardBannerNav';
 
 
 export function HomePage() {
-
-    const notFoundLogo = "/static/images/unknown-file-icon.png"
-
     const cardWidth = '20rem'
-
     const navigate = useNavigate()
     const dispatch = useDispatch()
-
-    //const popularMovies = sessionStorage.getItem("popularMovies")
-
-    const popularMovies = useSelector(state => state.home.home)
-
-
+    const homeMovies = useSelector(state => state.homeMovies.homeMovies)
 
     return (
         <div className="Home" style={{ backgroundColor: '#FFFFFF', textAlign: 'center' }}>
             <h2>Welcome back, here are some recommended movies for you to watch</h2>
+            {console.log(homeMovies)}
             <Container className='grid'>
                 <Row md={8} className="gy-5">
-                    {popularMovies ? (
-                        Object.entries(popularMovies).map((movie_kv) => (
+                    {homeMovies ? (
+                        Object.entries(homeMovies).map((movie_kv) => (
                             <Col md={4} key={movie_kv[0]}>
                                 <Card className='border-0' style={{ width: cardWidth }}>
                                     <Container style={{ postition: 'relative', padding: 0 }}>

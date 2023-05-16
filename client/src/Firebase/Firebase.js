@@ -5,6 +5,10 @@ import {
   clearWatchlist,
   clearSeenlist,
   clearHomeMovies,
+  clearMovie,
+  clearGenre,
+  clearMovieGenres,
+  clearStreamingService,
 } from "../store";
 import {
   getAuth,
@@ -75,9 +79,19 @@ const handleLogin = async (result, dispatch) => {
 const handleLogout = async (result, dispatch) => {
   sessionStorage.removeItem('watchlist')
   sessionStorage.removeItem('seenlist')
+  sessionStorage.removeItem('homeMovies')
+  sessionStorage.removeItem('movie')
+  sessionStorage.removeItem('genre')
+  sessionStorage.removeItem('movieGenres')
+  sessionStorage.removeItem('streamingService')
   dispatch(clearWatchlist())
   dispatch(clearSeenlist())
   dispatch(clearHomeMovies())
+  dispatch(clearMovie())
+  dispatch(clearGenre())
+  dispatch(clearMovieGenres())
+  dispatch(clearStreamingService())
+
   console.log("Successfully signed out.", result)
 }
 
