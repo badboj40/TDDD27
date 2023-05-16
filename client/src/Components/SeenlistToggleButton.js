@@ -2,8 +2,8 @@ import { OverlayTrigger, ToggleButton } from 'react-bootstrap'
 import { RenderToggleButtonElement } from '../Helpers/RenderToggleButtonElement'
 import { RenderSeenlistTooltip } from '../Helpers/RenderSeenlistTooltip'
 import { useSelector } from 'react-redux'
-import { RemoveFromSeenlist, RemoveFromWatchlist } from '../Helpers/RemoveItem'
-import { AddToSeenlist } from '../Helpers/AddItem'
+import { AddToSeenlist, RemoveFromSeenlist, RemoveFromWatchlist } from '../Helpers/HandleListItem'
+
 
 export function SeenListToggleButton(props) {
     const dispatch = props.dispatch
@@ -30,8 +30,8 @@ export function SeenListToggleButton(props) {
                     if (seenlistState.hasOwnProperty(movie_kv[0])) {
                         RemoveFromSeenlist(movie_kv[0], dispatch)
                     } else {
-                        RemoveFromWatchlist(movie_kv[0], dispatch)
                         AddToSeenlist(movie_kv, dispatch)
+                        RemoveFromWatchlist(movie_kv[0], dispatch)
                     }
                 }}
                 style={style}

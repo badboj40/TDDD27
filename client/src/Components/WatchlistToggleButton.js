@@ -2,8 +2,8 @@ import { OverlayTrigger, ToggleButton } from 'react-bootstrap'
 import { RenderToggleButtonElement } from '../Helpers/RenderToggleButtonElement'
 import { RenderWatchlistTooltip } from '../Helpers/RenderWatchlistTooltip'
 import { useSelector } from 'react-redux'
-import { RemoveFromWatchlist } from '../Helpers/RemoveItem'
-import { AddToWatchlist } from '../Helpers/AddItem'
+import { AddToWatchlist, RemoveFromWatchlist } from '../Helpers/HandleListItem'
+
 
 
 export function WatchListToggleButton(props) {

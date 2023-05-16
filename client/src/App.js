@@ -9,11 +9,12 @@ import { SeenListPage } from './Components/Seenlist'
 import { MoviePage } from './Components/Movie'
 import { SearchResultPage } from './Components/SearchResult'
 import { LoginPage } from './Components/Login'
-
+import { BrowsePage } from './Components/Browse'
 import { auth } from './Firebase/Firebase'
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowseGenrePage } from './Components/BrowseGenre'
 
 
 export default function App() {
@@ -34,6 +35,8 @@ export default function App() {
         <div className='App-body'>
           <Routes>
             <Route exact path="/" element={<HomePage/>}/>
+            <Route path="/browse" element={<BrowsePage/>} />
+            <Route path="/browse/:genre" element={<BrowseGenrePage/>}/>
             <Route path="/account" element={<AccountPage/>} />
             <Route path="/watchlist" element={isSignedIn ? <WatchListPage/> : <LoginPage/> } />
             <Route path="/seen" element={isSignedIn ? <SeenListPage/> : <LoginPage/> } />

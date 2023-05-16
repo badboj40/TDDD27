@@ -66,6 +66,35 @@ def home(request):
     return Response(result)
 
 
+@api_view(["GET"])
+def browse(request, genre):
+    result = {}
+    # TODO: ADD dynamic page, see URL for next in links
+    url = "https://moviesminidatabase.p.rapidapi.com/movie/byGen/" + genre# + page
+
+    links = requests.get(url=url, headers=movie_db_headers).json()["links"]
+
+    for movie in requests.get(url=url, headers=movie_db_headers).json()["results"]:
+        print(movie)
+        id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + \
+            movie["imdb_id"] + "/"
+
+        result[movie["imdb_id"]] = requests.get(
+            url=id_search_url, headers=movie_db_headers).json()["results"]
+
+    return Response({"result": result, "links": links})
+
+# Route which retrieves all genres that the MoviesMiniDatabase can be filtered with
+@api_view(["GET"])
+def genres(request):
+    result = []
+    url = "https://moviesminidatabase.p.rapidapi.com/genres/"
+
+    for genre in requests.get(url=url, headers=movie_db_headers).json()["results"]:
+        result.append(genre["genre"])
+    return Response(result)
+
+
 @api_view(["POST"])
 def login(request):
     # Verify the ID token and get the user's information
@@ -106,13 +135,9 @@ def search(request, search_term):
 
 
 @api_view(["POST"])
-def movies(request):
-    pass
-
-
-@api_view(["POST"])
 def add_watchlist_item(request):
-    id_token = request.data['idToken']
+    id_token = request.META.get('HTTP_AUTHORIZATION')
+
     if not id_token:
         return Response({'error': "No authentication token."}, status=404)
 
@@ -122,23 +147,22 @@ def add_watchlist_item(request):
         return Response({'error': "Movie was not found."}, status=404)
 
     ref = db.reference('Users').child(decoded_token['uid']).child('watchlist')
-    ref.update({request.data['movie']['imdb_id']: request.data['movie']})
+    ref.update({request.data['movie'][0]: request.data['movie'][1]})
 
     return Response({'result': "POST"}, status=200)
 
 
 @api_view(["DELETE"])
 def remove_watchlist_item(request, movie_id):
-
     id_token = request.META.get('HTTP_AUTHORIZATION')
 
     if not id_token:
         return Response({'error': "No authentication token."}, status=401)
 
+    decoded_token = auth.verify_id_token(id_token, check_revoked=True)
+
     if not movie_id:
         return Response({'error': "You don't have this movie in your watchlist."}, status=404)
-
-    decoded_token = auth.verify_id_token(id_token, check_revoked=True)
 
     ref = db.reference('Users').child(decoded_token['uid']).child('watchlist')
     ref.child(movie_id).delete()
@@ -148,7 +172,8 @@ def remove_watchlist_item(request, movie_id):
 
 @api_view(["POST"])
 def add_seenlist_item(request):
-    id_token = request.data['idToken']
+    id_token = request.META.get('HTTP_AUTHORIZATION')
+
     if not id_token:
         return Response({'error': "No authentication token."}, status=404)
 
@@ -158,23 +183,23 @@ def add_seenlist_item(request):
         return Response({'error': "Movie was not found."}, status=404)
 
     ref = db.reference('Users').child(decoded_token['uid']).child('seenlist')
-    ref.update({request.data['movie']['imdb_id']: request.data['movie']})
+    ref.update({request.data['movie'][0]: request.data['movie'][1]})
 
     return Response({'result': "POST"}, status=200)
 
 
 @api_view(["DELETE"])
 def remove_seenlist_item(request, movie_id):
-
     id_token = request.META.get('HTTP_AUTHORIZATION')
 
     if not id_token:
         return Response({'error': "No authentication token."}, status=401)
+    
+    decoded_token = auth.verify_id_token(id_token, check_revoked=True)
 
     if not movie_id:
         return Response({'error': "You don't have this movie in your watchlist."}, status=404)
 
-    decoded_token = auth.verify_id_token(id_token, check_revoked=True)
 
     ref = db.reference('Users').child(decoded_token['uid']).child('seenlist')
     ref.child(movie_id).delete()

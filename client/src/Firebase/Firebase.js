@@ -2,11 +2,13 @@ import { initializeApp } from "firebase/app";
 import {
   initWatchlist,
   initSeenlist,
-  initProfilePic,
   clearWatchlist,
   clearSeenlist,
-  clearProfilePic,
   clearHomeMovies,
+  clearMovie,
+  clearGenre,
+  clearMovieGenres,
+  clearStreamingService,
 } from "../store";
 import {
   getAuth,
@@ -16,7 +18,7 @@ import {
 } from "firebase/auth";
 
 import axios from 'axios';
-import { GetPopularMovies } from "../Helpers/GetPopularMovies";
+import { GetHomeMovies } from "../Helpers/GetData";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMsNwx5KzZKx5tdeh0FcT8yY_ckeZMliE",
@@ -66,7 +68,7 @@ const handleLogin = async (result, dispatch) => {
       sessionStorage.setItem('seenlist', JSON.stringify(response.data.seenlist))
       dispatch(initWatchlist())
       dispatch(initSeenlist())
-      GetPopularMovies(dispatch)
+      GetHomeMovies(dispatch)
       return response.data
     })
     .catch(error => {
@@ -77,9 +79,19 @@ const handleLogin = async (result, dispatch) => {
 const handleLogout = async (result, dispatch) => {
   sessionStorage.removeItem('watchlist')
   sessionStorage.removeItem('seenlist')
+  sessionStorage.removeItem('homeMovies')
+  sessionStorage.removeItem('movie')
+  sessionStorage.removeItem('genre')
+  sessionStorage.removeItem('movieGenres')
+  sessionStorage.removeItem('streamingService')
   dispatch(clearWatchlist())
   dispatch(clearSeenlist())
   dispatch(clearHomeMovies())
+  dispatch(clearMovie())
+  dispatch(clearGenre())
+  dispatch(clearMovieGenres())
+  dispatch(clearStreamingService())
+
   console.log("Successfully signed out.", result)
 }
 
