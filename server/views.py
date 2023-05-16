@@ -136,7 +136,8 @@ def search(request, search_term):
 
 @api_view(["POST"])
 def add_watchlist_item(request):
-    id_token = request.data['idToken']
+    id_token = request.META.get('HTTP_AUTHORIZATION')
+
     if not id_token:
         return Response({'error': "No authentication token."}, status=404)
 
@@ -146,23 +147,22 @@ def add_watchlist_item(request):
         return Response({'error': "Movie was not found."}, status=404)
 
     ref = db.reference('Users').child(decoded_token['uid']).child('watchlist')
-    ref.update({request.data['movie']['imdb_id']: request.data['movie']})
+    ref.update({request.data['movie'][0]: request.data['movie'][1]})
 
     return Response({'result': "POST"}, status=200)
 
 
 @api_view(["DELETE"])
 def remove_watchlist_item(request, movie_id):
-
     id_token = request.META.get('HTTP_AUTHORIZATION')
 
     if not id_token:
         return Response({'error': "No authentication token."}, status=401)
 
+    decoded_token = auth.verify_id_token(id_token, check_revoked=True)
+
     if not movie_id:
         return Response({'error': "You don't have this movie in your watchlist."}, status=404)
-
-    decoded_token = auth.verify_id_token(id_token, check_revoked=True)
 
     ref = db.reference('Users').child(decoded_token['uid']).child('watchlist')
     ref.child(movie_id).delete()
@@ -172,7 +172,8 @@ def remove_watchlist_item(request, movie_id):
 
 @api_view(["POST"])
 def add_seenlist_item(request):
-    id_token = request.data['idToken']
+    id_token = request.META.get('HTTP_AUTHORIZATION')
+
     if not id_token:
         return Response({'error': "No authentication token."}, status=404)
 
@@ -182,23 +183,23 @@ def add_seenlist_item(request):
         return Response({'error': "Movie was not found."}, status=404)
 
     ref = db.reference('Users').child(decoded_token['uid']).child('seenlist')
-    ref.update({request.data['movie']['imdb_id']: request.data['movie']})
+    ref.update({request.data['movie'][0]: request.data['movie'][1]})
 
     return Response({'result': "POST"}, status=200)
 
 
 @api_view(["DELETE"])
 def remove_seenlist_item(request, movie_id):
-
     id_token = request.META.get('HTTP_AUTHORIZATION')
 
     if not id_token:
         return Response({'error': "No authentication token."}, status=401)
+    
+    decoded_token = auth.verify_id_token(id_token, check_revoked=True)
 
     if not movie_id:
         return Response({'error': "You don't have this movie in your watchlist."}, status=404)
 
-    decoded_token = auth.verify_id_token(id_token, check_revoked=True)
 
     ref = db.reference('Users').child(decoded_token['uid']).child('seenlist')
     ref.child(movie_id).delete()

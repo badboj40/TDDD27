@@ -2,9 +2,7 @@ import { OverlayTrigger, ToggleButton } from 'react-bootstrap'
 import { RenderToggleButtonElement } from '../Helpers/RenderToggleButtonElement'
 import { RenderSeenlistTooltip } from '../Helpers/RenderSeenlistTooltip'
 import { useSelector } from 'react-redux'
-import { RemoveFromSeenlist, RemoveFromWatchlist } from '../Helpers/RemoveItem'
-import { AddToSeenlist } from '../Helpers/AddItem'
-//import { AddToSeenlist, RemoveFromSeenlist, RemoveFromWatchlist } from '../Helpers/HandleListItem'
+import { AddToSeenlist, RemoveFromSeenlist, RemoveFromWatchlist } from '../Helpers/HandleListItem'
 
 
 export function SeenListToggleButton(props) {
