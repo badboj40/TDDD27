@@ -70,6 +70,7 @@ def home(request):
 def browse(request, genre):
     result = {}
     # TODO: ADD dynamic page, see URL for next in links
+    #
     url = "https://moviesminidatabase.p.rapidapi.com/movie/byGen/" + genre# + page
 
     links = requests.get(url=url, headers=movie_db_headers).json()["links"]
