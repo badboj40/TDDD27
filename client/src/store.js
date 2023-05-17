@@ -21,6 +21,10 @@ const movieGenresInitialState = {
   movieGenres: JSON.parse(sessionStorage.getItem('movieGenres')),
 };
 
+const genreFilterInitialState = {
+  genreFilter: []
+}
+
 const watchlistInitialState = {
   watchlist: JSON.parse(sessionStorage.getItem('watchlist')),
 };
@@ -44,8 +48,8 @@ const searchSlice = createSlice({
   },
 });
 
-const homeMovies = createSlice({
-  name: "home",
+const homeMoviesSlice = createSlice({
+  name: "homeMovies",
   initialState: homeMoviesInitialState,
   reducers: {
     setHomeMovies: (state, action) => {
@@ -63,8 +67,8 @@ const movieSlice = createSlice({
   initialState: movieInitialState,
   reducers: {
     setMovie: (state, action) => {
-      sessionStorage.setItem('movie', JSON.stringify({[action.payload[0]]: action.payload[1] }))
-      state.movie = {[action.payload[0]]: action.payload[1] }
+      sessionStorage.setItem('movie', JSON.stringify({ [action.payload[0]]: action.payload[1] }))
+      state.movie = { [action.payload[0]]: action.payload[1] }
     },
     clearMovie: (state) => {
       state.movie = {}
@@ -77,7 +81,7 @@ const streamingServiceSlice = createSlice({
   initialState: streamServiceState,
   reducers: {
     setStreamingService: (state, action) => {
-      sessionStorage.setItem('streamingService', JSON.stringify({[action.payload[0]]: action.payload[1]}))
+      sessionStorage.setItem('streamingService', JSON.stringify({ [action.payload[0]]: action.payload[1] }))
       state.streamingService = { [action.payload[0]]: action.payload[1] }
     },
     clearStreamingService: (state) => {
@@ -110,6 +114,31 @@ const movieGenresSlice = createSlice({
     },
     clearMovieGenres: (state) => {
       state.movieGenres = {}
+    },
+  },
+});
+
+const genreFilterSlice = createSlice({
+  name: "genreFilter",
+  initialState: genreFilterInitialState,
+  reducers: {
+    addToGenreFilter: (state, action) => {
+      console.log("add")
+      const newGenreFilter = [...state.genreFilter, action.payload]
+      state.genreFilter = newGenreFilter
+    },
+    removeFromGenreFilter: (state, action) => {
+      console.log("remove")
+      const newGenreFilter = [...state.genreFilter]
+      const index = newGenreFilter.indexOf(action.payload);
+      if ( index !== -1) {
+        newGenreFilter.splice(index, 1);
+      }
+      console.log(newGenreFilter)
+      state.genreFilter = newGenreFilter
+    },
+    clearGenreFilter: (state) => {
+      state.genreFilter = {}
     },
   },
 });
@@ -167,10 +196,11 @@ export const { setSearchTerm } = searchSlice.actions;
 export const { setMovie, clearMovie } = movieSlice.actions;
 export const { setStreamingService, clearStreamingService } = streamingServiceSlice.actions;
 export const { setGenre, clearGenre } = genreSlice.actions;
-export const { setHomeMovies, clearHomeMovies } = homeMovies.actions;
+export const { setHomeMovies, clearHomeMovies } = homeMoviesSlice.actions;
+export const { addToGenreFilter, removeFromGenreFilter, clearGenreFilter } = genreFilterSlice.actions;
+export const { setMovieGenres, clearMovieGenres } = movieGenresSlice.actions;
 export const { initWatchlist, addItemToWatchlist, removeItemFromWatchlist, clearWatchlist } = watchlistSlice.actions;
 export const { initSeenlist, addItemToSeenlist, removeItemFromSeenlist, clearSeenlist } = seenlistSlice.actions;
-export const { setMovieGenres, clearMovieGenres } = movieGenresSlice.actions;
 
 
 const rootReducer = {
@@ -178,8 +208,9 @@ const rootReducer = {
   movie: movieSlice.reducer,
   streamingService: streamingServiceSlice.reducer,
   genre: genreSlice.reducer,
-  homeMovies: homeMovies.reducer,
+  homeMovies: homeMoviesSlice.reducer,
   movieGenres: movieGenresSlice.reducer,
+  genreFilter: genreFilterSlice.reducer,
   watchlist: watchlistSlice.reducer,
   seenlist: seenlistSlice.reducer,
 };

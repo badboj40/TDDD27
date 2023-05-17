@@ -18,7 +18,7 @@ import {
 } from "firebase/auth";
 
 import axios from 'axios';
-import { GetHomeMovies } from "../Helpers/GetData";
+import { GetHomeMovies, GetMovieGenres } from "../Helpers/GetData";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMsNwx5KzZKx5tdeh0FcT8yY_ckeZMliE",
@@ -69,6 +69,7 @@ const handleLogin = async (result, dispatch) => {
       dispatch(initWatchlist())
       dispatch(initSeenlist())
       GetHomeMovies(dispatch)
+      GetMovieGenres(dispatch)
       return response.data
     })
     .catch(error => {
