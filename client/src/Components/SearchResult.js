@@ -10,13 +10,20 @@ import { FilterResult } from './FilterResult';
 
 export function SearchResultPage(props) {
     const isSignedIn = props.isSignedIn;
-    const searchResult = useSelector(state => state.search.searchTerm);
+    let searchResult = useSelector(state => state.search.searchTerm);
+    const keys = Object.keys(searchResult);
+
+    keys.forEach(key => {
+        searchResult = searchResult[key];
+        console.log(`Key: ${key}, Value: ${searchResult}`);
+    });
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     return (
         <div className="SearchResult">
-            <FilterResult/>
+            <FilterResult />
+            {console.log(searchResult)}
             <Container>
                 {searchResult ? (
                     Object.entries(searchResult).map((movie_kv) => (

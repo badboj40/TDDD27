@@ -50,7 +50,7 @@ export function FilterResult() {
                     <Offcanvas.Title>Filter</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                    <Button variant="primary" onClick={resetFilter} style={{ marginBottom: '20px' }}>
+                    <Button variant="dark" onClick={resetFilter} style={{ marginBottom: '20px' }}>
                         Reset filters
                     </Button>
                     <Container style={containerStyle}>
@@ -76,7 +76,7 @@ export function FilterResult() {
                                 return (
                                     <Col md={4} key={idx}>
                                         <ToggleButton
-                                            variant={RenderToggleButtonElement(genre, 'genreFilter', 'success', 'light')}
+                                            variant={RenderToggleButtonElement(genre, 'genreFilter', 'dark', 'light')}
                                             size="sm"
                                             value={genre}
                                             checked={genreFilterState.includes(genre)}
@@ -95,7 +95,7 @@ export function FilterResult() {
                             })}
                         </Row>
                     </Container>
-                    <Button variant="primary" onClick={applyFilter} style={{ marginTop: '50px' }}>
+                    <Button variant="dark" onClick={applyFilter} style={{ marginTop: '50px' }}>
                         Apply filters
                     </Button>
                 </Offcanvas.Body>

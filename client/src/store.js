@@ -2,7 +2,7 @@ import { createSlice, configureStore } from "@reduxjs/toolkit";
 
 // Initialise states
 const searchInitialState = {
-  searchTerm: "",
+  searchTerm: JSON.parse(sessionStorage.getItem("searchTerm")),
 };
 
 const homeMoviesInitialState = {
@@ -43,7 +43,13 @@ const searchSlice = createSlice({
   initialState: searchInitialState,
   reducers: {
     setSearchTerm: (state, action) => {
-      state.searchTerm = action.payload;
+      console.log("PAYLOAD", action.payload, "KEY",action.payload[0], "VALUE", action.payload[1] )
+
+      sessionStorage.setItem("searchTerm", JSON.stringify(action.payload));
+      state.searchTerm = action.payload
+    },
+    clearSearchTerm: (state) => {
+      state.searchTerm = {}
     },
   },
 });
@@ -131,7 +137,7 @@ const genreFilterSlice = createSlice({
       console.log("remove")
       const newGenreFilter = [...state.genreFilter]
       const index = newGenreFilter.indexOf(action.payload);
-      if ( index !== -1) {
+      if (index !== -1) {
         newGenreFilter.splice(index, 1);
       }
       console.log(newGenreFilter)
@@ -192,7 +198,7 @@ const seenlistSlice = createSlice({
 });
 
 // Export actions
-export const { setSearchTerm } = searchSlice.actions;
+export const { setSearchTerm, clearSearchTerm } = searchSlice.actions;
 export const { setMovie, clearMovie } = movieSlice.actions;
 export const { setStreamingService, clearStreamingService } = streamingServiceSlice.actions;
 export const { setGenre, clearGenre } = genreSlice.actions;

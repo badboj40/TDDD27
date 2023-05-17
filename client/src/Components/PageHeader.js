@@ -12,7 +12,6 @@ import { auth, signInWithGoogle } from "../Firebase/Firebase"
 import { signOutFromGoogle } from "../Firebase/Firebase";
 import { setSearchTerm } from '../store';
 import { setMovieGenres } from '../store';
-import { setHomeMovies } from '../store';
 import { GetHomeMovies } from '../Helpers/GetData';
 
 
@@ -38,7 +37,7 @@ export function PageHeader(props) {
         await axios.get('http://' + window.location.host + path + searchQuery)
             .then((result) => {
                 navigate(url);
-                dispatch(setSearchTerm(result.data));
+                dispatch(setSearchTerm({[searchQuery]: result.data}));
             })
             .catch((error) => {
                 console.error(error);
