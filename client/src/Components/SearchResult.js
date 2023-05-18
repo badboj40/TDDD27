@@ -25,28 +25,18 @@ export function SearchResultPage(props) {
         <div className="SearchResult">
             <FilterResult />
             <Container>
+                {console.log(searchFilter)}
                 {searchResult ? (
                     Object.entries(searchResult).map((movie_kv) => {
                         const movie = movie_kv[1];
                         if (
-                            searchFilter &&
-                            searchFilter.genreFilter &&
-                            searchFilter.genreFilter.length > 0 &&
-                            !searchFilter.genreFilter.some((filterGenre) =>
-                                movie.gen && movie.gen.some((movieGenre) => movieGenre.genre === filterGenre)
-                            )
+                            (searchFilter?.genreFilter?.length > 0 && !movie.gen?.some(movieGenre => searchFilter.genreFilter.includes(movieGenre.genre))) ||
+                            (searchFilter?.yearFilter?.length === 2 && (movie.year < searchFilter.yearFilter[0] || movie.year > searchFilter.yearFilter[1])) ||
+                            (searchFilter?.ratingFilter && movie.rating < searchFilter.ratingFilter)
                         ) {
-                            return null; // Skip this movie if it doesn't satisfy the genreFilter
+                            return null; // Doesn't satisfy the filters
                         }
-                        if (
-                            searchFilter &&
-                            searchFilter.yearFilter &&
-                            searchFilter.yearFilter.length === 2 &&
-                            (movie.year < searchFilter.yearFilter[0] ||
-                                movie.year > searchFilter.yearFilter[1])
-                        ) {
-                            return null; // Skip this movie if it doesn't satisfy the yearFilter
-                        }
+                        { console.log(movie.rating < searchFilter.ratingFilter) }
                         return (
                             <Card className="border-0" key={movie_kv[0]} style={{ width: '62rem' }}>
                                 <Row>
@@ -57,11 +47,15 @@ export function SearchResultPage(props) {
                                         <Card.Body>
                                             <Card.Title>{movie_kv[1].title}</Card.Title>
                                             <Card.Text>{movie_kv[1].plot}</Card.Text>
-                                            {movie_kv[1].gen && movie_kv[1].gen.length > 0 && (
-                                                <Card.Text>
-                                                    <strong>Genres:</strong> {movie_kv[1].gen.map(genre => genre.genre).join(', ')}
-                                                </Card.Text>
-                                            )}
+                                            <Card.Text>
+                                                <strong>Genres:</strong> {movie_kv[1].gen.map(genre => genre.genre).join(', ')}
+                                            </Card.Text>
+                                            <Card.Text>
+                                                <strong>Rating:</strong> {movie_kv[1].rating} / 10
+                                            </Card.Text>
+                                            <Card.Text>
+                                                <strong>Content rating:</strong> {movie_kv[1].content_rating}
+                                            </Card.Text>
                                             <Card.Text>{movie_kv[1].movie_length}min</Card.Text>
                                             {isSignedIn === true ?
                                                 <Container style={{ postition: 'relative', padding: 0 }}>
@@ -84,7 +78,7 @@ export function SearchResultPage(props) {
                         )
                     })
                 ) : (
-                    <p>No results found.</p>
+                    <></>
                 )}
             </Container>
         </div >

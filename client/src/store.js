@@ -24,7 +24,7 @@ const movieGenresInitialState = {
 const searchFilterInitialState = {
   genreFilter: [],
   yearFilter: [1950, 2023],
-  searchFilter: JSON.parse(sessionStorage.getItem('searchFilter')),
+  ratingFilter: 0,
 };
 
 const watchlistInitialState = {
@@ -130,15 +130,10 @@ const searchFilterSlice = createSlice({
   name: 'searchFilter',
   initialState: searchFilterInitialState,
   reducers: {
-    setSearchFilter: (state) => {
-      state.searchFilter = {
-        year: state.yearFilter,
-        genres: state.genreFilter,
-      };
-    },
     clearSearchFilter: (state) => {
       state.genreFilter = []
       state.yearFilter = [1950, 2023]
+      state.ratingFilter = 0
     },
     addToGenreFilter: (state, action) => {
       const newGenreFilter = [...state.genreFilter, action.payload]
@@ -155,6 +150,9 @@ const searchFilterSlice = createSlice({
     setYearFilter: (state, action) => {
       const newYearFilter = action.payload
       state.yearFilter = newYearFilter
+    },
+    setRatingFilter: (state, action) => {
+      state.ratingFilter = action.payload
     },
   },
 });
@@ -220,9 +218,8 @@ export const { setHomeMovies,
   clearHomeMovies } = homeMoviesSlice.actions;
 export const { addToGenreFilter,
   removeFromGenreFilter,
-  clearGenreFilter,
   setYearFilter,
-  clearYearFilter,
+  setRatingFilter,
   setSearchFilter,
   clearSearchFilter, } = searchFilterSlice.actions;
 export const { setMovieGenres,
@@ -244,8 +241,6 @@ const rootReducer = {
   genre: genreSlice.reducer,
   homeMovies: homeMoviesSlice.reducer,
   movieGenres: movieGenresSlice.reducer,
-  //genreFilter: genreFilterSlice.reducer,
-  //yearFilter: yearFilterSlice.reducer,
   searchFilter: searchFilterSlice.reducer,
   watchlist: watchlistSlice.reducer,
   seenlist: seenlistSlice.reducer,

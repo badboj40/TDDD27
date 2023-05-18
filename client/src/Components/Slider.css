@@ -1,9 +1,10 @@
+/*Release year slider*/
 .horizontal-slider {
     width: 95%;
     max-width: 500px;
     height: 5vh;
   }
-  .example-thumb {
+  .releaseYear-thumb {
     cursor: pointer;
     position: absolute;
     z-index: 100;
@@ -13,21 +14,55 @@
     display: block;
     box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
   }
-  .example-thumb.active {
+  .releaseYear-thumb.active {
     background-color: grey;
   }
-  .example-track {
+  .releaseYear-track {
     position: relative;
     background: #ddd;
   }
-  .example-track.example-track-1 {
+  .releaseYear-track.releaseYear-track-1 {
     background: #363636;
   }
-  .horizontal-slider .example-track {
+  .horizontal-slider .releaseYear-track {
     top: 15px;
     height: 4px;
   }
-  .horizontal-slider .example-thumb {
+  .horizontal-slider .releaseYear-thumb {
+    top: 12px;
+    width: 10px;
+    outline: none;
+    height: 10px;
+    line-height: 38px;
+  }
+
+/* Rating slider CSS */
+
+  .rating-thumb {
+    cursor: pointer;
+    position: absolute;
+    z-index: 100;
+    background: #ffffff;
+    border: 5px solid #2e2e2e;
+    border-radius: 100%;
+    display: block;
+    box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
+  }
+  .rating-thumb.active {
+    background-color: grey;
+  }
+  .rating-track {
+    position: relative;
+    background: #ddd;
+  }
+  .rating-track.rating-track-0 {
+    background: #363636;
+  }
+  .horizontal-slider .rating-track {
+    top: 15px;
+    height: 4px;
+  }
+  .horizontal-slider .rating-thumb {
     top: 12px;
     width: 10px;
     outline: none;

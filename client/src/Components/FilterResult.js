@@ -4,7 +4,7 @@ import './Slider.css'
 import { useState } from 'react';
 import { RenderToggleButtonElement } from '../Helpers/RenderToggleButtonElement';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToGenreFilter, clearSearchFilter, removeFromGenreFilter, setYearFilter } from '../store';
+import { addToGenreFilter, clearSearchFilter, removeFromGenreFilter, setRatingFilter, setYearFilter } from '../store';
 
 export function FilterResult() {
 
@@ -13,6 +13,7 @@ export function FilterResult() {
     const dispatch = useDispatch()
     const genreFilterState = useSelector(state => state.searchFilter.genreFilter)
     const yearFilterState = useSelector(state => state.searchFilter.yearFilter)
+    const ratingFilterState = useSelector(state => state.searchFilter.ratingFilter)
     const [showComponent, setShowComponent] = useState(false);
     const [sliderKey, setSliderKey] = useState(Date.now());
     const genres = JSON.parse(sessionStorage.getItem("movieGenres"))
@@ -22,14 +23,17 @@ export function FilterResult() {
     };
 
     const resetFilter = () => {
-        console.log("RESET FILTERS")
         console.log(yearFilterState)
         dispatch(clearSearchFilter())
         setSliderKey(Date.now());
     }
 
     return (
-        <div className="FilterResult">
+        <div className="FilterResult" style={{
+            position: 'sticky',
+            top: '0',
+            zIndex: '999',
+          }}>
             <ToggleButton
                 style={{ position: 'relative' }}
                 variant='none'
@@ -55,8 +59,8 @@ export function FilterResult() {
                         <ReactSlider
                             className="horizontal-slider"
                             key={sliderKey}
-                            thumbClassName="example-thumb"
-                            trackClassName="example-track"
+                            thumbClassName="releaseYear-thumb"
+                            trackClassName="releaseYear-track"
                             defaultValue={yearFilterState}
                             min={1950}
                             max={2023}
@@ -64,9 +68,30 @@ export function FilterResult() {
                             ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
                             renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
                             pearling
-                            minDistance={1}
+                            step={1}
                             onAfterChange={(values) => {
                                 dispatch(setYearFilter(values))
+                            }}
+                        />
+                    </Container>
+                    <Container style={containerStyle}>
+                        <Offcanvas.Title>Rating</Offcanvas.Title>
+                        <ReactSlider
+                            className="horizontal-slider"
+                            key={sliderKey}
+                            thumbClassName="rating-thumb"
+                            trackClassName="rating-track"
+                            defaultValue={ratingFilterState}
+                            min={0}
+                            max={10}
+                            ariaLabel={['Lower thumb', 'Upper thumb']}
+                            ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
+                            renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                            pearling
+                            step={0.1}
+                            onAfterChange={(value) => {
+                                console.log(value)
+                                dispatch(setRatingFilter(value))
                             }}
                         />
                     </Container>
