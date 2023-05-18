@@ -2,9 +2,9 @@ import { useSelector } from 'react-redux';
 
 
 export function RenderToggleButtonElement(item, state_dict, disable_content, enable_content) {
-    const watchlistState = useSelector(state => state.watchlist)['watchlist']
-    const seenlistState = useSelector(state => state.seenlist)['seenlist']
-    const genreFilterState = useSelector(state => state.genreFilter)["genreFilter"]
+    const watchlistState = useSelector(state => state.watchlist.watchlist)
+    const seenlistState = useSelector(state => state.seenlist.seenlist)
+    const genreFilterState = useSelector(state => state.searchFilter.genreFilter)
 
     if (state_dict === 'watchlist') {
         if (watchlistState.hasOwnProperty(item)) {

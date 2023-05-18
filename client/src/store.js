@@ -21,9 +21,11 @@ const movieGenresInitialState = {
   movieGenres: JSON.parse(sessionStorage.getItem('movieGenres')),
 };
 
-const genreFilterInitialState = {
-  genreFilter: []
-}
+const searchFilterInitialState = {
+  genreFilter: [],
+  yearFilter: [1950, 2023],
+  searchFilter: JSON.parse(sessionStorage.getItem('searchFilter')),
+};
 
 const watchlistInitialState = {
   watchlist: JSON.parse(sessionStorage.getItem('watchlist')),
@@ -43,7 +45,7 @@ const searchSlice = createSlice({
   initialState: searchInitialState,
   reducers: {
     setSearchTerm: (state, action) => {
-      console.log("PAYLOAD", action.payload, "KEY",action.payload[0], "VALUE", action.payload[1] )
+      console.log("PAYLOAD", action.payload, "KEY", action.payload[0], "VALUE", action.payload[1])
 
       sessionStorage.setItem("searchTerm", JSON.stringify(action.payload));
       state.searchTerm = action.payload
@@ -124,27 +126,35 @@ const movieGenresSlice = createSlice({
   },
 });
 
-const genreFilterSlice = createSlice({
-  name: "genreFilter",
-  initialState: genreFilterInitialState,
+const searchFilterSlice = createSlice({
+  name: 'searchFilter',
+  initialState: searchFilterInitialState,
   reducers: {
+    setSearchFilter: (state) => {
+      state.searchFilter = {
+        year: state.yearFilter,
+        genres: state.genreFilter,
+      };
+    },
+    clearSearchFilter: (state) => {
+      state.genreFilter = []
+      state.yearFilter = [1950, 2023]
+    },
     addToGenreFilter: (state, action) => {
-      console.log("add")
       const newGenreFilter = [...state.genreFilter, action.payload]
       state.genreFilter = newGenreFilter
     },
     removeFromGenreFilter: (state, action) => {
-      console.log("remove")
       const newGenreFilter = [...state.genreFilter]
       const index = newGenreFilter.indexOf(action.payload);
       if (index !== -1) {
         newGenreFilter.splice(index, 1);
       }
-      console.log(newGenreFilter)
       state.genreFilter = newGenreFilter
     },
-    clearGenreFilter: (state) => {
-      state.genreFilter = {}
+    setYearFilter: (state, action) => {
+      const newYearFilter = action.payload
+      state.yearFilter = newYearFilter
     },
   },
 });
@@ -198,15 +208,33 @@ const seenlistSlice = createSlice({
 });
 
 // Export actions
-export const { setSearchTerm, clearSearchTerm } = searchSlice.actions;
-export const { setMovie, clearMovie } = movieSlice.actions;
-export const { setStreamingService, clearStreamingService } = streamingServiceSlice.actions;
-export const { setGenre, clearGenre } = genreSlice.actions;
-export const { setHomeMovies, clearHomeMovies } = homeMoviesSlice.actions;
-export const { addToGenreFilter, removeFromGenreFilter, clearGenreFilter } = genreFilterSlice.actions;
-export const { setMovieGenres, clearMovieGenres } = movieGenresSlice.actions;
-export const { initWatchlist, addItemToWatchlist, removeItemFromWatchlist, clearWatchlist } = watchlistSlice.actions;
-export const { initSeenlist, addItemToSeenlist, removeItemFromSeenlist, clearSeenlist } = seenlistSlice.actions;
+export const { setSearchTerm,
+  clearSearchTerm } = searchSlice.actions;
+export const { setMovie,
+  clearMovie } = movieSlice.actions;
+export const { setStreamingService,
+  clearStreamingService } = streamingServiceSlice.actions;
+export const { setGenre,
+  clearGenre } = genreSlice.actions;
+export const { setHomeMovies,
+  clearHomeMovies } = homeMoviesSlice.actions;
+export const { addToGenreFilter,
+  removeFromGenreFilter,
+  clearGenreFilter,
+  setYearFilter,
+  clearYearFilter,
+  setSearchFilter,
+  clearSearchFilter, } = searchFilterSlice.actions;
+export const { setMovieGenres,
+  clearMovieGenres } = movieGenresSlice.actions;
+export const { initWatchlist,
+  addItemToWatchlist,
+  removeItemFromWatchlist,
+  clearWatchlist } = watchlistSlice.actions;
+export const { initSeenlist,
+  addItemToSeenlist,
+  removeItemFromSeenlist,
+  clearSeenlist } = seenlistSlice.actions;
 
 
 const rootReducer = {
@@ -216,7 +244,9 @@ const rootReducer = {
   genre: genreSlice.reducer,
   homeMovies: homeMoviesSlice.reducer,
   movieGenres: movieGenresSlice.reducer,
-  genreFilter: genreFilterSlice.reducer,
+  //genreFilter: genreFilterSlice.reducer,
+  //yearFilter: yearFilterSlice.reducer,
+  searchFilter: searchFilterSlice.reducer,
   watchlist: watchlistSlice.reducer,
   seenlist: seenlistSlice.reducer,
 };

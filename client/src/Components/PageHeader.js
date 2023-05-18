@@ -25,7 +25,7 @@ export function PageHeader(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const pageLogo = "/static/images/popcorn.png"
-    const altAccountLogo = "/static/images/account.png"
+    //const altAccountLogo = "/static/images/account.png"
 
     const handleSubmit = async (event) => {
         event.preventDefault();
