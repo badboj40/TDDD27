@@ -2,7 +2,7 @@ import { createSlice, configureStore } from "@reduxjs/toolkit";
 
 // Initialise states
 const searchInitialState = {
-  searchTerm: "",
+  searchTerm: JSON.parse(sessionStorage.getItem("searchTerm")),
 };
 
 const homeMoviesInitialState = {
@@ -19,6 +19,16 @@ const genreInitialState = {
 
 const movieGenresInitialState = {
   movieGenres: JSON.parse(sessionStorage.getItem('movieGenres')),
+};
+
+const sliderInitialState = {
+  slider: Date.now()
+}
+
+const searchFilterInitialState = {
+  genreFilter: [],
+  yearFilter: [1950, 2023],
+  ratingFilter: 0,
 };
 
 const watchlistInitialState = {
@@ -39,13 +49,17 @@ const searchSlice = createSlice({
   initialState: searchInitialState,
   reducers: {
     setSearchTerm: (state, action) => {
-      state.searchTerm = action.payload;
+      sessionStorage.setItem("searchTerm", JSON.stringify(action.payload));
+      state.searchTerm = action.payload
+    },
+    clearSearchTerm: (state) => {
+      state.searchTerm = {}
     },
   },
 });
 
-const homeMovies = createSlice({
-  name: "home",
+const homeMoviesSlice = createSlice({
+  name: "homeMovies",
   initialState: homeMoviesInitialState,
   reducers: {
     setHomeMovies: (state, action) => {
@@ -63,8 +77,8 @@ const movieSlice = createSlice({
   initialState: movieInitialState,
   reducers: {
     setMovie: (state, action) => {
-      sessionStorage.setItem('movie', JSON.stringify({[action.payload[0]]: action.payload[1] }))
-      state.movie = {[action.payload[0]]: action.payload[1] }
+      sessionStorage.setItem('movie', JSON.stringify({ [action.payload[0]]: action.payload[1] }))
+      state.movie = { [action.payload[0]]: action.payload[1] }
     },
     clearMovie: (state) => {
       state.movie = {}
@@ -77,7 +91,7 @@ const streamingServiceSlice = createSlice({
   initialState: streamServiceState,
   reducers: {
     setStreamingService: (state, action) => {
-      sessionStorage.setItem('streamingService', JSON.stringify({[action.payload[0]]: action.payload[1]}))
+      sessionStorage.setItem('streamingService', JSON.stringify({ [action.payload[0]]: action.payload[1] }))
       state.streamingService = { [action.payload[0]]: action.payload[1] }
     },
     clearStreamingService: (state) => {
@@ -110,6 +124,47 @@ const movieGenresSlice = createSlice({
     },
     clearMovieGenres: (state) => {
       state.movieGenres = {}
+    },
+  },
+});
+
+const sliderSlice = createSlice({
+  name: "slider",
+  initialState: sliderInitialState,
+  reducers: {
+    setSlider: (state, action) => {
+      state.slider = action.payload
+    },
+  },
+});
+
+const searchFilterSlice = createSlice({
+  name: 'searchFilter',
+  initialState: searchFilterInitialState,
+  reducers: {
+    clearSearchFilter: (state) => {
+      state.genreFilter = []
+      state.yearFilter = [1950, 2023]
+      state.ratingFilter = 0
+    },
+    addToGenreFilter: (state, action) => {
+      const newGenreFilter = [...state.genreFilter, action.payload]
+      state.genreFilter = newGenreFilter
+    },
+    removeFromGenreFilter: (state, action) => {
+      const newGenreFilter = [...state.genreFilter]
+      const index = newGenreFilter.indexOf(action.payload);
+      if (index !== -1) {
+        newGenreFilter.splice(index, 1);
+      }
+      state.genreFilter = newGenreFilter
+    },
+    setYearFilter: (state, action) => {
+      const newYearFilter = action.payload
+      state.yearFilter = newYearFilter
+    },
+    setRatingFilter: (state, action) => {
+      state.ratingFilter = action.payload
     },
   },
 });
@@ -163,14 +218,33 @@ const seenlistSlice = createSlice({
 });
 
 // Export actions
-export const { setSearchTerm } = searchSlice.actions;
-export const { setMovie, clearMovie } = movieSlice.actions;
-export const { setStreamingService, clearStreamingService } = streamingServiceSlice.actions;
-export const { setGenre, clearGenre } = genreSlice.actions;
-export const { setHomeMovies, clearHomeMovies } = homeMovies.actions;
-export const { initWatchlist, addItemToWatchlist, removeItemFromWatchlist, clearWatchlist } = watchlistSlice.actions;
-export const { initSeenlist, addItemToSeenlist, removeItemFromSeenlist, clearSeenlist } = seenlistSlice.actions;
-export const { setMovieGenres, clearMovieGenres } = movieGenresSlice.actions;
+export const { setSearchTerm,
+  clearSearchTerm } = searchSlice.actions;
+export const { setMovie,
+  clearMovie } = movieSlice.actions;
+export const { setStreamingService,
+  clearStreamingService } = streamingServiceSlice.actions;
+export const { setGenre,
+  clearGenre } = genreSlice.actions;
+export const { setHomeMovies,
+  clearHomeMovies } = homeMoviesSlice.actions;
+export const { setMovieGenres,
+  clearMovieGenres } = movieGenresSlice.actions;
+export const { setSlider } = sliderSlice.actions;
+export const { addToGenreFilter,
+  removeFromGenreFilter,
+  setYearFilter,
+  setRatingFilter,
+  setSearchFilter,
+  clearSearchFilter, } = searchFilterSlice.actions;
+export const { initWatchlist,
+  addItemToWatchlist,
+  removeItemFromWatchlist,
+  clearWatchlist } = watchlistSlice.actions;
+export const { initSeenlist,
+  addItemToSeenlist,
+  removeItemFromSeenlist,
+  clearSeenlist } = seenlistSlice.actions;
 
 
 const rootReducer = {
@@ -178,8 +252,10 @@ const rootReducer = {
   movie: movieSlice.reducer,
   streamingService: streamingServiceSlice.reducer,
   genre: genreSlice.reducer,
-  homeMovies: homeMovies.reducer,
+  homeMovies: homeMoviesSlice.reducer,
   movieGenres: movieGenresSlice.reducer,
+  slider: sliderSlice.reducer,
+  searchFilter: searchFilterSlice.reducer,
   watchlist: watchlistSlice.reducer,
   seenlist: seenlistSlice.reducer,
 };
