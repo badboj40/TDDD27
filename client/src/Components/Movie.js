@@ -19,7 +19,7 @@ export function MoviePage(props) {
         <div className="MoviePage" style={{ marginBottom: '1rem' }}>
             {movieState ? (
                 Object.entries(movieState).map((movie_kv) => (
-                    <>
+                    <div key={movie_kv[0]}>
                         <div className='MoviePage-Background' style={{
                             backgroundImage: `url(${movie_kv[1].banner})`,
                             backgroundSize: 'cover',
@@ -93,7 +93,7 @@ export function MoviePage(props) {
                                 </Card.Body>
                             </Card>
                         </Container>
-                    </>
+                    </div>
                 ))
             ) : (
                 <h2>No movies in your watchlist.</h2>

@@ -1,47 +1,35 @@
-import { Button, Col, Container, Offcanvas, Row, ToggleButton } from 'react-bootstrap'
-import ReactSlider from 'react-slider';
-import './Slider.css'
+import { Button, Offcanvas, ToggleButton } from 'react-bootstrap'
 import { useState } from 'react';
-import { RenderToggleButtonElement } from '../Helpers/RenderToggleButtonElement';
-import { useDispatch, useSelector } from 'react-redux';
-import { addToGenreFilter, clearSearchFilter, removeFromGenreFilter, setRatingFilter, setYearFilter } from '../store';
+import { useDispatch } from 'react-redux';
+import { ResetFilter } from '../Helpers/ResetSlider';
+import { GenreSelector } from './GenreSelector';
+import { SliderFilter } from './SliderFilter';
 
 export function FilterResult() {
 
     const filterIcon = "/static/images/filterIcon.png"
     const containerStyle = { marginBottom: '20px' }
     const dispatch = useDispatch()
-    const genreFilterState = useSelector(state => state.searchFilter.genreFilter)
-    const yearFilterState = useSelector(state => state.searchFilter.yearFilter)
-    const ratingFilterState = useSelector(state => state.searchFilter.ratingFilter)
     const [showComponent, setShowComponent] = useState(false);
-    const [sliderKey, setSliderKey] = useState(Date.now());
-    const genres = JSON.parse(sessionStorage.getItem("movieGenres"))
 
     const toggleComponent = () => {
         setShowComponent(!showComponent);
     };
-
-    const resetFilter = () => {
-        console.log(yearFilterState)
-        dispatch(clearSearchFilter())
-        setSliderKey(Date.now());
-    }
 
     return (
         <div className="FilterResult" style={{
             position: 'sticky',
             top: '0',
             zIndex: '999',
-          }}>
+        }}>
             <ToggleButton
-                style={{ position: 'relative' }}
+                style={{ position: 'absolute', right: '0' }}
                 variant='none'
                 onClick={toggleComponent}>
                 <img
                     src={filterIcon}
-                    width="45"
-                    height="45"
+                    width="70"
+                    height="70"
                     className="filter-icon"
                     alt={"Filter Icon"}
                 />
@@ -51,76 +39,19 @@ export function FilterResult() {
                     <Offcanvas.Title>Filter</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                    <Button variant="dark" onClick={resetFilter} style={{ marginBottom: '20px' }}>
+                    <Button variant="dark"
+                        onClick={() => ResetFilter(dispatch)}
+                        style={{ marginBottom: '20px' }}>
                         Reset filters
                     </Button>
-                    <Container style={containerStyle}>
-                        <Offcanvas.Title>Release year</Offcanvas.Title>
-                        <ReactSlider
-                            className="horizontal-slider"
-                            key={sliderKey}
-                            thumbClassName="releaseYear-thumb"
-                            trackClassName="releaseYear-track"
-                            defaultValue={yearFilterState}
-                            min={1950}
-                            max={2023}
-                            ariaLabel={['Lower thumb', 'Upper thumb']}
-                            ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
-                            renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-                            pearling
-                            step={1}
-                            onAfterChange={(values) => {
-                                dispatch(setYearFilter(values))
-                            }}
-                        />
-                    </Container>
-                    <Container style={containerStyle}>
-                        <Offcanvas.Title>Rating</Offcanvas.Title>
-                        <ReactSlider
-                            className="horizontal-slider"
-                            key={sliderKey}
-                            thumbClassName="rating-thumb"
-                            trackClassName="rating-track"
-                            defaultValue={ratingFilterState}
-                            min={0}
-                            max={10}
-                            ariaLabel={['Lower thumb', 'Upper thumb']}
-                            ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
-                            renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-                            pearling
-                            step={0.1}
-                            onAfterChange={(value) => {
-                                console.log(value)
-                                dispatch(setRatingFilter(value))
-                            }}
-                        />
-                    </Container>
-                    <Container className='grid' style={containerStyle}>
-                        <Offcanvas.Title>Genres</Offcanvas.Title>
-                        <Row md={1} className="gy-1">
-                            {genres && genres.map((genre, idx) => {
-                                return (
-                                    <Col md={4} key={idx}>
-                                        <ToggleButton
-                                            variant={RenderToggleButtonElement(genre, 'genreFilter', 'dark', 'light')}
-                                            size="sm"
-                                            value={genre}
-                                            checked={genreFilterState.includes(genre)}
-                                            onClick={() => {
-                                                if (genreFilterState.includes(genre)) {
-                                                    dispatch(removeFromGenreFilter(genre))
-                                                } else {
-                                                    dispatch(addToGenreFilter(genre))
-                                                }
-                                            }}
-                                        >
-                                            {genre}
-                                        </ToggleButton>
-                                    </Col>
-                                )
-                            })}
-                        </Row>
-                    </Container>
+                    <SliderFilter dispatch={dispatch}
+                        containerStyle={containerStyle}
+                        type='releaseYear' />
+                    <SliderFilter dispatch={dispatch}
+                        containerStyle={containerStyle}
+                        type='rating' />
+                    <GenreSelector dispatch={dispatch}
+                        containerStyle={containerStyle} />
                 </Offcanvas.Body>
             </Offcanvas>
         </div>

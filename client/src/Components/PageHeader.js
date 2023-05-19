@@ -13,6 +13,7 @@ import { signOutFromGoogle } from "../Firebase/Firebase";
 import { setSearchTerm } from '../store';
 import { setMovieGenres } from '../store';
 import { GetHomeMovies } from '../Helpers/GetData';
+import { ResetFilter } from '../Helpers/ResetSlider';
 
 
 
@@ -38,6 +39,7 @@ export function PageHeader(props) {
             .then((result) => {
                 navigate(url);
                 dispatch(setSearchTerm({[searchQuery]: result.data}));
+                ResetFilter(dispatch)
             })
             .catch((error) => {
                 console.error(error);

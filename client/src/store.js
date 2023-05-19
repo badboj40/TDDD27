@@ -21,6 +21,10 @@ const movieGenresInitialState = {
   movieGenres: JSON.parse(sessionStorage.getItem('movieGenres')),
 };
 
+const sliderInitialState = {
+  slider: Date.now()
+}
+
 const searchFilterInitialState = {
   genreFilter: [],
   yearFilter: [1950, 2023],
@@ -45,8 +49,6 @@ const searchSlice = createSlice({
   initialState: searchInitialState,
   reducers: {
     setSearchTerm: (state, action) => {
-      console.log("PAYLOAD", action.payload, "KEY", action.payload[0], "VALUE", action.payload[1])
-
       sessionStorage.setItem("searchTerm", JSON.stringify(action.payload));
       state.searchTerm = action.payload
     },
@@ -122,6 +124,16 @@ const movieGenresSlice = createSlice({
     },
     clearMovieGenres: (state) => {
       state.movieGenres = {}
+    },
+  },
+});
+
+const sliderSlice = createSlice({
+  name: "slider",
+  initialState: sliderInitialState,
+  reducers: {
+    setSlider: (state, action) => {
+      state.slider = action.payload
     },
   },
 });
@@ -216,14 +228,15 @@ export const { setGenre,
   clearGenre } = genreSlice.actions;
 export const { setHomeMovies,
   clearHomeMovies } = homeMoviesSlice.actions;
+export const { setMovieGenres,
+  clearMovieGenres } = movieGenresSlice.actions;
+export const { setSlider } = sliderSlice.actions;
 export const { addToGenreFilter,
   removeFromGenreFilter,
   setYearFilter,
   setRatingFilter,
   setSearchFilter,
   clearSearchFilter, } = searchFilterSlice.actions;
-export const { setMovieGenres,
-  clearMovieGenres } = movieGenresSlice.actions;
 export const { initWatchlist,
   addItemToWatchlist,
   removeItemFromWatchlist,
@@ -241,6 +254,7 @@ const rootReducer = {
   genre: genreSlice.reducer,
   homeMovies: homeMoviesSlice.reducer,
   movieGenres: movieGenresSlice.reducer,
+  slider: sliderSlice.reducer,
   searchFilter: searchFilterSlice.reducer,
   watchlist: watchlistSlice.reducer,
   seenlist: seenlistSlice.reducer,

@@ -30,13 +30,17 @@ export function SearchResultPage(props) {
                     Object.entries(searchResult).map((movie_kv) => {
                         const movie = movie_kv[1];
                         if (
-                            (searchFilter?.genreFilter?.length > 0 && !movie.gen?.some(movieGenre => searchFilter.genreFilter.includes(movieGenre.genre))) ||
-                            (searchFilter?.yearFilter?.length === 2 && (movie.year < searchFilter.yearFilter[0] || movie.year > searchFilter.yearFilter[1])) ||
-                            (searchFilter?.ratingFilter && movie.rating < searchFilter.ratingFilter)
+                            (searchFilter?.genreFilter?.length > 0 && 
+                                !movie.gen?.some(movieGenre => searchFilter.genreFilter.includes(movieGenre.genre))) ||
+                            (searchFilter?.yearFilter?.length === 2 && 
+                                (movie.year < searchFilter.yearFilter[0] 
+                                    || movie.year > searchFilter.yearFilter[1])) ||
+                            (searchFilter?.ratingFilter && 
+                                movie.rating < searchFilter.ratingFilter)
                         ) {
                             return null; // Doesn't satisfy the filters
                         }
-                        { console.log(movie.rating < searchFilter.ratingFilter) }
+                        console.log(movie.rating < searchFilter.ratingFilter) 
                         return (
                             <Card className="border-0" key={movie_kv[0]} style={{ width: '62rem' }}>
                                 <Row>

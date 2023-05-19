@@ -13,6 +13,7 @@ export function StreamingAvailabilityGroup(props) {
                     {availableStreamingServices && Object.entries(availableStreamingServices[movie_kv[0]]["services"])?.map((service_kv, index) => {
                         return (
                             <Button className={service_kv[0] + movie_kv[0]}
+                                key={index}
                                 variant="secondary"
                                 size="lg"
                                 style={style}
