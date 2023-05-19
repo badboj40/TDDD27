@@ -15,9 +15,6 @@ import requests
 
 cred = credentials.Certificate(
     'server/tddd27-gg-firebase-adminsdk-k0gde-8699c126f0.json')
-app = firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://tddd27-gg-default-rtdb.europe-west1.firebasedatabase.app/'
-})
 
 firebaseConfig = {
     'apiKey': "AIzaSyDMsNwx5KzZKx5tdeh0FcT8yY_ckeZMliE",
@@ -26,7 +23,10 @@ firebaseConfig = {
     'storageBucket': "tddd27-gg.appspot.com",
     'messagingSenderId': "622087775650",
     'appId': "1:622087775650:web:cf7b13d091e47a9511fefb",
+    'databaseURL': 'https://tddd27-gg-default-rtdb.europe-west1.firebasedatabase.app/'
 }
+
+app = firebase_admin.initialize_app(cred, firebaseConfig)
 
 movie_db_headers = {
     "content-type": "application/octet-stream",
@@ -70,7 +70,7 @@ def home(request):
 def browse(request, genre):
     result = {}
     # TODO: ADD dynamic page, see URL for next in links
-    url = "https://moviesminidatabase.p.rapidapi.com/movie/byGen/" + genre# + page
+    url = "https://moviesminidatabase.p.rapidapi.com/movie/byGen/" + genre  # + page
 
     links = requests.get(url=url, headers=movie_db_headers).json()["links"]
 
@@ -85,6 +85,8 @@ def browse(request, genre):
     return Response({"result": result, "links": links})
 
 # Route which retrieves all genres that the MoviesMiniDatabase can be filtered with
+
+
 @api_view(["GET"])
 def genres(request):
     result = []
@@ -192,12 +194,11 @@ def remove_seenlist_item(request, movie_id):
 
     if not id_token:
         return Response({'error': "No authentication token."}, status=401)
-    
+
     decoded_token = auth.verify_id_token(id_token, check_revoked=True)
 
     if not movie_id:
         return Response({'error': "You don't have this movie in your watchlist."}, status=404)
-
 
     ref = db.reference('Users').child(decoded_token['uid']).child('seenlist')
     ref.child(movie_id).delete()
