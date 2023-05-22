@@ -12,6 +12,7 @@ from firebase_admin import auth
 from firebase_admin import db
 
 import requests
+import math
 
 cred = credentials.Certificate(
     'server/tddd27-gg-firebase-adminsdk-k0gde-8699c126f0.json')
@@ -67,24 +68,30 @@ def home(request):
 
 
 @api_view(["GET"])
-def browse(request, genre):
+def browse(request, genre, page):
     result = {}
-    # TODO: ADD dynamic page, see URL for next in links
-    url = "https://moviesminidatabase.p.rapidapi.com/movie/byGen/" + genre  # + page
+    search_page = math.ceil(page/5)
+    slice_start = (page-1) % 5 * 10
+    slice_end = slice_start + 10
 
-    links = requests.get(url=url, headers=movie_db_headers).json()["links"]
+    if search_page == 1:
+        url = f"https://moviesminidatabase.p.rapidapi.com/movie/byGen/{genre}/"
+    else:
+        url = f"https://moviesminidatabase.p.rapidapi.com/movie/byGen/{genre}/?page={search_page}"
 
-    for movie in requests.get(url=url, headers=movie_db_headers).json()["results"]:
-        print(movie)
+    movie_list = requests.get(
+        url=url, headers=movie_db_headers).json()["results"]
+    
+    movie_list = movie_list[slice_start:slice_end]
+
+    for movie in movie_list:
         id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + \
             movie["imdb_id"] + "/"
 
         result[movie["imdb_id"]] = requests.get(
             url=id_search_url, headers=movie_db_headers).json()["results"]
 
-    return Response({"result": result, "links": links})
-
-# Route which retrieves all genres that the MoviesMiniDatabase can be filtered with
+    return Response({"result": result})
 
 
 @api_view(["GET"])
