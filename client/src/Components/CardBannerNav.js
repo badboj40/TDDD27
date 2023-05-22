@@ -32,8 +32,8 @@ export function CardBannerNav(props) {
                         width: '100px',
                         height: '100px',
                         // UNDVIK MARGIN, GÖR DYNAMISK OM MÖJLIGT
-                        marginLeft: '145px',
-                        marginTop: '145px'
+                        marginLeft: 'calc(50% - 50px)',
+                        marginTop: 'calc(50% - 50px)'
                     }}
                 /> : <></>}
                 <Card.Img variant="top"

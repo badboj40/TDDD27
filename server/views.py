@@ -1,6 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpRequest
-from django.contrib.auth import authenticate
 from django.middleware.csrf import get_token
 
 from rest_framework.response import Response

@@ -7,8 +7,7 @@ export const LoadingSpinner = (props) => {
     const size = props.size
     const variant = props.variant
     let animation = props.animation
-    console.log(animation)
-
+    
     if(!animation){
         animation = 'border'
     }

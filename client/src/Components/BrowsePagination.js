@@ -10,12 +10,11 @@ import { LoadingSpinner } from './LoadingSpinner';
 export function BrowsePagination(props) {
     const dispatch = props.dispatch;
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedButton, setSelectedButton] = useState(null)
     const [page, setPage] = useState(1);
     const { genre } = useParams();
 
     return (
-        <div className='d-flex flex-column align-items-center' >
+        <div className='d-flex flex-column align-items-center' style={{paddingBottom: '50px'}}>
             <LoadingSpinner
                 isLoading={isLoading}
                 animation="grow"

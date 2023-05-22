@@ -14,7 +14,7 @@ export function BrowsePage() {
     const dispatch = useDispatch()
 
     return (
-        <div className="Browse" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="Browse" style={{ backgroundColor: '#FFFFFF', paddingTop: '25px' , paddingBottom: '50px'}}>
             <Container className='grid'>
                 <Row md={1} className="gy-5">
                     {genres ? (
@@ -31,12 +31,12 @@ export function BrowsePage() {
                                             });
                                     }}
                                 >
-                                    {selectedButton == genre_kv[0] ?
+                                    {selectedButton === genre_kv[0] ?
                                         <LoadingSpinner
                                             isLoading={isLoading}
                                             animation="grow"
                                             size="lg"
-                                            variant="dark"
+                                            variant="light"
                                             style={{ position: 'relative' }} />
                                         :
                                         <>
