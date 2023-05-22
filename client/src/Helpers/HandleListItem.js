@@ -2,7 +2,7 @@ import { auth } from '../Firebase/Firebase';
 import axios from 'axios';
 import { addItemToSeenlist, addItemToWatchlist, removeItemFromSeenlist, removeItemFromWatchlist } from '../store';
 
-export function handleListAction(actionType, requestType, movie_kv, dispatch, payload = {}) {
+function handleListAction(actionType, requestType, movie_kv, dispatch, payload = {}) {
     let user = auth.currentUser;
 
     if (user) {

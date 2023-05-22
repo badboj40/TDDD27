@@ -2,13 +2,12 @@ import { useNavigate } from 'react-router-dom'
 import { Card, Col, Container, Pagination, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { CardBannerNav } from './CardBannerNav';
+import { BrowsePagination } from './BrowsePagination';
 
 
 export function BrowseGenrePage() {
     const moviesByGenreState = useSelector(state => state.genre.genre);
     const movies = moviesByGenreState.result
-    //Links will be used for pagination
-    const links = moviesByGenreState.links
 
     const cardWidth = '20rem'
     const navigate = useNavigate()
@@ -43,9 +42,7 @@ export function BrowseGenrePage() {
                     )}
                 </Row>
             </Container>
-            <Pagination>
-                {/* ADD PAGINATION OR AT LEAST NEXT/PREV PAGE */}
-            </Pagination>
+            <BrowsePagination dispatch={dispatch} />
         </div >
     )
 }

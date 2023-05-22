@@ -30,8 +30,8 @@ export const GetStreamingService = (movie_kv, dispatch) => {
     return fetchData(url, dispatch, setStreamingService, movie_kv);
 };
 
-export const GetMoviesByGenre = (genre_kv, dispatch) => {
-    const url = `http://${window.location.host}/browse/${genre_kv[1]}`;
+export const GetMoviesByGenre = (genre, page, dispatch) => {
+    const url = `http://${window.location.host}/browse/${genre}/${page}`;
     return fetchData(url, dispatch, setGenre);
 };
 

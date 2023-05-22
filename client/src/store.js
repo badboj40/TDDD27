@@ -21,6 +21,10 @@ const movieGenresInitialState = {
   movieGenres: JSON.parse(sessionStorage.getItem('movieGenres')),
 };
 
+const moviesByGenreInitialState = {
+  moviesByGenre: JSON.parse(sessionStorage.getItem('moviesByGenre')),
+};
+
 const watchlistInitialState = {
   watchlist: JSON.parse(sessionStorage.getItem('watchlist')),
 };
@@ -114,6 +118,17 @@ const movieGenresSlice = createSlice({
   },
 });
 
+const moviesByGenreSlice = createSlice({
+  name: "moviesByGenre",
+  initialState: moviesByGenreInitialState,
+  reducers: {
+    setMoviesByGenre: (state, action) => {
+      sessionStorage.setItem('moviesByGenre', JSON.stringify(action.payload))
+      state.moviesByGenre = action.payload
+    },
+  },
+});
+
 const watchlistSlice = createSlice({
   name: 'watchlist',
   initialState: watchlistInitialState,
@@ -171,6 +186,7 @@ export const { setHomeMovies, clearHomeMovies } = homeMovies.actions;
 export const { initWatchlist, addItemToWatchlist, removeItemFromWatchlist, clearWatchlist } = watchlistSlice.actions;
 export const { initSeenlist, addItemToSeenlist, removeItemFromSeenlist, clearSeenlist } = seenlistSlice.actions;
 export const { setMovieGenres, clearMovieGenres } = movieGenresSlice.actions;
+export const { setMoviesByGenre } = moviesByGenreSlice.actions;
 
 
 const rootReducer = {
@@ -182,6 +198,7 @@ const rootReducer = {
   movieGenres: movieGenresSlice.reducer,
   watchlist: watchlistSlice.reducer,
   seenlist: seenlistSlice.reducer,
+  setMoviesByGenre: moviesByGenreSlice.reducer,
 };
 
 

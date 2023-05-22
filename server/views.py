@@ -12,6 +12,7 @@ from firebase_admin import auth
 from firebase_admin import db
 
 import requests
+import math
 
 cred = credentials.Certificate(
     'server/tddd27-gg-firebase-adminsdk-k0gde-8699c126f0.json')
@@ -67,15 +68,24 @@ def home(request):
 
 
 @api_view(["GET"])
-def browse(request, genre):
+def browse(request, genre, page):
     result = {}
-    # TODO: ADD dynamic page, see URL for next in links
-    #
-    url = "https://moviesminidatabase.p.rapidapi.com/movie/byGen/" + genre# + page
+    print("browse:", [genre, page])
+    search_page = math.ceil(page/5)
+    slice_start = (page-1) % 5 * 10
+    slice_end = slice_start + 10
 
-    links = requests.get(url=url, headers=movie_db_headers).json()["links"]
+    if search_page == 1:
+        url = f"https://moviesminidatabase.p.rapidapi.com/movie/byGen/{genre}/"
+    else:
+        url = f"https://moviesminidatabase.p.rapidapi.com/movie/byGen/{genre}/?page={search_page}"
 
-    for movie in requests.get(url=url, headers=movie_db_headers).json()["results"]:
+    movie_list = requests.get(
+        url=url, headers=movie_db_headers).json()["results"]
+    
+    movie_list = movie_list[slice_start:slice_end]
+
+    for movie in movie_list:
         print(movie)
         id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + \
             movie["imdb_id"] + "/"
@@ -83,9 +93,9 @@ def browse(request, genre):
         result[movie["imdb_id"]] = requests.get(
             url=id_search_url, headers=movie_db_headers).json()["results"]
 
-    return Response({"result": result, "links": links})
+    return Response({"result": result})
 
-# Route which retrieves all genres that the MoviesMiniDatabase can be filtered with
+
 @api_view(["GET"])
 def genres(request):
     result = []
@@ -195,12 +205,11 @@ def remove_seenlist_item(request, movie_id):
 
     if not id_token:
         return Response({'error': "No authentication token."}, status=401)
-    
+
     decoded_token = auth.verify_id_token(id_token, check_revoked=True)
 
     if not movie_id:
         return Response({'error': "You don't have this movie in your watchlist."}, status=404)
-
 
     ref = db.reference('Users').child(decoded_token['uid']).child('seenlist')
     ref.child(movie_id).delete()
