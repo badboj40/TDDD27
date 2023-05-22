@@ -13,7 +13,6 @@ export function HomePage() {
     return (
         <div className="Home" style={{ backgroundColor: '#FFFFFF', textAlign: 'center' }}>
             <h2>Welcome back, here are some recommended movies for you to watch</h2>
-            {console.log(homeMovies)}
             <Container className='grid'>
                 <Row md={8} className="gy-5">
                     {homeMovies ? (

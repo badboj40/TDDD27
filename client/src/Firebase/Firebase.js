@@ -9,6 +9,7 @@ import {
   clearGenre,
   clearMovieGenres,
   clearStreamingService,
+  clearSearchTerm,
 } from "../store";
 import {
   getAuth,
@@ -18,7 +19,7 @@ import {
 } from "firebase/auth";
 
 import axios from 'axios';
-import { GetHomeMovies } from "../Helpers/GetData";
+import { GetHomeMovies, GetMovieGenres } from "../Helpers/GetData";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMsNwx5KzZKx5tdeh0FcT8yY_ckeZMliE",
@@ -69,6 +70,7 @@ const handleLogin = async (result, dispatch) => {
       dispatch(initWatchlist())
       dispatch(initSeenlist())
       GetHomeMovies(dispatch)
+      GetMovieGenres(dispatch)
       return response.data
     })
     .catch(error => {
@@ -84,6 +86,7 @@ const handleLogout = async (result, dispatch) => {
   sessionStorage.removeItem('genre')
   sessionStorage.removeItem('movieGenres')
   sessionStorage.removeItem('streamingService')
+  sessionStorage.removeItem('searchTerm')
   dispatch(clearWatchlist())
   dispatch(clearSeenlist())
   dispatch(clearHomeMovies())
@@ -91,6 +94,7 @@ const handleLogout = async (result, dispatch) => {
   dispatch(clearGenre())
   dispatch(clearMovieGenres())
   dispatch(clearStreamingService())
+  dispatch(clearSearchTerm())
 
   console.log("Successfully signed out.", result)
 }

@@ -12,8 +12,8 @@ import { auth, signInWithGoogle } from "../Firebase/Firebase"
 import { signOutFromGoogle } from "../Firebase/Firebase";
 import { setSearchTerm } from '../store';
 import { setMovieGenres } from '../store';
-import { setHomeMovies } from '../store';
 import { GetHomeMovies } from '../Helpers/GetData';
+import { ResetFilter } from '../Helpers/ResetSlider';
 
 
 
@@ -26,7 +26,7 @@ export function PageHeader(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const pageLogo = "/static/images/popcorn.png"
-    const altAccountLogo = "/static/images/account.png"
+    //const altAccountLogo = "/static/images/account.png"
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -38,7 +38,8 @@ export function PageHeader(props) {
         await axios.get('http://' + window.location.host + path + searchQuery)
             .then((result) => {
                 navigate(url);
-                dispatch(setSearchTerm(result.data));
+                dispatch(setSearchTerm({[searchQuery]: result.data}));
+                ResetFilter(dispatch)
             })
             .catch((error) => {
                 console.error(error);

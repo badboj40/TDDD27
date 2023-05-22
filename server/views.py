@@ -130,8 +130,6 @@ def login(request):
 @api_view(["GET"])
 def search(request, search_term):
     result = {}
-    ref = db.reference('Data')
-    ref.update({'searchQuery': search_term})
 
     search_url = "https://moviesminidatabase.p.rapidapi.com/movie/imdb_id/byTitle/" + \
         search_term + "/"
