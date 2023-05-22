@@ -3,7 +3,7 @@ import { RenderToggleButtonElement } from '../Helpers/RenderToggleButtonElement'
 import { RenderWatchlistTooltip } from '../Helpers/RenderWatchlistTooltip'
 import { useSelector } from 'react-redux'
 import { AddToWatchlist, RemoveFromWatchlist } from '../Helpers/HandleListItem'
-
+import { useState } from 'react'
 
 
 export function WatchListToggleButton(props) {
@@ -11,7 +11,7 @@ export function WatchListToggleButton(props) {
     const dispatch = props.dispatch
     const style = props.style
     const watchlistState = useSelector(state => state.watchlist)['watchlist']
-
+    const [isLoading, setIsLoading] = useState(false);
 
     return (
         <OverlayTrigger
@@ -25,17 +25,25 @@ export function WatchListToggleButton(props) {
                 variant={RenderToggleButtonElement(movie_kv[0], 'watchlist', 'success', 'light')}
                 value={movie_kv[0]}
                 checked={watchlistState.hasOwnProperty(movie_kv[0])}
-                onClick={async () => {
+                disabled={isLoading}
+                onClick={() => {
+                    setIsLoading(true);
                     if (watchlistState.hasOwnProperty(movie_kv[0])) {
                         RemoveFromWatchlist(movie_kv[0], dispatch)
+                            .then(() => {
+                                setIsLoading(false);
+                            })
                     } else {
                         AddToWatchlist(movie_kv, dispatch)
+                            .then(() => {
+                                setIsLoading(false);
+                            })
                     }
                 }}
                 style={style}
             >
-                {RenderToggleButtonElement(movie_kv[0], 'watchlist', 'x', '+')}
+                {RenderToggleButtonElement(movie_kv[0], 'watchlist', '\u2A2F', '+', 'dark', isLoading)}
             </ToggleButton>
-        </OverlayTrigger>
+        </OverlayTrigger >
     )
 }

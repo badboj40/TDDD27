@@ -25,7 +25,6 @@ export function SearchResultPage(props) {
         <div className="SearchResult">
             <FilterResult />
             <Container>
-                {console.log(searchFilter)}
                 {searchResult ? (
                     Object.entries(searchResult).map((movie_kv) => {
                         const movie = movie_kv[1];
@@ -40,7 +39,6 @@ export function SearchResultPage(props) {
                         ) {
                             return null; // Doesn't satisfy the filters
                         }
-                        console.log(movie.rating < searchFilter.ratingFilter) 
                         return (
                             <Card className="border-0" key={movie_kv[0]} style={{ width: '62rem' }}>
                                 <Row>

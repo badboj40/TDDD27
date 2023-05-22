@@ -1,6 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpRequest
-from django.contrib.auth import authenticate
 from django.middleware.csrf import get_token
 
 from rest_framework.response import Response
@@ -16,9 +14,6 @@ import math
 
 cred = credentials.Certificate(
     'server/tddd27-gg-firebase-adminsdk-k0gde-8699c126f0.json')
-app = firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://tddd27-gg-default-rtdb.europe-west1.firebasedatabase.app/'
-})
 
 firebaseConfig = {
     'apiKey': "AIzaSyDMsNwx5KzZKx5tdeh0FcT8yY_ckeZMliE",
@@ -27,7 +22,10 @@ firebaseConfig = {
     'storageBucket': "tddd27-gg.appspot.com",
     'messagingSenderId': "622087775650",
     'appId': "1:622087775650:web:cf7b13d091e47a9511fefb",
+    'databaseURL': 'https://tddd27-gg-default-rtdb.europe-west1.firebasedatabase.app/'
 }
+
+app = firebase_admin.initialize_app(cred, firebaseConfig)
 
 movie_db_headers = {
     "content-type": "application/octet-stream",
@@ -70,7 +68,6 @@ def home(request):
 @api_view(["GET"])
 def browse(request, genre, page):
     result = {}
-    print("browse:", [genre, page])
     search_page = math.ceil(page/5)
     slice_start = (page-1) % 5 * 10
     slice_end = slice_start + 10
@@ -86,7 +83,6 @@ def browse(request, genre, page):
     movie_list = movie_list[slice_start:slice_end]
 
     for movie in movie_list:
-        print(movie)
         id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + \
             movie["imdb_id"] + "/"
 
@@ -103,7 +99,13 @@ def genres(request):
 
     for genre in requests.get(url=url, headers=movie_db_headers).json()["results"]:
         result.append(genre["genre"])
-    return Response(result)
+
+    print(result)
+
+    sorted_genres = sorted(result)
+
+
+    return Response(sorted_genres)
 
 
 @api_view(["POST"])

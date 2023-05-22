@@ -14,6 +14,7 @@ import { setSearchTerm } from '../store';
 import { setMovieGenres } from '../store';
 import { GetHomeMovies } from '../Helpers/GetData';
 import { ResetFilter } from '../Helpers/ResetSlider';
+import { LoadingSpinner } from './LoadingSpinner';
 
 
 
@@ -23,13 +24,14 @@ export function PageHeader(props) {
 
     const isSignedIn = props.isSignedIn;
     const [searchQuery, setSearchQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const pageLogo = "/static/images/popcorn.png"
-    //const altAccountLogo = "/static/images/account.png"
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsLoading(true)
         setSearchQuery(searchQuery)
 
         let path = '/movies/search/';
@@ -38,12 +40,15 @@ export function PageHeader(props) {
         await axios.get('http://' + window.location.host + path + searchQuery)
             .then((result) => {
                 navigate(url);
-                dispatch(setSearchTerm({[searchQuery]: result.data}));
+                dispatch(setSearchTerm({ [searchQuery]: result.data }));
                 ResetFilter(dispatch)
             })
             .catch((error) => {
                 console.error(error);
             })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     const handleChange = (event) => {
@@ -87,18 +92,29 @@ export function PageHeader(props) {
                             <Nav.Link as={Link} to="/seen">Seen</Nav.Link>
                         </Nav>
                         <Container className='d-flex justify-content-end'>
-                            <Form className="d-flex" onSubmit={(e) => {
-                                e.currentTarget.value = ""
-                                handleSubmit(e)
-                            }}>
+                            <LoadingSpinner isLoading={isLoading}
+                                style={{ marginTop: '15px', marginRight: '5px' }}
+                                size="lg" 
+                                variant="light"/>
+                            <Form
+                                className="d-flex"
+                                disabled={isLoading}
+                                onSubmit={(e) => {
+                                    if (!isLoading) {
+                                        e.currentTarget.value = ""
+                                        handleSubmit(e)
+                                    }
+                                }}>
                                 <Form.Control
                                     type="search"
                                     placeholder="Enter movie"
                                     className="me-2"
                                     aria-label="Search"
                                     name="searchQuery"
+                                    disabled={isLoading}
                                     onChange={handleChange}
                                 />
+
                             </Form>
                             <Nav>
                                 {isSignedIn === true ?
