@@ -45,14 +45,6 @@ export function SeenListToggleButton(props) {
                 style={style}
             >
                 {RenderToggleButtonElement(movie_kv[0], 'seenlist', '\u2713', '\u2713', 'light', isLoading)}
-                {/* <img
-                    src={checkMarkLogo}
-                    width="15"
-                    height="15"
-                    className=""
-                    alt="checkmark"
-                    style={RenderToggleButtonElement(movie_kv[0], 'seenlist', { filter: 'grayscale(0%)' }, { filter: 'grayscale(100%)' }, isLoading)}
-                /> */}
             </ToggleButton>
         </OverlayTrigger>
     )

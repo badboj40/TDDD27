@@ -101,7 +101,6 @@ export function PageHeader(props) {
                                 disabled={isLoading}
                                 onSubmit={(e) => {
                                     if (!isLoading) {
-                                        console.log("search")
                                         e.currentTarget.value = ""
                                         handleSubmit(e)
                                     }

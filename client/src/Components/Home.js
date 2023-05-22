@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { Card, Col, Container, Nav, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { CardBannerNav } from './CardBannerNav';
+import { WatchListToggleButton } from './WatchlistToggleButton';
+import { SeenListToggleButton } from './SeenlistToggleButton';
 
 
 export function HomePage() {
@@ -21,7 +23,15 @@ export function HomePage() {
                                 <Card className='border-0' style={{ width: cardWidth }}>
                                     <Container style={{ postition: 'relative', padding: 0 }}>
                                         <Nav>
-                                        <CardBannerNav movie_kv={movie_kv} dispatch={dispatch} navigate={navigate} />
+                                            <CardBannerNav movie_kv={movie_kv} dispatch={dispatch} navigate={navigate} />
+                                            <WatchListToggleButton movie_kv={movie_kv} dispatch={dispatch} style={{
+                                                position: 'absolute', borderWidth: '2px',
+                                                borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
+                                            }} />
+                                            <SeenListToggleButton movie_kv={movie_kv} dispatch={dispatch} style={{
+                                                position: 'absolute', right: '0', borderWidth: '2px',
+                                                borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
+                                            }} />
                                         </Nav>
                                     </Container>
                                     <div className=''>

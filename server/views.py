@@ -101,7 +101,13 @@ def genres(request):
 
     for genre in requests.get(url=url, headers=movie_db_headers).json()["results"]:
         result.append(genre["genre"])
-    return Response(result)
+
+    print(result)
+
+    sorted_genres = sorted(result)
+
+
+    return Response(sorted_genres)
 
 
 @api_view(["POST"])
