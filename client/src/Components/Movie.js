@@ -28,11 +28,12 @@ export function MoviePage(props) {
                             zIndex: '-1',
                             width: '100%',
                             height: '100%',
-                            transform: 'translateY(-100px) scale(1.1)'
+                            marginRight: '50rem',
+                            transform: 'translateY(-100px) scale(1.1) translateX(-200px)'
                         }}>
                         </div>
                         <Container className='grid' style={{ position: 'relative' }}>
-                            <Card style={{ width: '62rem', backgroundColor: '#1d1f1d', color: '#FFFFFF' }}>
+                            <Card style={{ width: '62rem', backgroundColor: '#1d1f1d', color: '#FFFFFF', paddingBottom: '1rem' }}>
                                 <Row>
                                     <div className='col-sm-5'>
                                         <Card.Img variant="top"

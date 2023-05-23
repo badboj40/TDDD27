@@ -22,7 +22,7 @@ export function WatchListToggleButton(props) {
             <ToggleButton
                 id={movie_kv[0]}
                 type="checkbox"
-                variant={RenderToggleButtonElement(movie_kv[0], 'watchlist', 'success', 'light')}
+                variant={RenderToggleButtonElement(movie_kv[0], 'watchlist', 'danger', 'success')}
                 value={movie_kv[0]}
                 checked={watchlistState.hasOwnProperty(movie_kv[0])}
                 disabled={isLoading}

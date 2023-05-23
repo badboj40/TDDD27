@@ -16,7 +16,7 @@ export function WatchListPage() {
         <div className="WatchList" style={{ backgroundColor: '#FFFFFF' }}>
             <Container className='grid'>
                 <Row md={8} className="gy-5">
-                    {watchlistState ? (
+                    {watchlistState && Object.keys(watchlistState).length > 0 ? (
                         Object.entries(watchlistState).map((movie_kv) => (
                             <Col md={4} key={movie_kv[0]}>
                                 <Card className='border-0' style={{ width: cardWidth }}>
@@ -29,7 +29,7 @@ export function WatchListPage() {
                                             position: 'absolute', right: '0', borderWidth: '2px',
                                             borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
                                         }} />
-                                        <CardBannerNav movie_kv={movie_kv} dispatch={dispatch} navigate={navigate}/>
+                                        <CardBannerNav movie_kv={movie_kv} dispatch={dispatch} navigate={navigate} loadingStyle='list' />
                                     </Container>
                                     <div className=''>
                                         <Card.Body>

@@ -32,7 +32,7 @@ export default function App() {
     <Router>
       <div className='App'>
         <PageHeader isSignedIn={isSignedIn}/> 
-        <div className='App-body'>
+        <div className='App-body' style={{paddingBottom: '100px', paddingTop: '30px'}}>
           <Routes>
             <Route exact path="/" element={<HomePage/>}/>
             <Route path="/browse" element={<BrowsePage/>} />

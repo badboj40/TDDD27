@@ -14,7 +14,7 @@ export function StreamingAvailabilityGroup(props) {
                         return (
                             <Button className={service_kv[0] + movie_kv[0]}
                                 key={index}
-                                variant="secondary"
+                                variant="success"
                                 size="lg"
                                 style={style}
                                 onClick={() =>

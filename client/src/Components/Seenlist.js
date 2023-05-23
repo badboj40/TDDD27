@@ -5,8 +5,6 @@ import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
 import { CardBannerNav } from './CardBannerNav';
 
-
-
 export function SeenListPage() {
     const seenlistState = useSelector(state => state.seenlist)['seenlist']
     const cardWidth = '20rem'
@@ -17,7 +15,7 @@ export function SeenListPage() {
         <div className="Seenlist" style={{}}>
             <Container className='grid'>
                 <Row md={8} className="gy-5">
-                    {seenlistState ? (
+                    {seenlistState && Object.entries(seenlistState).length > 0 ? (
                         Object.entries(seenlistState).map((movie_kv) => (
                             <Col md={4} key={movie_kv[0]}>
                                 <Card className='border-0' style={{ width: cardWidth }}>
@@ -30,7 +28,8 @@ export function SeenListPage() {
                                             position: 'absolute', right: '0', borderWidth: '2px',
                                             borderColor: 'black', opacity: '0.9', fontWeight: 'bold'
                                         }} />
-                                        <CardBannerNav movie_kv={movie_kv} dispatch={dispatch} navigate={navigate} />
+                                        <CardBannerNav movie_kv={movie_kv} dispatch={dispatch} navigate={navigate} loadingStyle='list'/>
+
                                     </Container>
                                     <div className=''>
                                         <Card.Body style={{ textAlign: 'center' }}>

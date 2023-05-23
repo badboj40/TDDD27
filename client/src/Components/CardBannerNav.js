@@ -9,7 +9,25 @@ export function CardBannerNav(props) {
     const movie_kv = props.movie_kv
     const dispatch = props.dispatch
     const navigate = props.navigate
+    const loadingStyle = props.loadingStyle
+    let style = {
+        position: 'absolute',
+        width: '100px',
+        height: '100px',
+    };
     const [isLoading, setIsLoading] = useState(false);
+
+    if (loadingStyle === 'searchResult') {
+        style['marginLeft'] = 'calc(20% - 50px)'
+        style['marginTop'] = 'calc(25% - 50px)'
+    } else if (loadingStyle === 'list') {
+        style['marginLeft'] = 'calc(54% - 65px)'
+        style['marginTop'] = 'calc(50% - 50px)'
+    }
+    else {
+        style['marginLeft'] = 'calc(5% - 65px)'
+        style['marginTop'] = 'calc(50% - 50px)'
+    }
 
     return (
         <Nav>
@@ -27,14 +45,7 @@ export function CardBannerNav(props) {
                     animation="grow"
                     size="lg"
                     variant="light"
-                    style={{
-                        position: 'absolute',
-                        width: '100px',
-                        height: '100px',
-                        // UNDVIK MARGIN, GÖR DYNAMISK OM MÖJLIGT
-                        marginLeft: 'calc(50% - 50px)',
-                        marginTop: 'calc(50% - 50px)'
-                    }}
+                    style={style}
                 /> : <></>}
                 <Card.Img variant="top"
                     src={movie_kv[1].banner}

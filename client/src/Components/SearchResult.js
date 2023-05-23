@@ -25,7 +25,7 @@ export function SearchResultPage(props) {
         <div className="SearchResult">
             <FilterResult />
             <Container>
-                {searchResult ? (
+                {searchResult && Object.entries(searchResult).length > 0 ? (
                     Object.entries(searchResult).map((movie_kv) => {
                         const movie = movie_kv[1];
                         if (
@@ -40,10 +40,14 @@ export function SearchResultPage(props) {
                             return null; // Doesn't satisfy the filters
                         }
                         return (
-                            <Card className="border-0" key={movie_kv[0]} style={{ width: '62rem' }}>
+                            <Card className="border-0" key={movie_kv[0]} style={{ width: '62rem', paddingBottom: '50px' }}>
                                 <Row>
                                     <div className='col-sm-5'>
-                                        <CardBannerNav movie_kv={movie_kv} dispatch={dispatch} navigate={navigate} />
+                                        <CardBannerNav 
+                                        movie_kv={movie_kv} 
+                                        dispatch={dispatch} 
+                                        navigate={navigate} 
+                                        loadingStyle='searchResult'/>
                                     </div>
                                     <div className='col-sm-7'>
                                         <Card.Body>
@@ -80,7 +84,7 @@ export function SearchResultPage(props) {
                         )
                     })
                 ) : (
-                    <></>
+                    <h3>Your search did not result in any matches</h3>
                 )}
             </Container>
         </div >
