@@ -19,4 +19,6 @@ urlpatterns = [
          views.remove_seenlist_item, name="remove_seenlist_item"),
     path('getStreamingService/<str:movie_title>/<str:movie_id>',
          views.get_streaming_service, name="get_streaming_service"),
+    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
+
 ]
