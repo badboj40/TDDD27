@@ -1,4 +1,4 @@
-# Project Plan (UPDATED 2023-05-23)
+# Project Plan (UPDATED 2023-05-24)
 
 This is the project plan for Gustav Elmqvist (gusel725) and Gabriel Hult (gabhu204) in the course TDDD27
 
@@ -69,3 +69,11 @@ To run the Django server (executed at top level)
 ```zsh
 python3 manage.py runserver
 ```
+
+## Submission
+
+Links to unlisted youtube videos containing screencasts
+
+- [Project Screencast](https://youtu.be/em-PWKLoHRQ)
+- [Gabriel Individual Code Screencast](https://google.com)
+- [Gustav Individual Code Screencast](https://google.com)

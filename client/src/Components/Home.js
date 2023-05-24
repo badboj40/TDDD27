@@ -25,7 +25,11 @@ export function HomePage(props) {
 
     return (
         <div className="Home" style={{ backgroundColor: '#FFFFFF', textAlign: 'center' }}>
-            <h2>Welcome back, here are some recommended movies for you to watch</h2>
+            { isSignedIn ? 
+                (<h2>Welcome back, here are some recommended movies for you to watch</h2>)
+                :
+                (<h2>Sign in to see trending movies</h2>)
+            }
             <Container className='grid'>
                 <Row md={8} className="gy-5">
                     {movies && Object.entries(movies).length > 0 ? (
@@ -73,7 +77,11 @@ export function HomePage(props) {
                     )}
                 </Row>
             </Container>
-            <Pagination type="home" dispatch={dispatch} count={count} />
+            {isSignedIn ? 
+                (<Pagination type="home" dispatch={dispatch} count={count} />) 
+                :
+                (<></>)
+            }
         </div >
     )
 }

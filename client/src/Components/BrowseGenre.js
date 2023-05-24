@@ -6,8 +6,9 @@ import { Pagination } from './Pagination';
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
 
-export function BrowseGenrePage() {
+export function BrowseGenrePage(props) {
     const moviesByGenreState = useSelector(state => state.setMoviesByGenre.moviesByGenre);
+    const isSignedIn = props.isSignedIn;
     const movies = moviesByGenreState.result;
     const count = moviesByGenreState.count;
     const cardWidth = '20rem';

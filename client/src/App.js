@@ -35,8 +35,8 @@ export default function App() {
         <div className='App-body' style={{paddingBottom: '100px', paddingTop: '30px'}}>
           <Routes>
             <Route exact path="/" element={<HomePage isSignedIn={isSignedIn}/>}/>
-            <Route path="/browse" element={<BrowsePage/>} />
-            <Route path="/browse/:genre" element={<BrowseGenrePage/>}/>
+            <Route path="/browse" element={isSignedIn ? <BrowsePage/> : <LoginPage/> }/>
+            <Route path="/browse/:genre" element={isSignedIn ? <BrowseGenrePage/> : <LoginPage/> }/>
             <Route path="/account" element={<AccountPage/>} />
             <Route path="/watchlist" element={isSignedIn ? <WatchListPage/> : <LoginPage/> } />
             <Route path="/seen" element={isSignedIn ? <SeenListPage/> : <LoginPage/> } />

@@ -75,7 +75,7 @@ export function SearchResultPage(props) {
                                                     }} />
                                                 </Container>
                                                 :
-                                                <h1>Something went wrong loading "add to watchlist/seenlist"</h1>
+                                                <b>Sign in to add movie to watchlist/seenlist</b>
                                             }
                                         </Card.Body>
                                     </div>
