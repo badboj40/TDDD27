@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CardBannerNav } from './CardBannerNav';
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
-import { HomePagination } from './HomePagination';
 import { LoadingSpinner } from './LoadingSpinner';
 import { signInWithGoogle } from '../Firebase/Firebase';
+import { Pagination } from './Pagination';
 
 
 export function HomePage(props) {
@@ -73,7 +73,7 @@ export function HomePage(props) {
                     )}
                 </Row>
             </Container>
-            <HomePagination dispatch={dispatch} count={count} />
+            <Pagination type="home" dispatch={dispatch} count={count} />
         </div >
     )
 }
