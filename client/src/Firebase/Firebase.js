@@ -17,9 +17,9 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
+import { GetHomeMovies, GetMovieGenres } from "../Helpers/GetData";
 
 import axios from 'axios';
-import { GetHomeMovies, GetMovieGenres } from "../Helpers/GetData";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMsNwx5KzZKx5tdeh0FcT8yY_ckeZMliE",
@@ -69,7 +69,7 @@ const handleLogin = async (result, dispatch) => {
       sessionStorage.setItem('seenlist', JSON.stringify(response.data.seenlist))
       dispatch(initWatchlist())
       dispatch(initSeenlist())
-      GetHomeMovies(dispatch)
+      GetHomeMovies(1, dispatch)
       GetMovieGenres(dispatch)
       return response.data
     })
@@ -79,14 +79,7 @@ const handleLogin = async (result, dispatch) => {
 };
 
 const handleLogout = async (result, dispatch) => {
-  sessionStorage.removeItem('watchlist')
-  sessionStorage.removeItem('seenlist')
-  sessionStorage.removeItem('homeMovies')
-  sessionStorage.removeItem('movie')
-  sessionStorage.removeItem('genre')
-  sessionStorage.removeItem('movieGenres')
-  sessionStorage.removeItem('streamingService')
-  sessionStorage.removeItem('searchTerm')
+  sessionStorage.clear()
   dispatch(clearWatchlist())
   dispatch(clearSeenlist())
   dispatch(clearHomeMovies())

@@ -67,6 +67,7 @@ const homeMoviesSlice = createSlice({
   initialState: homeMoviesInitialState,
   reducers: {
     setHomeMovies: (state, action) => {
+      console.log(action.payload)
       sessionStorage.setItem('homeMovies', JSON.stringify(action.payload))
       state.homeMovies = action.payload;
     },

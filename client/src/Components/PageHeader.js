@@ -66,7 +66,7 @@ export function PageHeader(props) {
     };
 
     const handleHomeMovies = async () => {
-        await GetHomeMovies(dispatch)
+        await GetHomeMovies(1, dispatch)
     }
 
     return (

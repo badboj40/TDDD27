@@ -56,7 +56,7 @@ To run the Django server (executed at top level)
 python3 manage.py runserver
 ```
 
-### Only using Django server
+### Only using Django server (currently bugged regarding login)
 
 To build React version (executed inside client folder)
 

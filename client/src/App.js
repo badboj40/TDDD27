@@ -34,7 +34,7 @@ export default function App() {
         <PageHeader isSignedIn={isSignedIn}/> 
         <div className='App-body' style={{paddingBottom: '100px', paddingTop: '30px'}}>
           <Routes>
-            <Route exact path="/" element={<HomePage/>}/>
+            <Route exact path="/" element={<HomePage isSignedIn={isSignedIn}/>}/>
             <Route path="/browse" element={<BrowsePage/>} />
             <Route path="/browse/:genre" element={<BrowseGenrePage/>}/>
             <Route path="/account" element={<AccountPage/>} />

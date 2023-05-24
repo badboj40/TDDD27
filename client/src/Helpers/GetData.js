@@ -1,6 +1,6 @@
 import { auth } from '../Firebase/Firebase'
 import axios from 'axios';
-import { setMovie, setStreamingService, setGenre, setMovieGenres, setHomeMovies } from '../store';
+import { setMovie, setStreamingService, setGenre, setMovieGenres, setHomeMovies, setMoviesByGenre } from '../store';
 
 export const fetchData = async (url, dispatch, actionType, movie_kv) => {
     try {
@@ -32,7 +32,7 @@ export const GetStreamingService = (movie_kv, dispatch) => {
 
 export const GetMoviesByGenre = (genre, page, dispatch) => {
     const url = `http://${window.location.host}/browse/${genre}/${page}`;
-    return fetchData(url, dispatch, setGenre);
+    return fetchData(url, dispatch, setMoviesByGenre);
 };
 
 export const GetMovieGenres = (dispatch) => {
@@ -40,7 +40,7 @@ export const GetMovieGenres = (dispatch) => {
     return fetchData(url, dispatch, setMovieGenres);
 };
 
-export const GetHomeMovies = (dispatch) => {
-    const url = `http://${window.location.host}/home`;
+export const GetHomeMovies = (page, dispatch) => {
+    const url = `http://${window.location.host}/home/${page}`;
     return fetchData(url, dispatch, setHomeMovies);
 };

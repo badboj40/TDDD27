@@ -4,21 +4,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CardBannerNav } from './CardBannerNav';
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
+import { HomePagination } from './HomePagination';
+import { LoadingSpinner } from './LoadingSpinner';
+import { signInWithGoogle } from '../Firebase/Firebase';
 
 
-export function HomePage() {
+export function HomePage(props) {
+    const isSignedIn = props.isSignedIn;
     const cardWidth = '20rem'
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    let count = 50;
+    let movies;
     const homeMovies = useSelector(state => state.homeMovies.homeMovies)
+    if (homeMovies !== null) {
+        // Weird API bug where getting some pages failed. Count therefore hardcoded to 50 (one page)
+        //count = homeMovies.count;
+        movies = homeMovies.result;
+    }
 
     return (
         <div className="Home" style={{ backgroundColor: '#FFFFFF', textAlign: 'center' }}>
             <h2>Welcome back, here are some recommended movies for you to watch</h2>
             <Container className='grid'>
                 <Row md={8} className="gy-5">
-                    {homeMovies && Object.entries(homeMovies).length > 0 ? (
-                        Object.entries(homeMovies).map((movie_kv) => (
+                    {movies && Object.entries(movies).length > 0 ? (
+                        Object.entries(movies).map((movie_kv) => (
                             <Col md={4} key={movie_kv[0]}>
                                 <Card className='border-0' style={{ width: cardWidth }}>
                                     <Container style={{ postition: 'relative', padding: 0 }}>
@@ -46,10 +57,23 @@ export function HomePage() {
                             </Col>
                         ))
                     ) : (
-                        <h2>Could not display home movies, sorry for the inconvenience.</h2>
+                        isSignedIn ? (
+                            <LoadingSpinner
+                                isLoading={true}
+                                animation="border"
+                                size="lg"
+                                variant="dark"
+                                style={{ position: 'relative' }}
+                            />
+                        ) : (
+                            <button className="login-with-google-btn" onClick={() => signInWithGoogle(dispatch)}>
+                                Sign in with Google
+                            </button>
+                        )
                     )}
                 </Row>
             </Container>
+            <HomePagination dispatch={dispatch} count={count} />
         </div >
     )
 }

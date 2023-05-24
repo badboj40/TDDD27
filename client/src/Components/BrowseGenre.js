@@ -2,13 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { CardBannerNav } from './CardBannerNav';
-import { BrowsePagination } from './BrowsePagination';
+import { Pagination } from './Pagination';
 import { WatchListToggleButton } from './WatchlistToggleButton';
 import { SeenListToggleButton } from './SeenlistToggleButton';
 
 export function BrowseGenrePage() {
-    const moviesByGenreState = useSelector(state => state.genre.genre);
+    const moviesByGenreState = useSelector(state => state.setMoviesByGenre.moviesByGenre);
     const movies = moviesByGenreState.result;
+    const count = moviesByGenreState.count;
     const cardWidth = '20rem';
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -46,7 +47,7 @@ export function BrowseGenrePage() {
                     </Row>
                 )}
             </Container>
-            <BrowsePagination dispatch={dispatch} />
+            <Pagination type="browse" dispatch={dispatch} count={count} />
         </div>
     );
 }

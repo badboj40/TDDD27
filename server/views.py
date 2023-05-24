@@ -48,21 +48,34 @@ def index(request):
 
 
 @api_view(["GET"])
-def home(request):
+def home(request, page):
     result = {}
-    count = 0
-    url = "https://moviesminidatabase.p.rapidapi.com/movie/order/byPopularity/"
+    search_page = math.ceil(page/5)
+    slice_start = (page-1) % 5 * 10
+    slice_end = slice_start + 10
 
-    for movie in requests.get(url=url, headers=movie_db_headers).json()["results"]:
+    if search_page == 1:
+        url = f"https://moviesminidatabase.p.rapidapi.com/movie/order/byPopularity/"
+    else:
+        url = f"http://moviesminidatabase.p.rapidapi.com/movie/order/byPopularity/?page={search_page}"
+
+
+    data = requests.get(url=url, headers=movie_db_headers).json()
+
+    movie_list = data["results"]
+    count = data["count"]
+
+    movie_list = movie_list[slice_start:slice_end]
+
+    for movie in movie_list:
         id_search_url = "https://moviesminidatabase.p.rapidapi.com/movie/id/" + \
             movie["imdb_id"] + "/"
 
         result[movie["imdb_id"]] = requests.get(
             url=id_search_url, headers=movie_db_headers).json()["results"]
-        count += 1
-        if count == 8:
-            break
-    return Response(result)
+    
+
+    return Response({"result": result, "count": count})
 
 
 @api_view(["GET"])
@@ -77,9 +90,12 @@ def browse(request, genre, page):
     else:
         url = f"https://moviesminidatabase.p.rapidapi.com/movie/byGen/{genre}/?page={search_page}"
 
-    movie_list = requests.get(
-        url=url, headers=movie_db_headers).json()["results"]
-    
+    data = requests.get(
+        url=url, headers=movie_db_headers).json()
+
+    movie_list = data["results"]
+    count = data["count"]
+
     movie_list = movie_list[slice_start:slice_end]
 
     for movie in movie_list:
@@ -89,7 +105,7 @@ def browse(request, genre, page):
         result[movie["imdb_id"]] = requests.get(
             url=id_search_url, headers=movie_db_headers).json()["results"]
 
-    return Response({"result": result})
+    return Response({"result": result, "count": count})
 
 
 @api_view(["GET"])
@@ -100,10 +116,7 @@ def genres(request):
     for genre in requests.get(url=url, headers=movie_db_headers).json()["results"]:
         result.append(genre["genre"])
 
-    print(result)
-
     sorted_genres = sorted(result)
-
 
     return Response(sorted_genres)
 
@@ -114,7 +127,6 @@ def login(request):
     id_token = request.data['idToken']
     decoded_token = auth.verify_id_token(id_token, check_revoked=True)
 
-    # print("decoded", decoded_token)
     uid = decoded_token['uid']
     email = decoded_token['email']
     displayName = decoded_token['name']
@@ -229,22 +241,17 @@ def get_streaming_service(request, movie_title, movie_id):
 
     if ref.child(movie_id).get() is not None:
         services = ss if (ss := ref.child(movie_id).get()) else {}
-        print("already in database")
     else:
         for movie in requests.get(url=url, headers=streaming_headers, params=params).json()["result"]:
             # TODO: Sometimes this if-statement is wrong, like Harry Potter I
             # if movie["title"] == movie_title:
             try:
                 services = movie["streamingInfo"]["se"]
-                print("try se")
             except:
                 try:
                     services = movie["streamingInfo"]["us"]
-                    print("try us")
                 except:
-                    # TODO: Send this answer to frontend?
-                    print(
-                        "This movie does not have any streaming services available from this API")
+                    pass
             finally:
                 movieId = movie["imdbId"]
                 ref.update({movieId: services})
