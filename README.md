@@ -75,5 +75,5 @@ python3 manage.py runserver
 Links to unlisted youtube videos containing screencasts
 
 - [Project Screencast](https://youtu.be/em-PWKLoHRQ)
-- [Gabriel Individual Code Screencast](https://youtu.be/3ssvoHKddIo)
+- [Gabriel Individual Code Screencast](https://youtu.be/sH9MdRGBKOQ)
 - [Gustav Individual Code Screencast](https://google.com)
